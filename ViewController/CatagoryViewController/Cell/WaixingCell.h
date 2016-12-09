@@ -11,6 +11,6 @@
 @interface WaixingCell : UITableViewCell
 
 @property (nonatomic,strong) UIButton * moreButton;
-
+@property (nonatomic,strong) UIView * bgView;
 
 @end

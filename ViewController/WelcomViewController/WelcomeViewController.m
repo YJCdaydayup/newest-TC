@@ -7,7 +7,9 @@
 //
 
 #import "WelcomeViewController.h"
-#import "XXYNavigationController.h"
+//#import "XXYNavigationController.h"
+#import "LoginViewController.h"
+#import "NetManager.h"
 
 @interface WelcomeViewController ()
 
@@ -20,7 +22,8 @@
     //判断是否是第一次登陆，是就展示用户的引导图，不是就进入主界面
     if ([self isFisrtStarApp] == YES) {
         //第一次启动
-        [self showGuide];
+//        [self showGuide];
+        [self goFoward];
     }else{
         [self goFoward];
     }
@@ -65,12 +68,21 @@
 #pragma mark  进入主界面
 -(void)goFoward{
     
+    LoginViewController * loginVc = [[LoginViewController alloc]init];
+    UINavigationController * nLoginVc = [[UINavigationController alloc]initWithRootViewController:loginVc];
+    
     FirstViewController * firstVc = [[FirstViewController alloc]init];
-    XXYNavigationController * nFirstVc = [[XXYNavigationController alloc]initWithRootViewController:firstVc];
+    UINavigationController * nfirstVc = [[UINavigationController alloc]initWithRootViewController:firstVc];
     
     //更改window的根视图控制器
     AppDelegate * appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    appDelegate.window.rootViewController = nFirstVc;
+    //NSLog(@"%@",[kUserDefaults objectForKey:LOGINFAILED]);
+    //NSLog(@"%zi",[manager checkOutIfHasCorrenctIp_port]);
+    if([kUserDefaults objectForKey:ISLOGIN]||[kUserDefaults objectForKey:LOGINFAILED]){
+        appDelegate.window.rootViewController =  nfirstVc;
+    }else{
+        appDelegate.window.rootViewController = nLoginVc;
+    }
 }
 
 - (void)didReceiveMemoryWarning {

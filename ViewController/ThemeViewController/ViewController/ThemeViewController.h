@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ThemeViewController : UIViewController
+@interface ThemeViewController : RootViewController
 
 @property (nonatomic,copy) NSString * themeTitle;
+@property (nonatomic,copy) NSString * indexParm;
 
+@property (nonatomic,assign) NSInteger fromVc;
 
 @end

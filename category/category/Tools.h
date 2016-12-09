@@ -10,7 +10,6 @@
 #import <UIKit/UIKit.h>
 
 @interface Tools : NSObject
-
 /**
  *  通过文件路径加载图片
  *  该方法加载图片优势：不会将图片加到内存缓存中（适用类型：较大图片的处理）
@@ -41,5 +40,14 @@
 
 //创建一个ImageView
 +(void)createImageViewWithFrame:(CGRect)frame imageName:(NSString *)imageName View:(UIView *)motherView;
+
+//给一个对象添加手势，在block里面执行
++(void)addSelectorWithObject:(UILabel *)obj target:(id)target selector:(SEL)selector;
+
+
++(NSString *)connectOriginImgStr:(NSString *)originStr width:(NSString *)width height:(NSString *)height;
+
+//获取文字的宽度
++(CGFloat)getTextWidth:(NSString *)text withHeight:(CGFloat)height;
 
 @end

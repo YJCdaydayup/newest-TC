@@ -8,8 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SingleSearchCatagoryViewController : UIViewController
+@interface SingleSearchCatagoryViewController : RootViewController
 
-@property (nonatomic,strong) NSMutableArray * pinleiArray;
+//参数
+@property (nonatomic,strong) NSMutableDictionary * parmDict;
+//选择的一个按钮
+@property (nonatomic,copy) NSString * catagoryItem;
+
+//判断是否是从多个按钮点击后的界面跳转过来
+@property (nonatomic,assign) NSInteger vc_flag;
+@property (nonatomic,copy) NSString * catagoryIndex;
+
 
 @end

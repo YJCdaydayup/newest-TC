@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SerizeViewController : UIViewController
+@interface SerizeViewController : RootViewController
+
+@property (nonatomic,assign) NSInteger pushFlag;
 
 @end

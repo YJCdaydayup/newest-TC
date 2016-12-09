@@ -29,11 +29,16 @@
 #import "UIView+Extesion.h"
 #import "GuideView.h"
 #import "ColorComment.h"
-
+#import "UrlDefine.h"
+#import <UIImage+GIF.h>
+#import "FMDB.h"
+#import "STShareTool.h"
 
 //界面及代理类
 #import "AppDelegate.h"
 #import "FirstViewController.h"
 #import "WelcomeViewController.h"
+#import "MBProgressHUD.h"
+#import "RootViewController.h"
 
 #endif /* pch_pch */

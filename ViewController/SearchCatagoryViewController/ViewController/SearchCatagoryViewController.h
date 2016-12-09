@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SearchCatagoryViewController : UIViewController
+@interface SearchCatagoryViewController : RootViewController
 
 @property (nonatomic,strong) NSMutableArray * pinleiArray;
+@property (nonatomic,strong) NSDictionary * parmDict;
 
 
 @end

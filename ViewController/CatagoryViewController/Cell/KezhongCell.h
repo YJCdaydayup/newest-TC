@@ -19,4 +19,6 @@
 @property (nonatomic,assign) CGFloat max_X;
 @property (nonatomic,assign) CGFloat max_Y;
 
+@property (nonatomic,strong,readwrite) UIView * bgView;
+
 @end

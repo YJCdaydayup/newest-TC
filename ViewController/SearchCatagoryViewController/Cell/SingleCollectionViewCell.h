@@ -7,10 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RecommandImageModel.h"
+
+typedef void(^ClickImageBlock)(NSString * number);
 
 @interface SingleCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic,strong) UIImageView * imageView;
+@property (nonatomic,strong) UIImageView * showImageView;
 @property (nonatomic,strong) UILabel * titleLabel;
+
+@property (nonatomic,copy) ClickImageBlock block;
+
+@property (nonatomic,copy) NSString * number;
+
+-(void)clickImageView:(ClickImageBlock)block;
+-(void)configCell:(id)model;
 
 @end

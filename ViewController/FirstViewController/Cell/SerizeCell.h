@@ -8,16 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SerizeCell : UITableViewCell
+typedef void (^ClickBlock)(NSInteger index);
 
-@property (nonatomic,strong) UIImageView * bSImageView;
-@property (nonatomic,strong) UIImageView * hQImageView;
-@property (nonatomic,strong) UIImageView * serizeImageView;
-@property (nonatomic,strong) UIImageView * hotImageView;
+@interface SerizeCell : UITableViewCell<UIScrollViewDelegate>{
+    
+    UIScrollView * horisonScrollView;
+    UIImageView * leftImg;
+    UIImageView * rightImg;
+    NSMutableArray * modelArr;
+}
 
+@property (nonatomic,copy) ClickBlock block;
 
 //适配工具
 @property (nonatomic,assign) CGFloat max_X;
 @property (nonatomic,assign) CGFloat max_Y;
 
+-(void)clickImageWithBlock:(ClickBlock)block;
+-(void)setImageViewWithArray:(NSMutableArray *)modelArray;
 @end

@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SerizeModel.h"
 
 @interface SerizesCell : UITableViewCell
 
 @property (nonatomic,strong) UIImageView * imageView1;
 @property (nonatomic,strong) UIImageView * imageView2;
 @property (nonatomic,strong) UIImageView * imageView3;
+
+@property (nonatomic,strong) SerizeModel * model;
 
 @end

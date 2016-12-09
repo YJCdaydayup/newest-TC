@@ -7,17 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PopurityModel.h"
+
+typedef void(^ClickImageBlock)(NSInteger index);
 
 @interface ProductCell : UITableViewCell
-
-@property (nonatomic,strong) UIImageView * imageView1;
-@property (nonatomic,strong) UIImageView * imageView2;
-
-@property (nonatomic,strong) UILabel * title1;
-@property (nonatomic,strong) UILabel * title2;
 
 //适配工具
 @property (nonatomic,assign) CGFloat max_X;
 @property (nonatomic,assign) CGFloat max_Y;
+
+@property (nonatomic,copy) ClickImageBlock block;
+
+-(void)configCellWithArray:(NSArray *)dataArray;
+-(void)clickImageForDetai:(ClickImageBlock)block;
+-(void)setImageView:(NSMutableArray *)imgArray;
 
 @end

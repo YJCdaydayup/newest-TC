@@ -7,52 +7,134 @@
 //
 
 #import "SerizeCell.h"
+#import <UIButton+AFNetworking.h>
+#import <UIImage+GIF.h>
+#import "NetManager.h"
+#import "BannerModel.h"
 
 @implementation SerizeCell
+
+-(void)prepareForReuse{
+    
+
+}
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
-        [self setImageView];
+        self.backgroundColor = CELLBGCOLOR;
     }
     return self;
 }
 
--(void)setImageView{
+-(void)setImageViewWithArray:(NSMutableArray *)modelArray{
     
-    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, (20+230+20)/2.0*ScreenMultipleIn6)];
-    bgView.backgroundColor = TABLEVIEWCOLOR;
-    [self.contentView addSubview:bgView];
+    for(UIView * subView in self.contentView.subviews){
+        [subView removeFromSuperview];
+    }
     
-    self.bSImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10*ScreenMultipleIn6, 10*ScreenMultipleIn6, 115*ScreenMultipleIn6, 115*ScreenMultipleIn6)];
-    self.bSImageView.image = [UIImage imageNamed:@"basha"];
-    [self configImageView:self.bSImageView];
-    
-    self.max_X = CGRectGetMaxX(self.bSImageView.frame);
-    self.max_Y = CGRectGetMinY(self.bSImageView.frame);
-    
-    self.hQImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.max_X+5*ScreenMultipleIn6, self.max_Y, 115*ScreenMultipleIn6, 115*ScreenMultipleIn6)];
-    self.hQImageView.image = [UIImage imageNamed:@"hunqing"];
-    [self configImageView:self.hQImageView];
-    
-    self.max_X = CGRectGetMaxX(self.hQImageView.frame);
-    
-    self.serizeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.max_X+5*ScreenMultipleIn6, self.max_Y, 115*ScreenMultipleIn6, 55*ScreenMultipleIn6)];
-    self.serizeImageView.image = [UIImage imageNamed:@"xilie1"];
-    [self configImageView:self.serizeImageView];
-    
-    self.max_Y = CGRectGetMaxY(self.serizeImageView.frame);
-    self.hotImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.max_X+5*ScreenMultipleIn6, self.max_Y+5*ScreenMultipleIn6, 115*ScreenMultipleIn6, 55*ScreenMultipleIn6)];
-    self.hotImageView.image = [UIImage imageNamed:@"hotso"];
-    [self configImageView:self.hotImageView];
+//    [modelArray addObject:modelArray[0]];
+    modelArr = modelArray;
+    NetManager * manager = [NetManager shareManager];
+    NSString * URLstring = [NSString stringWithFormat:GETTUIGUANGIMG,[manager getIPAddress]];
+    if(modelArray.count<8){
+        
+        //两边的箭头
+        leftImg = [[UIImageView alloc]initWithFrame:CGRectMake(7.5*S6, 40*S6, 6.5*S6, 13.5*S6)];
+        leftImg.image = [UIImage sd_animatedGIFNamed:@"leftImg"];
+        leftImg.hidden = YES;
+        [self.contentView addSubview:leftImg];
+        
+        rightImg = [[UIImageView alloc]initWithFrame:CGRectMake(Wscreen-18.5*S6, 40*S6, 6.5*S6, 13.5*S6)];
+        rightImg.image = [UIImage sd_animatedGIFNamed:@"rightImg"];
+        [self.contentView addSubview:rightImg];
+        
+        if(modelArr.count<=4){
+            leftImg.hidden = YES;
+            rightImg.hidden = YES;
+        }
+        
+        //横向分布
+        horisonScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(13.5*S6+5*S6, 0, Wscreen-27*S6-10*S6, 85*S6)];
+//        horisonScrollView.bounces = NO;
+        horisonScrollView.delegate = self;
+        horisonScrollView.showsHorizontalScrollIndicator = NO;
+        horisonScrollView.contentSize = CGSizeMake(modelArray.count*(Wscreen-32*S6)/4.0, 85*S6);
+        [self.contentView addSubview:horisonScrollView];
+        
+        for(int i=0;i<modelArray.count;i++){
+            
+            BannerModel * model = [modelArray objectAtIndex:i];
+            UIButton * imgBtn = [Tools createButtonNormalImage:nil selectedImage:nil tag:i addTarget:self action:@selector(clickImgBtn:)];
+            [imgBtn setImageForState:UIControlStateNormal withURL:[NSURL URLWithString:[self connectImage:URLstring withFollow:model.img]] placeholderImage:[UIImage imageNamed:@"places"]];
+            imgBtn.frame = CGRectMake((Wscreen-32*S6)/4.0*i+12.5*S6, 10*S6, 55*S6, 55*S6);
+            [horisonScrollView addSubview:imgBtn];
+            
+            imgBtn.layer.cornerRadius = 55/2.0*S6;
+            imgBtn.layer.masksToBounds = YES;
+            
+            UILabel * label = [Tools createLabelWithFrame:CGRectMake((Wscreen-32*S6)/4.0*i-3*S6, 50*S6,(Wscreen-32*S6)/4.0 , 55*S6) textContent:model.aliasname withFont:[UIFont systemFontOfSize:12*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+            [horisonScrollView addSubview:label];
+        }
+    }else{
+       
+        //纵向分布
+        for(int i=0;i<modelArray.count;i++){
+            
+            BannerModel * model = [modelArray objectAtIndex:i];
+            UIButton * imgBtn = [Tools createButtonNormalImage:nil selectedImage:nil tag:i addTarget:self action:@selector(clickImgBtn:)];
+            [imgBtn setImageForState:UIControlStateNormal withURL:[NSURL URLWithString:[self connectImage:URLstring withFollow:model.img]] placeholderImage:[UIImage imageNamed:@"places"]];
+            imgBtn.frame = CGRectMake(12.5*S6+13.5*S6+i%4*(Wscreen-32*S6)/4.0, 10*S6+i/4*80*S6, 55*S6, 55*S6);
+            [self.contentView addSubview:imgBtn];
+            
+            imgBtn.layer.cornerRadius = 55/2.0*S6;
+            imgBtn.layer.masksToBounds = YES;
+            
+            UILabel * label = [Tools createLabelWithFrame:CGRectMake(-4*S6, 40*S6, 60*S6, 55*S6) textContent:model.aliasname withFont:[UIFont systemFontOfSize:12*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+            [imgBtn addSubview:label];
+        }
+    }
 }
 
--(void)configImageView:(UIImageView *)imageView{
+-(void)clickImgBtn:(UIButton *)btn{
     
-    imageView.layer.cornerRadius = 5.0*ScreenMultipleIn6;
-    imageView.layer.masksToBounds = YES;
-    [self.contentView addSubview:imageView];
+    if(self.block){
+        self.block(btn.tag);
+    }
+}
+
+-(void)clickImageWithBlock:(ClickBlock)block{
+    
+    self.block = block;
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    if(scrollView.contentOffset.x>=(Wscreen-32*S6)/4.0-15*S6){
+        leftImg.hidden = NO;
+    }
+    if(scrollView.contentOffset.x<(Wscreen-32*S6)/4.0-15*S6){
+        leftImg.hidden = YES;
+    }
+    
+    if(scrollView.contentOffset.x >= (Wscreen-32*S6)/4.0*(modelArr.count-4)-15*S6){
+        rightImg.hidden = YES;
+    }
+    
+    if(scrollView.contentOffset.x < (Wscreen-32*S6)/4.0*(modelArr.count-4)-15*S6){
+        rightImg.hidden = NO;
+    }
+}
+
+-(NSString *)connectImage:(NSString *)urlStr withFollow:(NSString *)followStr{
+    
+    return [NSString stringWithFormat:@"%@%@",urlStr,followStr];
+}
+                                                                                       
+//加载本地图片
+-(NSString *)getLocalImagePath:(NSString *)imageName{
+    
+    return [[NSBundle mainBundle]pathForResource:imageName ofType:@"png"];
 }
 
 - (void)awakeFromNib {
@@ -61,7 +143,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

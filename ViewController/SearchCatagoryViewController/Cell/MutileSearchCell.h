@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SearchCatagoryModel.h"
 
 @interface MutileSearchCell : UITableViewCell
 
 @property (nonatomic,strong) UIImageView * imageView1;
 @property (nonatomic,strong) UIImageView * imageView2;
 @property (nonatomic,strong) UIImageView * imageView3;
+
+@property (nonatomic,strong) SearchCatagoryModel * model;
 
 @end

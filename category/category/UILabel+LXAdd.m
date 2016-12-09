@@ -97,7 +97,7 @@
     // 字间距
     if(self.characterSpace > 0){
         long number = self.characterSpace;
-        CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&number);
+        CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt32Type,&number);
         [attributedString addAttribute:(id)kCTKernAttributeName value:(__bridge id)num range:NSMakeRange(0,[attributedString length])];
         
         CFRelease(num);

@@ -36,9 +36,9 @@
         
         // 2.加载时间
         if(self.dateKey){
-            self.lastUpdateTime = [[NSUserDefaults standardUserDefaults] objectForKey:self.dateKey];
+            self.lastUpdateTime = [kUserDefaults objectForKey:self.dateKey];
         } else {
-            self.lastUpdateTime = [[NSUserDefaults standardUserDefaults] objectForKey:MJRefreshHeaderTimeKey];
+            self.lastUpdateTime = [kUserDefaults objectForKey:MJRefreshHeaderTimeKey];
         }
     }
     return _lastUpdateTimeLabel;
@@ -94,11 +94,11 @@
     
     // 1.归档
     if(self.dateKey){
-        [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime forKey:self.dateKey];
+        [kUserDefaults setObject:lastUpdateTime forKey:self.dateKey];
     }   else{
-        [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime forKey:MJRefreshHeaderTimeKey];
+        [kUserDefaults setObject:lastUpdateTime forKey:MJRefreshHeaderTimeKey];
     }
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [kUserDefaults synchronize];
     
     // 2.更新时间
     [self updateTimeLabel];

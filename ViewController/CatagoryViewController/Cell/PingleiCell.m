@@ -21,114 +21,39 @@
 
 -(void)setImageView{
     
-    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(10*ScreenMultipleIn6, 0, Wscreen-20*ScreenMultipleIn6, 280*ScreenMultipleIn6)];
-    bgView.backgroundColor = [UIColor whiteColor];
-    [self.contentView addSubview:bgView];
+    self.bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 280*S6)];
+    self.bgView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:self.bgView];
     
-    NSArray * titleArray = @[@"项链",@"手镯",@"挂坠",@"戒指",@"手链",@"金条",@"耳环",@"更多",@"耳坠",@"耳钉",@"摆件",@"套链",@"发簪",@"发钗",@"项圈",@"脚镯",@"脚链",@"皮带",@"金币",@"金章",@"金钞",@"金票",@"金算盘",@"手编",@"金包银",@"金包铜"];
+    //从文件读取数据
+    NSString * plistPath = [NSString stringWithFormat:@"%@catagory.plist",LIBPATH];
+    NSArray * fileArray = [[NSArray alloc]initWithContentsOfFile:plistPath];
+    NSArray * titleArray = fileArray[0];
+    
     
     //这里的按钮需要tag值从”tag ＝ 100“开始
-    for(int i=0;i<PINLEICOUNT;i++){
+    for(int i=0;i<titleArray.count;i++){
         
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(6.5*ScreenMultipleIn6+i%4*85*ScreenMultipleIn6-i%4*0.6*ScreenMultipleIn6, i/4*40*ScreenMultipleIn6-i/4*0.6*ScreenMultipleIn6
-                                  , 85*ScreenMultipleIn6, 40*ScreenMultipleIn6);
+        button.frame = CGRectMake(12.5*S6+i%4*BUTTONWIDTH*S6+i%4*7.5*S6, i/4*BUTTONHEIGHT*S6+i/4*7.5*S6+10*S6, BUTTONWIDTH*S6, BUTTONHEIGHT*S6);
+        button.layer.cornerRadius = 3.0*S6;
         [button setTitle:titleArray[i] forState:UIControlStateNormal];
-        [button setTitleColor:TEXTCOLOR forState:UIControlStateNormal];
-        button.layer.borderColor = [RGB_COLOR(221, 221, 221, 1)CGColor];
-        button.layer.borderWidth = 0.6*ScreenMultipleIn6;
-        button.titleLabel.font = [UIFont systemFontOfSize:15*ScreenMultipleIn6];
+        [button setTitleColor:CATAGORYTEXTCOLOR forState:UIControlStateNormal];
+        button.layer.borderColor = [BTNBORDCOLOR CGColor];
+        button.layer.borderWidth = 0.6*S6;
+        
+        button.titleLabel.font = [UIFont systemFontOfSize:14*S6];
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
         button.tag = 100 + i;
-        if(i == 7){
-            
-            self.moreButton = button;
-        }
-        [bgView addSubview:button];
-        
-        //分配Button
-        switch (i) {
-            case 0:
-                self.button1 = button;
-                break;
-            case 1:
-                self.button2 = button;
-                break;
-            case 2:
-                self.button3 = button;
-                break;
-            case 3:
-                self.button4 = button;
-                break;
-            case 4:
-                self.button5 = button;
-                break;
-            case 5:
-                self.button6 = button;
-                break;
-            case 6:
-                self.button7 = button;
-                break;
-            case 8:
-                self.button8 = button;
-                break;
-            case 9:
-                self.button9 = button;
-                break;
-            case 10:
-                self.button10 = button;
-                break;
-            case 11:
-                self.button11 = button;
-                break;
-                
-            case 12:
-                self.button12 = button;
-                break;
-            case 13:
-                self.button13 = button;
-                break;
-            case 14:
-                self.button14 = button;
-                break;
-            case 15:
-                self.button15 = button;
-                break;
-            case 16:
-                self.button16 = button;
-                break;
-            case 17:
-                self.button17 = button;
-                break;
-            case 18:
-                self.button18 = button;
-                break;
-            case 19:
-                self.button19 = button;
-                break;
-            case 20:
-                self.button20 = button;
-                break;
-            case 21:
-                self.button21 = button;
-                break;
-            case 22:
-                self.button22 = button;
-                break;
-            case 23:
-                self.button23 = button;
-                break;
-            case 24:
-                self.button24 = button;
-                break;
-            case 25:
-                self.button25 = button;
-                break;
-            default:
-                break;
-        }
+        [self.bgView addSubview:button];
     }
+    
+    
+    //最下面添加一根线
+    UIView * bottonLineView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMinY(self.bgView.frame), CGRectGetWidth(self.bgView.frame), 0.6*S6)];
+    bottonLineView.backgroundColor = BTNBORDCOLOR;
+    [self.bgView addSubview:bottonLineView];
 }
 
 

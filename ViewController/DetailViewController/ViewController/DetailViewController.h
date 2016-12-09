@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : RootViewController
 
+@property (nonatomic,copy) NSString * index;
+@property (nonatomic,copy) NSString * number;
+
+@property (nonatomic,assign) NSInteger fromSaveVc;
+@property (nonatomic,assign) BOOL isFromSearchVc;
+@property (nonatomic,assign) BOOL isFromSaveVc;
+@property (nonatomic,assign) BOOL isFromThemeVc;
 @end

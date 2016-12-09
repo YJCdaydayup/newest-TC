@@ -124,4 +124,22 @@
     [motherView addSubview:imageView];
 }
 
++(void)addSelectorWithObject:(UILabel *)obj target:(id)target selector:(SEL)selector{
+    
+    obj.userInteractionEnabled = YES;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:target action:@selector(selector)];
+    [obj addGestureRecognizer:tap];
+}
+
++(NSString *)connectOriginImgStr:(NSString *)originStr width:(NSString *)width height:(NSString *)height{
+    
+    return [NSString stringWithFormat:@"%@;width=%@;height=%@;equalratio=1",originStr,width,height];
+}
+
++(CGFloat)getTextWidth:(NSString *)text withHeight:(CGFloat)height{
+    
+    CGSize size = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, height) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12*S6]} context:nil].size;
+    return size.width;
+}
+
 @end

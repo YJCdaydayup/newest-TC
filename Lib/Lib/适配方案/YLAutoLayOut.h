@@ -18,7 +18,7 @@
 #define ScreenMultipleIn6Plus [[YLAutoLayOut shareInstance] screenMultipleIn6Plus]
 
 //不同iPhone下的屏幕比例  iphone6为基准
-#define ScreenMultipleIn6 [[YLAutoLayOut shareInstance] screenMultipleIn6]
+#define S6 [[YLAutoLayOut shareInstance] screenMultipleIn6]
 
 //不同iPhone下的屏幕比例  登录界面为基准
 #define ScreenMultipleLogin [[YLAutoLayOut shareInstance] screenMultipleLogin]

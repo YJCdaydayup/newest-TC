@@ -21,27 +21,36 @@
 
 -(void)setImageView{
     
-    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(10*ScreenMultipleIn6, 0, Wscreen-20*ScreenMultipleIn6, 80*ScreenMultipleIn6)];
-    bgView.backgroundColor = [UIColor whiteColor];
-    [self.contentView addSubview:bgView];
+   self.bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 280*S6)];
+    self.bgView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:self.bgView];
     
-    NSArray * titleArray = @[@"足金9999",@"足金999",@"足金99",@"硬金",@"珍珠",@"砖石"];
+    //从文件读取数据
+    NSString * plistPath = [NSString stringWithFormat:@"%@catagory.plist",LIBPATH];
+    NSArray * fileArray = [[NSArray alloc]initWithContentsOfFile:plistPath];
+    
+    NSArray * titleArray = fileArray[2];
     
     //这里的按钮需要tag值从”tag ＝ 40“开始
-    for(int i=0;i<6;i++){
+    for(int i=0;i<titleArray.count;i++){
         
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(6.5*ScreenMultipleIn6+i%4*85*ScreenMultipleIn6-i%4*0.5*ScreenMultipleIn6, i/4*40*ScreenMultipleIn6-i/4*0.5*ScreenMultipleIn6
-                                  , 85*ScreenMultipleIn6, 40*ScreenMultipleIn6);
+        button.frame = CGRectMake(12.5*S6+i%4*BUTTONWIDTH*S6+i%4*7.5*S6, i/4*BUTTONHEIGHT*S6+i/4*7.5*S6+10*S6, BUTTONWIDTH*S6, BUTTONHEIGHT*S6);
+        button.layer.cornerRadius = 3.0*S6;
         [button setTitle:titleArray[i] forState:UIControlStateNormal];
-        [button setTitleColor:TEXTCOLOR forState:UIControlStateNormal];
-        button.layer.borderColor = [RGB_COLOR(221, 221, 221, 1)CGColor];
-        button.layer.borderWidth = 0.5*ScreenMultipleIn6;
-        button.titleLabel.font = [UIFont systemFontOfSize:15*ScreenMultipleIn6];
+        [button setTitleColor:CATAGORYTEXTCOLOR forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
+        button.layer.borderColor = [BTNBORDCOLOR CGColor];
+        button.layer.borderWidth = 0.5*S6;
+        button.titleLabel.font = [UIFont systemFontOfSize:14*S6];
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
         button.tag = 40+i;
-        [bgView addSubview:button];
+        [self.bgView addSubview:button];
     }
+    //最下面添加一根线
+    UIView * bottonLineView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMinY(self.bgView.frame), CGRectGetWidth(self.bgView.frame), 0.6*S6)];
+    bottonLineView.backgroundColor = BTNBORDCOLOR;
+    [self.bgView addSubview:bottonLineView];
 }
 
 

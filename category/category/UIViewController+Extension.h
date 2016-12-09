@@ -11,5 +11,6 @@
 @interface UIViewController (Extension)
 
 - (void)pushWebViewWithURL:(NSString *)URL;
-
+-(void)pushToViewControllerWithTransition:(UIViewController *)viewController withDirection:(NSString *)direction type:(BOOL)loginBool;
+-(void)popToViewControllerWithDirection:(NSString *)direction type:(BOOL)loginBool;
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ThemeDetailModel.h"
 
 @interface ThemeCell : UITableViewCell{
     
@@ -16,6 +17,8 @@
 
 @property (nonatomic,strong) UIImageView * productImageView;
 @property (nonatomic,strong) UILabel * titleLabel;
+
+@property (nonatomic,strong) ThemeDetailModel * model;
 
 
 @end

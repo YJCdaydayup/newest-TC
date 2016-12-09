@@ -22,4 +22,7 @@
 @property (nonatomic,assign) CGFloat max_X;
 @property (nonatomic,assign) CGFloat max_Y;
 
+//背景bgView
+@property (nonatomic,strong) UIView * bgView;
+
 @end

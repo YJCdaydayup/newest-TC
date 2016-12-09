@@ -10,4 +10,6 @@
 
 @interface CaizhiCell : UITableViewCell
 
+@property (nonatomic,strong,readwrite) UIView * bgView;
+
 @end

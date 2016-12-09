@@ -76,7 +76,7 @@ NSString * const ID = @"cycleCell";
 - (void)initialization
 {
     _pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
-    _autoScrollTimeInterval = 2.0;
+    _autoScrollTimeInterval = 4.5;
     _titleLabelTextColor = [UIColor whiteColor];
     _titleLabelTextFont= [UIFont systemFontOfSize:14];
     _titleLabelBackgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
@@ -84,12 +84,12 @@ NSString * const ID = @"cycleCell";
     _autoScroll = YES;
     _infiniteLoop = YES;
     _showPageControl = YES;
-    _pageControlDotSize = CGSizeMake(5*ScreenMultipleIn6,5*ScreenMultipleIn6);
+    _pageControlDotSize = CGSizeMake(5*S6,5*S6);
     _pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
     _hidesForSinglePage = YES;
     _currentPageDotColor = [UIColor whiteColor];
     _pageDotColor = [UIColor lightGrayColor];
-    _bannerImageViewContentMode = UIViewContentModeScaleAspectFill;
+    _bannerImageViewContentMode = UIViewContentModeScaleToFill;
     
     self.backgroundColor = [UIColor lightGrayColor];
     
@@ -160,6 +160,7 @@ NSString * const ID = @"cycleCell";
     }
     
     self.backgroundImageView.image = placeholderImage;
+    self.backgroundImageView.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 - (void)setPageControlDotSize:(CGSize)pageControlDotSize
@@ -189,7 +190,6 @@ NSString * const ID = @"cycleCell";
         UIPageControl *pageControl = (UIPageControl *)_pageControl;
         pageControl.currentPageIndicatorTintColor = currentPageDotColor;
     }
-    
 }
 
 - (void)setPageDotColor:(UIColor *)pageDotColor
@@ -312,8 +312,6 @@ NSString * const ID = @"cycleCell";
 }
 
 #pragma mark - actions
-
-
 - (void)setupPageControl
 {
     if (_pageControl) [_pageControl removeFromSuperview]; // 重新加载数据时调整
@@ -331,6 +329,7 @@ NSString * const ID = @"cycleCell";
             pageControl.userInteractionEnabled = NO;
             [self addSubview:pageControl];
             _pageControl = pageControl;
+            pageControl.alpha = PAGECONTROLALPHA;
         }
             break;
             
@@ -467,7 +466,6 @@ NSString * const ID = @"cycleCell";
     
     NSURL *url = self.imageURLsGroup[itemIndex];
     [cell.imageView sd_setImageWithURL:url placeholderImage:self.placeholderImage];
-    
     if (_titlesGroup.count) {
         cell.title = _titlesGroup[itemIndex];
     }
