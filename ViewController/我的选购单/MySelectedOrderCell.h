@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OrderCarModel.h"
+#import "DBSaveModel.h"
 
 typedef void(^ClickSelectedOrderBlock)(UIButton * btn);
 
@@ -22,7 +22,7 @@ typedef void(^ClickSelectedOrderBlock)(UIButton * btn);
 @property (nonatomic,strong) UIButton * select_btn;
 @property (nonatomic,strong) UILabel * numberLabel;
 
--(void)configCellWithModel:(OrderCarModel *)model;
+-(void)configCellWithModel:(DBSaveModel *)model;
 
 -(void)clickSelectedOrderBlock:(ClickSelectedOrderBlock)block;
 

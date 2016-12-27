@@ -36,6 +36,7 @@
 //文字颜色
 #define TEXTCOLOR RGB_COLOR(51, 51, 51, 1)
 #define CATAGORYTEXTCOLOR RGB_COLOR(102, 102, 102, 1)
+#define BatarPlaceTextCol RGB_COLOR(153, 153, 153, 1)
 
 //描边颜色
 #define BOARDCOLOR  RGB_COLOR(204, 204, 204, 1)
@@ -43,8 +44,13 @@
 //持久化NSUserDefault
 #define kUserDefaults [NSUserDefaults standardUserDefaults]
 
+#define  WEAKSELF(SELF)  __block typeof(self)(SELF) = self
+
 //注销按钮颜色
 #define LOGOUTBTNCOLOR RGB_COLOR(220, 119, 40, 1)
+
+//tabbar按钮颜色
+#define TABBARTEXTCOLOR  RGB_COLOR(231, 140, 59, 1)
 
 //资源下载路径
 #define LIBPATH [NSString stringWithFormat:@"%@/",[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]]

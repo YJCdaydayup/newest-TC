@@ -7,12 +7,14 @@
 //
 
 #import "AppDelegate.h"
-#import "DetailViewController.h"
+#import "BatarSettingController.h"
 #import "DBWorkerManager.h"
 #import "YLVer_UpManager.h"
 #import "NetManager.h"
 #import "YLLoginView.h"
-#import "SearchViewController.h"
+#import "BatarMainTabBarContoller.h"
+#import "BatarLoginController.h"
+#import "YLUploadToServer.h"
 
 @interface AppDelegate ()
 
@@ -21,6 +23,18 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+//    [kUserDefaults removeObjectForKey:CustomerID];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadDataToServer) name:CustomerID object:nil];
+    //SDImageCache默认是利用NSCache存储资源，也就是利用内存。设置不使用内存就行
+    //    [[SDImageCache sharedImageCache] setShouldCacheImagesInMemory:NO];
+    /**
+     * Decompressing images that are downloaded and cached can improve performance but can consume lot of memory.
+     * Defaults to YES. Set this to NO if you are experiencing a crash due to excessive memory consumption.
+     */
+    //    [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];
+    //    [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
     
     //检测版本更新
     [self checkUpdated];
@@ -31,19 +45,14 @@
     [NSThread sleepForTimeInterval:1];
     
     [[UINavigationBar appearance]setBarTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance]setTitleTextAttributes:@{NSForegroundColorAttributeName:TEXTCOLOR,NSFontAttributeName:[UIFont systemFontOfSize:17*S6]}];
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    WelcomeViewController * welcomeVc = [[WelcomeViewController alloc]init];
-    self.window.rootViewController = welcomeVc;
-    
-
-    
-//    SearchViewController * searchVC = [[SearchViewController alloc]init];
-//    UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:searchVC];
-//    self.window.rootViewController = nvc;
+    BatarMainTabBarContoller * mainVc = [[BatarMainTabBarContoller alloc]init];
+    self.window.rootViewController = mainVc;
     
     return YES;
 }
@@ -75,15 +84,26 @@
             [alertController addAction:action2];
             [self.window.rootViewController presentViewController:alertController animated:YES completion:nil];
         }
-        
     }];
 }
 
-//该方法写在AppDelegate.m文件中
+-(void)uploadDataToServer{
+    
+    NSLog(@"开始上传");
+   YLUploadToServer * uploadManager = [YLUploadToServer shareUploadToServer];
+    [uploadManager batar_start];
+}
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    [[SDImageCache sharedImageCache]cleanDisk];
-    [[SDImageCache sharedImageCache]clearMemory];
+    //1.取消当前任务
+    [[SDWebImageManager sharedManager]cancelAll];
+    
+    //2.清空缓存
+    //    [[SDWebImageManager sharedManager].imageCache clearDisk];
+    [[SDWebImageManager sharedManager].imageCache cleanDisk];
+    //    [[SDImageCache sharedImageCache]cleanDisk];
+    //    [[SDImageCache sharedImageCache]clearMemory];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
@@ -98,17 +118,16 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    //蓝牙设置界面
-
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-//    NSURL *url = [NSURL URLWithString:@"prefs:root=General&path=ManagedConfigurationList"];
-//    if ([[UIApplication sharedApplication] canOpenURL:url])
-//    {
-//        [[UIApplication sharedApplication] openURL:url];
-//    }
+    //    NSURL *url = [NSURL URLWithString:@"prefs:root=General&path=ManagedConfigurationList"];
+    //    if ([[UIApplication sharedApplication] canOpenURL:url])
+    //    {
+    //        [[UIApplication sharedApplication] openURL:url];
+    //    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

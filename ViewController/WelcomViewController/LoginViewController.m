@@ -265,114 +265,67 @@
     [kUserDefaults setObject:portTextfield.text forKey:PORTSTRING];
     
     NetManager * manager = [NetManager shareManager];
-    [manager checkIPCompareWithPort:^(NSString *response, NSError *error) {
-        
-        if(response){
-            
-            if(userCodeTextfield.text.length>0){
-                
-                [self.timer setFireDate:[NSDate distantFuture]];
-         
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    
-                    //验证客户编号
-                    self.hud.labelText = @"正在验证客户编号...";
-                    [self performSelector:@selector(confrimAction) withObject:nil afterDelay:1.5];
-                });
-            }else{
-                [self.hud hide:YES];
-                [kUserDefaults removeObjectForKey:CustomerID];
-                [kUserDefaults setObject:@"1" forKey:ISLOGIN];
-                faultLabel.alpha = 0;
-                FirstViewController * firstVc = [[FirstViewController alloc]init];
-                [self pushToViewControllerWithTransition:firstVc withDirection:@"left" type:YES];
-                //保存ip和端口
-                [manager saveCurrentIP:ipTextfield.text withPort:portTextfield.text];
-            }
-            
-        }else{
-            
-            //IP或端口错误
-            [kUserDefaults removeObjectForKey:ISLOGIN];
-            [kUserDefaults removeObjectForKey:IPSTRING];
-            [kUserDefaults removeObjectForKey:PORTSTRING];
-            [UIView animateWithDuration:0.2 animations:^{
-                
-                if(self.netState == YES){
-                    return ;
-                }
-                if(![error.description containsString:@"The request timed out"]){
-                    [self.hud hide:YES];
-                    
-                    self.netState = NO;//服务器地址或端口错误
-                    faultLabel.text = @"服务器地址或端口错误，请重新填写!";
-                    faultLabel.alpha = 1;
-                    [self.timer setFireDate:[NSDate distantFuture]];
-                    self.timeCount = 0;
-                    
-                    if([manager checkOutIfHasCorrenctIp_port]){
-                        //登录失败，如果有默认的ip和端口，则使用默认的
-                        [kUserDefaults setObject:LOGINFAILED forKey:LOGINFAILED];
-                        [manager getNewestIp_PortWhenLoginFailed];
-                    }else{
-                        //登录失败，没有默认的ip和端口
-                        [kUserDefaults removeObjectForKey:LOGINFAILED];
-                    }
-                    
-                }
-            }];
-        }
-    }];
+//    [manager checkIPCompareWithPort:^(NSString *response, NSError *error) {
+//        
+//        if(response){
+//            
+//            if(userCodeTextfield.text.length>0){
+//                
+//                [self.timer setFireDate:[NSDate distantFuture]];
+//         
+//                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                    
+//                    //验证客户编号
+//                    self.hud.labelText = @"正在验证客户编号...";
+//                    [self performSelector:@selector(confrimAction) withObject:nil afterDelay:1.5];
+//                });
+//            }else{
+//                [self.hud hide:YES];
+//                [kUserDefaults removeObjectForKey:CustomerID];
+//                [kUserDefaults setObject:@"1" forKey:ISLOGIN];
+//                faultLabel.alpha = 0;
+//                FirstViewController * firstVc = [[FirstViewController alloc]init];
+//                [self pushToViewControllerWithTransition:firstVc withDirection:@"left" type:YES];
+//                //保存ip和端口
+//                [manager saveCurrentIP:ipTextfield.text withPort:portTextfield.text];
+//            }
+//            
+//        }else{
+//            
+//            //IP或端口错误
+//            [kUserDefaults removeObjectForKey:ISLOGIN];
+//            [kUserDefaults removeObjectForKey:IPSTRING];
+//            [kUserDefaults removeObjectForKey:PORTSTRING];
+//            [UIView animateWithDuration:0.2 animations:^{
+//                
+//                if(self.netState == YES){
+//                    return ;
+//                }
+//                if(![error.description containsString:@"The request timed out"]){
+//                    [self.hud hide:YES];
+//                    
+//                    self.netState = NO;//服务器地址或端口错误
+//                    faultLabel.text = @"服务器地址或端口错误，请重新填写!";
+//                    faultLabel.alpha = 1;
+//                    [self.timer setFireDate:[NSDate distantFuture]];
+//                    self.timeCount = 0;
+//                    
+//                    if([manager checkOutIfHasCorrenctIp_port]){
+//                        //登录失败，如果有默认的ip和端口，则使用默认的
+//                        [kUserDefaults setObject:LOGINFAILED forKey:LOGINFAILED];
+//                        [manager getNewestIp_PortWhenLoginFailed];
+//                    }else{
+//                        //登录失败，没有默认的ip和端口
+//                        [kUserDefaults removeObjectForKey:LOGINFAILED];
+//                    }
+//                    
+//                }
+//            }];
+//        }
+//    }];
 }
 
 -(void)confrimAction{
-    
-    NetManager * manager = [NetManager shareManager];
-    NSString * urlStr = [NSString stringWithFormat:LOGIN_URL,[manager getIPAddress]];
-    NSDictionary * dict = @{@"number":userCodeTextfield.text};
-    [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
-        
-        NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSString * state = [dict objectForKey:@"state"];
-        if([state intValue] == 1){
-            
-            [kUserDefaults setObject:@"1" forKey:ISLOGIN];
-            faultLabel.alpha = 0;
-            FirstViewController * firstVc = [[FirstViewController alloc]init];
-            [self pushToViewControllerWithTransition:firstVc withDirection:@"left" type:YES];
-            //保存ip和端口
-            [manager saveCurrentIP:ipTextfield.text withPort:portTextfield.text];
-            //判断是否输入客户编号
-            [self.hud hide:YES];
-            [kUserDefaults setObject:userCodeTextfield.text forKey:CustomerID];
-        }else{
-            
-            [self.hud hide:YES];
-            AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            self.hud.labelText = @"客户编码错误";
-            YLCustomerHUD * hud = [[YLCustomerHUD alloc]initWithWindow:app.window];
-            [kUserDefaults removeObjectForKey:CustomerID];
-            
-            [hud clickCustomerBtn:^(NSInteger index) {
-                
-                if (index == 0) {
-                    //下次再说
-                    [kUserDefaults setObject:@"1" forKey:ISLOGIN];
-                    faultLabel.alpha = 0;
-                    FirstViewController * firstVc = [[FirstViewController alloc]init];
-                    [self pushToViewControllerWithTransition:firstVc withDirection:@"left" type:YES];
-                    //保存ip和端口
-                    [manager saveCurrentIP:ipTextfield.text withPort:portTextfield.text];
-                    
-                }else{
-                    
-                    //再次填写客户编号
-                    
-                }
-                
-            }];
-        }
-    }];
 }
 
 -(void)timerEnd{

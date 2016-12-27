@@ -13,7 +13,7 @@ typedef void(^ConfirmBlock)(NSString * user_code);
 typedef void(^CancelBlock)();
 
 @interface YLLoginView : UIView
-
+@property (nonatomic,strong)     UITextField * user_code_field;
 -(id)initWithVC:(UIWindow *)window withVc:(RootViewController *)vc;
 -(void)clickCancelBtn:(CancelBlock)block;
 

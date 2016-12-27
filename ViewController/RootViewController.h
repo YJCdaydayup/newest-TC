@@ -10,12 +10,29 @@
 #import "MBProgressHUD.h"
 #import "UIViewController+Extension.h"
 #import "YLProgressHUD.h"
+#import "Single.h"
 
+@interface RootViewController : UIViewController{
+    
+    UIButton * _leftNavBtn;
+    UIButton * _rightNavBtn;
+}
 
-@interface RootViewController : UIViewController
-
+//singleH(Controller)
+@property (nonatomic,strong) AppDelegate * app;
 @property (nonatomic,strong) MBProgressHUD * hud;
 @property (nonatomic,strong) YLProgressHUD * ylHud;
+@property (nonatomic,strong) RootViewController * fatherVc;
+
+-(instancetype)initWithController:(id)Vc;
+
+-(void)createView;
+
+//导航条
+-(void)batar_setNavibar:(NSString *)title;
+
+//导航按钮
+-(void)batar_setLeftNavButton:(NSArray *)imgArray target:(id)target selector:(SEL)leftSel size:(CGSize)leftSize selector:(SEL)rightSel rightSize:(CGSize)rightSize topHeight:(CGFloat)height;
 
 //获取placeHolder图片
 -(NSString *)captureLocalImage:(NSString *)imageName withType:(NSString *)imageType;

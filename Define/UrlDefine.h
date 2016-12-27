@@ -21,8 +21,10 @@
 /*人气产品*/
 #define POPULARITY @"http://%@/photo-album/index/popularity"
 
-/*轮播图拼接url*/
+/*图片拼接url*/
 #define BANNERCONNET @"http://%@/photo-album/image/"
+/*轮播图拼接url*/
+#define NEWBANNERCONNET @"http://%@/photo-album/index/image_tab/"
 
 /*点击轮播图url*/
 #define BANNERCLICKURL @"http://%@/photo-album/search/classify/"

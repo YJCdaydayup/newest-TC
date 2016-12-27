@@ -186,14 +186,14 @@
         [self.selected_array removeAllObjects];
         for(OrderCarModel * model in self.dataArray){
             
-            model.isSelcted = YES;
+            model.selected = YES;
             [self.selected_array addObject:model.number];
         }
     }else{
         //取消全选
         [self.selected_array removeAllObjects];
         for(OrderCarModel * model in self.dataArray){
-            model.isSelcted = NO;
+            model.selected = NO;
             [self.selected_array removeObject:model.number];
         }
     }
@@ -249,7 +249,6 @@
                 }
                 [self.dataArray addObjectsFromArray:tempArray];
             }
-            
             [order_tableView reloadData];
         }else{
             NSLog(@"%@",error.description);
@@ -278,14 +277,14 @@
         
         if(btn.selected){
             //选择
-            model.isSelcted = YES;
+            model.selected = YES;
             [weakSelf.selected_array addObject:model.number];
             if(self.selected_array.count == self.dataArray.count){
                 selectAllBtn.selected = YES;
             }
         }else{
             //取消选择
-            model.isSelcted = NO;
+            model.selected = NO;
             selectAllBtn.selected = NO;
             [weakSelf.selected_array removeObject:model.number];
         }

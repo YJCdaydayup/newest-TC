@@ -57,7 +57,7 @@ typedef void(^DetailDataBlock)(id responseObject);
 /*
  清除所有图片的缓存
  **/
--(void)cleanUpImageInCache;
++(void)cleanUpImageInCache;
 /*
  清除所有图片硬盘里面的缓存
  **/
@@ -95,7 +95,7 @@ typedef void(^DetailDataBlock)(id responseObject);
  **/
 -(void)order_getAllDetailCache:(NSString *)number completion:(DetailDataBlock)block;
 /*
-加入购物车后，通过产品的ID，移除对应缓存数据
+加入购物车后，通过产品的ID，移除对应缓存详细数据
  **/
 -(void)order_cleanDataCacheWithNumber:(NSString *)number;
 /*

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailViewController : RootViewController
-
++(instancetype)shareDetailController;
 @property (nonatomic,copy) NSString * index;
 @property (nonatomic,copy) NSString * number;
 

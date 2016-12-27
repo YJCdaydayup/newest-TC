@@ -53,28 +53,40 @@
 @end
 
 @implementation SavaViewController
+singleM(SaveController)
 
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    
-    self.navLeftButton.hidden = NO;
-    self.titlelabel.hidden = NO;
     [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
     
     for(UIView * subView in self.view.subviews){
         [subView removeFromSuperview];
     }
-    
     [self setVc];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    self.navLeftButton.hidden = YES;
-    self.titlelabel.hidden = YES;
     [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
+}
+
+-(void)configUI{
+    
+    //导航条设置
+    [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(backAct) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
+    
+    //导航条标题
+    NSString * titleStr = @"我的收藏";
+    
+    self.titlelabel = [Tools createLabelWithFrame:CGRectMake(10, 10, 100*S6, 20*S6) textContent:titleStr
+                                         withFont:[UIFont systemFontOfSize:17*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];
+    self.navigationItem.titleView = self.titlelabel;
+    editBtn = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 40*S6, 35*S6) textContent:@"编辑" withFont:[UIFont systemFontOfSize:17*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
+    [editBtn addTarget:self action:@selector(editSaveAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem * editbarBtn = [[UIBarButtonItem alloc]initWithCustomView:editBtn];
+    self.navigationItem.rightBarButtonItem = editbarBtn;
 }
 
 -(void)setVc{
@@ -228,36 +240,6 @@
             [self.collectionView reloadData];
         }
     }];
-}
-
--(void)configUI{
-
-    
-    NSLog(@"%zi",[[kUserDefaults objectForKey:SAVE_PUSH_FLAG]integerValue]);
-    
-    //导航条设置
-    self.navLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.navLeftButton setBackgroundImage:[UIImage imageNamed:@"return"] forState:UIControlStateNormal];
-    
-    if(IS_IPHONE == IS_IPHONE_6||IS_IPHONE == IS_IPHONE_6P){
-        
-        self.navLeftButton.frame = CGRectMake(31/2.0*S6, 20.5/2*S6, 49/2.0*S6, 22.5*S6);
-    }else{
-        self.navLeftButton.frame = CGRectMake(31/2.0*S6, 22/2*S6, 49/2.0*S6, 22.5*S6);
-    }
-    [self.navigationController.navigationBar addSubview:self.navLeftButton];
-    [self.navLeftButton addTarget:self action:@selector(backAct) forControlEvents:UIControlEventTouchUpInside];
-    
-    //导航条标题
-    NSString * titleStr = @"我的收藏";
-    
-    self.titlelabel = [Tools createLabelWithFrame:CGRectMake(10, 10, 100*S6, 20*S6) textContent:titleStr
-                                         withFont:[UIFont systemFontOfSize:17*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];
-    self.navigationItem.titleView = self.titlelabel;
-    editBtn = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 40*S6, 35*S6) textContent:@"编辑" withFont:[UIFont systemFontOfSize:17*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
-    [editBtn addTarget:self action:@selector(editSaveAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem * editbarBtn = [[UIBarButtonItem alloc]initWithCustomView:editBtn];
-    self.navigationItem.rightBarButtonItem = editbarBtn;
 }
 
 #pragma mark -编辑cell

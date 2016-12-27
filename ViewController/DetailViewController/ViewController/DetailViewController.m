@@ -47,9 +47,10 @@
     YLOrderControlView * bottomControlView;
     
     UIButton * save_Button;
+    
+    YLLoginView * loginView;//登录模块
 }
-//左导航按钮和导航栏标题
-@property (nonatomic,strong) UIButton * navLeftButton;
+
 @property (nonatomic,strong) UILabel * titlelabel;
 
 //四个图片属性
@@ -78,19 +79,27 @@
 @end
 
 @implementation DetailViewController
-
--(void)viewWillAppear:(BOOL)animated{
++(instancetype)shareDetailController{
     
-    [super viewWillAppear:animated];
-    self.navLeftButton.hidden = NO;
-    self.titlelabel.hidden = NO;
+    static DetailViewController * controller = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        controller = [[DetailViewController alloc]init];
+    });
+    return controller;
+}
+
+-(instancetype)init{
+    
+    if(self = [super init]){
+        self.hidesBottomBarWhenPushed = YES;
+    }
+    return self;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    self.navLeftButton.hidden = YES;
-    self.titlelabel.hidden = YES;
     
     //    self.ylScrollerView = nil;
     //    [self.ylScrollerView removeFromSuperview];
@@ -106,32 +115,57 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //    [kUserDefaults setObject:@"123" forKey:CustomerID];
-    //    [kUserDefaults removeObjectForKey:CustomerID];
-    //    NSLog(@"%@",self.index);
-    [self createView];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+-(void)keyBoardWillShow:(NSNotification *)notification{
+    
+    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    // 获取通知的信息字典
+    NSDictionary *userInfo = [notification userInfo];
+    
+    // 获取键盘弹出后的rect
+    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect keyboardRect = [aValue CGRectValue];
+    
+    // 获取键盘弹出动画时间
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    
+    // 调用代理
+    if([loginView.user_code_field becomeFirstResponder]){
+        [UIView animateWithDuration:animationDuration animations:^{
+            app.window.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+150*S6);
+        }];
+    }else{
+        [UIView animateWithDuration:animationDuration animations:^{
+            app.window.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+50*S6);
+        }];
+    }
+}
+-(void)keyBoardWillHide:(NSNotification *)notification{
+    
+    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    // 获取通知的信息字典
+    NSDictionary *userInfo = [notification userInfo];
+    
+    // 获取键盘弹出动画时间
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    
+    // 调用代理
+    [UIView animateWithDuration:animationDuration animations:^{
+        app.window.transform = CGAffineTransformIdentity;
+    }];
 }
 
 -(void)createView{
     self.navigationItem.hidesBackButton = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self createBgView];
-    
-    [self configUI];
-    [self createData];
-    UISwipeGestureRecognizer * swipe = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeAction)];
-    [self.view addGestureRecognizer:swipe];
-}
-
--(void)swipeAction{
-    
-    CATransition * animation = [CATransition animation];
-    animation.type = kCATransitionReveal;
-    animation.duration = 0.5f;
-    animation.subtype = kCATransitionFromLeft;
-    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
-    [self.navigationController.view.layer addAnimation:animation forKey:@"123"];
-    [self.navigationController popViewControllerAnimated:NO];
 }
 
 -(void)createBgView{
@@ -143,18 +177,9 @@
     
     backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 880*S6)];
     [scrollerView addSubview:backgroundView];
-}
-
--(YLScrollerView *)ylScrollerView{
     
-    if(_ylScrollerView == nil){
-        
-        _ylScrollerView = [YLScrollerView shareImageManager];
-        _ylScrollerView.delegate = self;
-        ylsubScrollView = _ylScrollerView.scollerView;
-        [self.bgView addSubview:_ylScrollerView];
-    }
-    return _ylScrollerView;
+    [self configUI];
+    [self createData];
 }
 
 -(void)getSmallImageArray{
@@ -275,7 +300,6 @@
         [self.hud show:YES];
         [manager downloadDataWithUrl:URLstring parm:dict callback:^(id responseObject, NSError *error) {
             obj = responseObject;
-            //                NSLog(@"%@",obj);
             [self captureData:responseObject];
         }];
     }else if (self.fromSaveVc == 1){
@@ -385,13 +409,20 @@
     [backgroundView addSubview:line_view];
     
     //下单备注
+    UIView * orderBgView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(separete_view.frame), Wscreen, 220*S6)];
+    orderBgView.backgroundColor = RGB_COLOR(238, 238, 238, 1);
+    [backgroundView addSubview:orderBgView];
+    
     UILabel * remark_label = [Tools createLabelWithFrame:CGRectMake(20*S6, 9*S6+CGRectGetMaxY(line_view.frame), Wscreen, 14*S6) textContent:@"下单备注:" withFont:[UIFont systemFontOfSize:14*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentLeft];
     [backgroundView addSubview:remark_label];
     
-#pragma mark -这里填写录音控件
+#pragma mark - 这里填写录音控件
     self.automaticallyAdjustsScrollViewInsets = NO;
     YLVoicemanagerView * YL = [[YLVoicemanagerView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(remark_label.frame)+10*S6, Wscreen, 230*S6) withVc:backgroundView];
     [backgroundView addSubview:YL];
+    
+#pragma mark - 底部
+    [self createBottomView];
 }
 
 #pragma mark -分享到第三方平台
@@ -452,12 +483,7 @@
     backgroundView.backgroundColor = [UIColor whiteColor];
     
     //导航条设置
-    self.navLeftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.navLeftButton setBackgroundImage:[UIImage imageNamed:@"return"] forState:UIControlStateNormal];
-    
-    self.navLeftButton.frame = CGRectMake(15.5, 13, 24.5, 22.5);
-    [self.navigationController.navigationBar addSubview:self.navLeftButton];
-    [self.navLeftButton addTarget:self action:@selector(backOut) forControlEvents:UIControlEventTouchUpInside];
+    [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(backOut) size:CGSizeMake(24.5*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:13.5*S6];
     
     //收藏按钮
     save_Button = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 0, 0) textContent:@"点击收藏" withFont:[UIFont systemFontOfSize:16*S6] textColor:RGB_COLOR(231, 140, 59, 1) textAlignment:NSTextAlignmentRight];
@@ -474,6 +500,58 @@
     
     //布局整个页面
     [self autoWholePage];
+}
+
+
+//布局整个页面
+-(void)autoWholePage{
+    
+    largeImgBgView = [[UIView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, 563/2.0*S6)];
+    [backgroundView addSubview:largeImgBgView];
+    
+    self.largeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0,0, Wscreen,563/2.0*S6)];
+    self.largeImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [largeImgBgView addSubview:self.largeImageView];
+}
+
+-(void)createBottomView{
+    
+    bottomControlView = [[YLOrderControlView alloc]init];
+    [self.view addSubview:bottomControlView];
+    [self.view bringSubviewToFront:bottomControlView];
+    
+    [bottomControlView clickBottomBtn:^(NSInteger tag) {
+        
+//        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        switch (tag) {
+            case 0:{
+                [self popToViewControllerWithDirection:@"left" type:NO];
+            }
+                break;
+            case 1:
+            {
+                SavaViewController * saveVc = [[SavaViewController alloc]init];
+                [self pushToViewControllerWithTransition:saveVc withDirection:@"left" type:NO];
+            }
+                break;
+            case 2:{
+                //进入购物车
+                
+            }
+                break;
+            case 3:{
+                //加入选购单
+                DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+                [manager order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image)  withNumber:detailModel.number];
+                [manager order_saveDatailCache:detailModel.number withData:obj];
+//                [self addMyOrders];
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }];
 }
 
 #pragma mark -收藏
@@ -515,90 +593,6 @@
     }];
 }
 
-//布局整个页面
--(void)autoWholePage{
-    
-    largeImgBgView = [[UIView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, 563/2.0*S6)];
-    [backgroundView addSubview:largeImgBgView];
-    
-    self.largeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0,0, Wscreen,563/2.0*S6)];
-    self.largeImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [largeImgBgView addSubview:self.largeImageView];
-    
-    
-    [self createBottomView];
-}
-
--(UIView *)bgView{
-    
-    if(_bgView == nil){
-        //设置滑动图片下面的背景
-        _bgView = [[UIView alloc]initWithFrame:CGRectMake(0,563/2.0*S6+NAV_BAR_HEIGHT, Wscreen, (15+165+15)/2.0*S6)];
-        _bgView.backgroundColor = TABLEVIEWCOLOR;
-        [backgroundView addSubview:_bgView];
-        self.max_Y = CGRectGetMaxY(_bgView.frame);
-    }
-    return _bgView;
-}
-
--(void)createBottomView{
-    
-    bottomControlView = [[YLOrderControlView alloc]init];
-    [self.view addSubview:bottomControlView];
-    [self.view bringSubviewToFront:bottomControlView];
-    
-    [bottomControlView clickBottomBtn:^(NSInteger tag) {
-        
-        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        switch (tag) {
-            case 0:{
-                FirstViewController * firstVC = [[FirstViewController alloc]init];
-                [self pushToViewControllerWithTransition:firstVC withDirection:@"left" type:NO];
-            }
-                
-                break;
-            case 1:
-            {
-                SavaViewController * saveVc = [[SavaViewController alloc]init];
-                [self pushToViewControllerWithTransition:saveVc withDirection:@"left" type:NO];
-            }
-                break;
-            case 2:{
-                
-                if([kUserDefaults objectForKey:CustomerID]){
-                    MyOrdersController * ordersVc = [[MyOrdersController alloc]init];
-                    [kUserDefaults setObject:self.index forKey:PRODUCTNUMBER];
-                    [self pushToViewControllerWithTransition:ordersVc withDirection:@"left" type:NO];
-                }else{
-                    
-                    YLLoginView * loginView = [[YLLoginView alloc]initWithVC:app.window withVc:self];
-                    [app.window addSubview:loginView];
-                }
-            }
-                
-                break;
-            case 3:{
-                
-                //加入选购单
-                if([kUserDefaults objectForKey:CustomerID]){
-                    
-                    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-                    [manager order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image)  withNumber:detailModel.number];
-                    [manager order_saveDatailCache:detailModel.number withData:obj];
-                    [self addMyOrders];
-                    
-                }else{
-                    YLLoginView * loginView = [[YLLoginView alloc]initWithVC:app.window withVc:self];
-                    [app.window addSubview:loginView];
-                }
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }];
-}
 //加入我的选购单
 -(void)addMyOrders{
     
@@ -607,7 +601,6 @@
     self.hud.animationType = MBProgressHUDAnimationZoomOut;
     
     YLVoicemanagerView * recordManager = [[YLVoicemanagerView alloc]initWithFrame:self.view.frame withVc:[UIView new]];
-    
     NSMutableArray * reNameVoiceArray = [NSMutableArray array];//获取所有的语音数组
     NSMutableArray * voiceArray = [recordManager getAllVoiceMessages];
     for(int i = 0;i<voiceArray.count;i++){
@@ -617,6 +610,7 @@
         NSData * data = dict[key];
         
         NSString * newKey = [NSString stringWithFormat:@"%@@%@@%@.wav",[kUserDefaults objectForKey:CustomerID],key,detailModel.number];
+        NSLog(@"%@",newKey);
         NSDictionary * newDict = @{newKey:data};
         [reNameVoiceArray addObject:newDict];
     }
@@ -669,7 +663,7 @@
             
             if(responseObject){
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                     self.hud.labelText = @"上传成功!";
+                    self.hud.labelText = @"上传成功!";
                 });
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self.hud hide:YES];
@@ -709,28 +703,7 @@
 //返回到上一个界面
 -(void)backOut{
     
-    FirstViewController * firstVc = [[FirstViewController alloc]init];
-    if(self.fromSaveVc == 0){
-        
-        if(self.isFromSearchVc||self.isFromThemeVc){
-            [self popToViewControllerWithDirection:@"right" type:NO];
-            return;
-        }
-        [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
-        return;
-    }
-    
-    if(self.isFromSaveVc == YES){
-        
-        SavaViewController * saveVc = [[SavaViewController alloc]init];
-        [self pushToViewControllerWithTransition:saveVc withDirection:@"right" type:NO];
-        [kUserDefaults setObject:[kUserDefaults objectForKey:FROM_VC_TO_SAVE] forKey:TEMP_FROM_VC_TO_SAVE];
-        [kUserDefaults removeObjectForKey:FROM_VC_TO_SAVE];
-        [kUserDefaults setObject:@"123" forKey:SAVE_PUSH_FLAG];
-        return;
-    }
-    
-    [self popToViewControllerWithDirection:@"right" type:NO];
+    [self popToViewControllerWithDirection:@"left" type:NO];
 }
 
 -(NSMutableArray *)sortItemsArray{
@@ -748,6 +721,29 @@
         _shareTool = [STShareTool toolWithViewController:self];
     }
     return _shareTool;
+}
+-(UIView *)bgView{
+    
+    if(_bgView == nil){
+        //设置滑动图片下面的背景
+        _bgView = [[UIView alloc]initWithFrame:CGRectMake(0,563/2.0*S6+NAV_BAR_HEIGHT, Wscreen, (15+165+15)/2.0*S6)];
+        _bgView.backgroundColor = TABLEVIEWCOLOR;
+        [backgroundView addSubview:_bgView];
+        self.max_Y = CGRectGetMaxY(_bgView.frame);
+    }
+    return _bgView;
+}
+
+-(YLScrollerView *)ylScrollerView{
+    
+    if(_ylScrollerView == nil){
+        
+        _ylScrollerView = [YLScrollerView shareImageManager];
+        _ylScrollerView.delegate = self;
+        ylsubScrollView = _ylScrollerView.scollerView;
+        [self.bgView addSubview:_ylScrollerView];
+    }
+    return _ylScrollerView;
 }
 
 - (void)didReceiveMemoryWarning {

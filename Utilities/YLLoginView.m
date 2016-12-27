@@ -14,7 +14,6 @@
     UIWindow * parentVc;
     UIView * maskView;
     UIView * controlView;
-    UITextField * user_code_field;
     UIButton * confirm_btn;
     UIButton * cancel_btn;
     RootViewController * currentVc;
@@ -32,8 +31,8 @@
     
     if(self = [super init]){
         
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
         
         currentVc = vc;
         parentVc = window;
@@ -44,43 +43,43 @@
     return self;
 }
 
--(void)keyBoardWillShow:(NSNotification *)notification{
-    
-//    [user_code_field resignFirstResponder];
-    // 获取通知的信息字典
-    NSDictionary *userInfo = [notification userInfo];
-    
-    // 获取键盘弹出后的rect
-//    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGRect keyboardRect = [aValue CGRectValue];
-    
-    // 获取键盘弹出动画时间
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    // 调用代理
-    [UIView animateWithDuration:animationDuration animations:^{
-        parentVc.transform = CGAffineTransformMakeTranslation(0, -50*S6);
-    }];
-}
--(void)keyBoardWillHide:(NSNotification *)notification{
-    
-//    [user_code_field resignFirstResponder];
-    
-    // 获取通知的信息字典
-    NSDictionary *userInfo = [notification userInfo];
-    
-    // 获取键盘弹出动画时间
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    // 调用代理
-    [UIView animateWithDuration:animationDuration animations:^{
-        parentVc.transform = CGAffineTransformIdentity;
-    }];
-}
+//-(void)keyBoardWillShow:(NSNotification *)notification{
+//    
+////    [user_code_field resignFirstResponder];
+//    // 获取通知的信息字典
+//    NSDictionary *userInfo = [notification userInfo];
+//    
+//    // 获取键盘弹出后的rect
+////    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+////    CGRect keyboardRect = [aValue CGRectValue];
+//    
+//    // 获取键盘弹出动画时间
+//    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+//    NSTimeInterval animationDuration;
+//    [animationDurationValue getValue:&animationDuration];
+//    
+//    // 调用代理
+//    [UIView animateWithDuration:animationDuration animations:^{
+//        parentVc.transform = CGAffineTransformMakeTranslation(0, -50*S6);
+//    }];
+//}
+//-(void)keyBoardWillHide:(NSNotification *)notification{
+//    
+////    [user_code_field resignFirstResponder];
+//    
+//    // 获取通知的信息字典
+//    NSDictionary *userInfo = [notification userInfo];
+//    
+//    // 获取键盘弹出动画时间
+//    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+//    NSTimeInterval animationDuration;
+//    [animationDurationValue getValue:&animationDuration];
+//    
+//    // 调用代理
+//    [UIView animateWithDuration:animationDuration animations:^{
+//        parentVc.transform = CGAffineTransformIdentity;
+//    }];
+//}
 
 -(void)createView{
     
@@ -106,19 +105,19 @@
     [controlView addSubview:title_label];
     
     UIView * leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 12*S6, 32*S6)];
-    user_code_field = [Tools createTextFieldFrame:CGRectMake(24*S6, CGRectGetMaxY(title_label.frame)+35*S6, 232*S6, 32*S6) placeholder:@"用户编号" bgImageName:nil leftView:leftView rightView:nil isPassWord:NO];
+   self.user_code_field = [Tools createTextFieldFrame:CGRectMake(24*S6, CGRectGetMaxY(title_label.frame)+35*S6, 232*S6, 32*S6) placeholder:@"用户编号" bgImageName:nil leftView:leftView rightView:nil isPassWord:NO];
    
-    user_code_field.layer.borderWidth = 1*S6;
-    user_code_field.layer.borderColor = [RGB_COLOR(204, 204, 204, 1)CGColor];
-    user_code_field.layer.cornerRadius = 5*S6;
-    user_code_field.layer.masksToBounds = YES;
-    [controlView addSubview:user_code_field];
+    self.user_code_field.layer.borderWidth = 1*S6;
+    self.user_code_field.layer.borderColor = [RGB_COLOR(204, 204, 204, 1)CGColor];
+    self.user_code_field.layer.cornerRadius = 5*S6;
+    self.user_code_field.layer.masksToBounds = YES;
+    [controlView addSubview:self.user_code_field];
     
-    wrongLabel = [Tools createLabelWithFrame:CGRectMake(24*S6, CGRectGetMaxY(user_code_field.frame)+5*S6, 232*S6, 14*S6) textContent:@"输入客户编号有误，请重新输入!" withFont:[UIFont systemFontOfSize:14*S6] textColor:[UIColor redColor] textAlignment:NSTextAlignmentLeft];
+    wrongLabel = [Tools createLabelWithFrame:CGRectMake(24*S6, CGRectGetMaxY(self.user_code_field.frame)+5*S6, 232*S6, 14*S6) textContent:@"输入客户编号有误，请重新输入!" withFont:[UIFont systemFontOfSize:14*S6] textColor:[UIColor redColor] textAlignment:NSTextAlignmentLeft];
     wrongLabel.alpha = 0;
     [controlView addSubview:wrongLabel];
     
-    cancel_btn = [Tools createNormalButtonWithFrame:CGRectMake(27.5*S6, 42.5*S6+CGRectGetMaxY(user_code_field.frame), 95*S6, 31.5*S6) textContent:@"取消" withFont:[UIFont systemFontOfSize:17*S6] textColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
+    cancel_btn = [Tools createNormalButtonWithFrame:CGRectMake(27.5*S6, 42.5*S6+CGRectGetMaxY(self.user_code_field.frame), 95*S6, 31.5*S6) textContent:@"取消" withFont:[UIFont systemFontOfSize:17*S6] textColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
     cancel_btn.layer.cornerRadius = 5*S6;
     cancel_btn.layer.masksToBounds = YES;
     cancel_btn.backgroundColor = RGB_COLOR(207, 193, 193, 1);
@@ -137,7 +136,7 @@
 
 -(void)hideKeyboard{
     
-    [user_code_field resignFirstResponder];
+    [self.user_code_field resignFirstResponder];
 }
 
 -(void)move{
@@ -154,13 +153,13 @@
     wrongLabel.alpha = 0;
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:LOGIN_URL,[manager getIPAddress]];
-    NSDictionary * dict = @{@"number":user_code_field.text};
+    NSDictionary * dict = @{@"number":self.user_code_field.text};
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
-       
+
         NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSString * state = [dict objectForKey:@"state"];
         if([state intValue] == 1){
-            [kUserDefaults setObject:user_code_field.text forKey:CustomerID];
+            [kUserDefaults setObject:self.user_code_field.text forKey:CustomerID];
             [UIView animateWithDuration:0.5 animations:^{
                 controlView.alpha = 0;
                 maskView.alpha = 0;

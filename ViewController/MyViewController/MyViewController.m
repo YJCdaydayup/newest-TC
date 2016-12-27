@@ -194,7 +194,7 @@
         case 0:{
             
             [self showAlert:@"清除缓存，请稍后..."];
-            [manager cleanUpImageInCache];
+//            [manager cleanUpImageInCache];
         }
             break;
         case 1:{
@@ -262,9 +262,7 @@
 
 -(void)backOut{
 
-//    [self popToViewControllerWithDirection:@"right" type:NO];
-    FirstViewController * firstVc = [[FirstViewController alloc]init];
-    [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
+    [self popToViewControllerWithDirection:@"right" type:NO];
 }
 
 @end

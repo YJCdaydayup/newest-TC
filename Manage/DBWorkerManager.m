@@ -159,7 +159,7 @@ static DBWorkerManager * manager = nil;
             model.number = [rs stringForColumn:@"number"];
             model.name = [rs stringForColumn:@"name"];
             model.img = [rs dataForColumn:@"img"];
-            model.isSeleted = NO;
+            model.selected = NO;
             [array addObject:model];
         }
         block(array);
@@ -180,7 +180,7 @@ static DBWorkerManager * manager = nil;
             model.number = [rs stringForColumn:@"number"];
             model.name = [rs stringForColumn:@"name"];
             model.img = [rs dataForColumn:@"img"];
-            model.isSeleted = NO;
+            model.selected = NO;
             [array addObject:model];
         }
         block(array);
@@ -360,9 +360,18 @@ static DBWorkerManager * manager = nil;
     }
 }
 
--(void)cleanUpImageInCache{
+//- (void)clearMemory;
+//- (void)clearDiskOnCompletion:(SDWebImageNoParamsBlock)completion;
+//- (void)clearDisk;
+//- (void)cleanDiskWithCompletionBlock:(SDWebImageNoParamsBlock)completionBlock;
+//- (void)cleanDisk;
+
++(void)cleanUpImageInCache{
     
     [[SDImageCache sharedImageCache]clearMemory];
+    [[SDImageCache sharedImageCache]cleanDisk];
+    [[SDImageCache sharedImageCache]clearDiskOnCompletion:nil];
+    [[SDImageCache sharedImageCache]cleanDiskWithCompletionBlock:nil];
     [[SDImageCache sharedImageCache]cleanDisk];
 }
 
@@ -416,7 +425,7 @@ static DBWorkerManager * manager = nil;
             model.number = [rs stringForColumn:@"number"];
             model.name = [rs stringForColumn:@"name"];
             model.img = [rs dataForColumn:@"img"];
-            model.isSeleted = NO;
+            model.selected = NO;
             [array addObject:model];
         }
     }];

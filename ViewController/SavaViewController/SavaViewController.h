@@ -9,5 +9,5 @@
 #import "RootViewController.h"
 
 @interface SavaViewController : RootViewController
-
+singleH(SaveController)
 @end

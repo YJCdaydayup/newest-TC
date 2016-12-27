@@ -37,10 +37,6 @@
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view{
     
     if(self = [super initWithFrame:frame]){
-        
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-        
         self.my_RecordPath = [NSString stringWithFormat:@"%@%@.plist",LIBPATH,[kUserDefaults objectForKey:RECORDPATH]];
         bgViews = bg_view;
         [self createView];
@@ -48,47 +44,11 @@
     return self;
 }
 
--(void)keyBoardWillShow:(NSNotification *)notification{
-    
-    // 获取通知的信息字典
-    NSDictionary *userInfo = [notification userInfo];
-    
-    // 获取键盘弹出后的rect
-    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect keyboardRect = [aValue CGRectValue];
-    
-    // 获取键盘弹出动画时间
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    // 调用代理
-    [UIView animateWithDuration:animationDuration animations:^{
-        bgViews.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+50*S6);
-    }];
-    
-}
--(void)keyBoardWillHide:(NSNotification *)notification{
-    
-    // 获取通知的信息字典
-    NSDictionary *userInfo = [notification userInfo];
-    
-    // 获取键盘弹出动画时间
-    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    NSTimeInterval animationDuration;
-    [animationDurationValue getValue:&animationDuration];
-    
-    // 调用代理
-    [UIView animateWithDuration:animationDuration animations:^{
-        bgViews.transform = CGAffineTransformIdentity;
-    }];
-}
-
 -(void)createView{
     
     dataArray = [NSMutableArray array];
     voiceTableView = [[UITableView alloc]initWithFrame:CGRectMake(20*S6, 0, self.frame.size.width-40*S6, 4*(VOICECELLHEIGHT+10)*S6)];
-    voiceTableView.backgroundColor = [UIColor whiteColor];
+    voiceTableView.backgroundColor = RGB_COLOR(238, 238, 238, 1);
     voiceTableView.delegate = self;
     voiceTableView.dataSource = self;
     voiceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -284,8 +244,7 @@
 
 #pragma mark - UITextFieldDelegate
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    
-    [textField resignFirstResponder];
+
     //发送消息
     if(textField.text.length>0&&[self judgeSpace:textField.text]){
         
@@ -332,7 +291,6 @@
 -(void)createData{
     
     dataArray = [self getAllRecordDataArray];
-    
     [voiceTableView reloadData];
     if(dataArray.count>1){
         [voiceTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[dataArray count]- 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -341,6 +299,13 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
+    NSDictionary * dict = @{@"1":@(1)};
+    if(![dataArray containsObject:dict]){
+        [dataArray addObject:dict];
+    }else{
+        NSInteger index = [dataArray indexOfObject:dict];
+        [dataArray exchangeObjectAtIndex:index withObjectAtIndex:dataArray.count-1];
+    }
     return dataArray.count;
 }
 
@@ -375,7 +340,7 @@
         UIView * view1 = [[UIView alloc]initWithFrame:CGRectMake(0,[self getTextCellHeight:(NSString *)obj], self.frame.size.width, 10*S6)];
         [cell.contentView addSubview:view1];
         
-    }else{
+    }else if([obj isKindOfClass:[NSData class]]){
         
         UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.frame.size.width-40*S6, VOICECELLHEIGHT)];
         bgView.layer.cornerRadius = 3.0*S6;
@@ -387,7 +352,6 @@
         [cell.contentView addSubview:bgView];
         
         //语音
-        
         CGFloat height = 0;
         if(IS_IPHONE == IS_IPHONE_5||IS_IPHONE == IS_IPHONE_4_OR_LESS){
             height = 12.5*S6;
@@ -421,7 +385,21 @@
         
         UIView * view1 = [[UIView alloc]initWithFrame:CGRectMake(0,VOICECELLHEIGHT, self.frame.size.width, 10*S6)];
         [cell.contentView addSubview:view1];
+    }else{
+        
+        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 2.1*S6, self.frame.size.width-40*S6, 115*S6)];
+//        label.backgroundColor = [UIColor redColor];
+//        cell.backgroundColor = [UIColor orangeColor];
+        label.backgroundColor = [UIColor whiteColor];
+        label.layer.borderColor = [BOARDCOLOR CGColor];
+        label.layer.borderWidth = 0.5*S6;
+        label.userInteractionEnabled = YES;
+        [cell.contentView addSubview:label];
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(activeTextfield)];
+        [label addGestureRecognizer:tap];
     }
+    
+    cell.backgroundColor = RGB_COLOR(238, 238, 238, 1);
     
     if([obj isKindOfClass:[NSString class]]){
         
@@ -433,7 +411,7 @@
         text_label.numberOfLines = 0;
         [text_label sizeToFit];
         
-    }else{
+    }else if([obj isKindOfClass:[NSData class]]){
         
         UIView * bgView = (UIView *)[cell.contentView viewWithTag:853];
         //语音时长label
@@ -442,9 +420,15 @@
         time_label.text = [NSString stringWithFormat:@"%@'%@",record_time,@"'"];
         time_label.width = [Tools getTextWidth:time_label.text withHeight:14*S6]+5*S6;
         time_label.x = Wscreen-75*S6-[Tools getTextWidth:time_label.text withHeight:14*S6];
-        
     }
     return cell;
+}
+
+-(void)activeTextfield{
+    
+    keyboardState = NO;
+    [self changeVoice];
+    [sendMessageTextfield becomeFirstResponder];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -454,8 +438,10 @@
     id obj = [dict objectForKey:key];
     if([obj isKindOfClass:[NSString class]]){
         return [self getTextCellHeight:(NSString *)obj]+30*S6;
+    }else if([obj isKindOfClass:[NSData class]]){
+        return (VOICECELLHEIGHT+18)*S6;
     }else{
-        return (VOICECELLHEIGHT+15)*S6;
+        return 120*S6;
     }
 }
 

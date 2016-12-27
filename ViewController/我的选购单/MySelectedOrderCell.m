@@ -38,8 +38,8 @@
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(selectTheBtn)];
     [btnView addGestureRecognizer:tap];
     
-    self.select_btn = [Tools createButtonNormalImage:@"order_selectNotAll" selectedImage:@"order_selectAll" tag:1 addTarget:self action:@selector(selectBtn:)];
-    self.select_btn.frame = CGRectMake(12.5*S6, CGRectGetMaxY(lineView.frame)+43*S6, 16.5*S6, 16.5*S6);
+    self.select_btn = [Tools createButtonNormalImage:@"no_select" selectedImage:@"select" tag:1 addTarget:self action:@selector(selectBtn:)];
+    self.select_btn.frame = CGRectMake(12.5*S6, CGRectGetMaxY(lineView.frame)+43*S6, 16*S6, 16*S6);
     [self.contentView addSubview:self.select_btn];
     
     imgView = [[UIImageView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.select_btn.frame)+17.5*S6, CGRectGetMaxY(lineView.frame)+10*S6, 110*S6, 82.5*S6)];
@@ -80,9 +80,9 @@
     self.block = block;
 }
 
--(void)configCellWithModel:(OrderCarModel *)model{
+-(void)configCellWithModel:(DBSaveModel *)model{
     
-    if(model.isSelcted){
+    if(model.selected){
         self.select_btn.selected = YES;
     }else{
         self.select_btn.selected = NO;
@@ -92,14 +92,14 @@
     self.numberLabel.text = model.number;
     
     //拼接ip和port
-    NetManager * manager = [NetManager shareManager];
-    NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
-    UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
+//    NetManager * manager = [NetManager shareManager];
+//    NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
+//    UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
+//    
+//    NSInteger width = 110*THUMBNAILRATE;
+//    NSInteger height = 165/2.0*THUMBNAILRATE;
     
-    NSInteger width = 110*THUMBNAILRATE;
-    NSInteger height = 165/2.0*THUMBNAILRATE;
-    
-    [imgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[NSString stringWithFormat:@"%@%@",URLstring,model.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
+    imgView.image = [UIImage imageWithData:model.img];
     
 }
 

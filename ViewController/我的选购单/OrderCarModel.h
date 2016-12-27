@@ -24,7 +24,7 @@
 @property (nonatomic,copy) NSString * name;
 @property (nonatomic,copy) NSString * image;
 @property (nonatomic,copy) NSString * module;
-@property (nonatomic,assign) BOOL isSelcted;
+@property (nonatomic,assign) BOOL selected;
 @property (nonatomic,copy) NSString * note;
 
 

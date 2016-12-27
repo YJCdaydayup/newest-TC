@@ -115,12 +115,8 @@
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    
-    self.catagoryButton1.hidden = YES;
-    self.searchTextField1.hidden = YES;
-    self.addView.hidden = YES;
-    self.exitBtn.hidden = YES;
     [self.searchTextField1 resignFirstResponder];
+    self.searchTextField1.hidden = YES;
     [self resetBtn];
 }
 
@@ -138,11 +134,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    self.catagoryButton1.hidden = NO;
-    self.searchTextField1.hidden = NO;
-    self.addView.hidden = NO;
-    self.exitBtn.hidden = NO;
     [self.pinleiSelectedArray removeAllObjects];
+    self.searchTextField1.hidden = NO;
     [self configUI];
 }
 
@@ -160,43 +153,9 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = TABLEVIEWCOLOR;
     
-    //导航条设置
-    self.catagoryButton1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.catagoryButton1 setBackgroundImage:[UIImage imageNamed:@"return"] forState:UIControlStateNormal];
-    
-    if(IS_IPHONE == IS_IPHONE_6||IS_IPHONE == IS_IPHONE_6P){
-        
-        self.catagoryButton1.frame = CGRectMake(31/2.0*S6, 20.5/2*S6, 49/2.0*S6, 22.5*S6);
-    }else{
-        self.catagoryButton1.frame = CGRectMake(31/2.0*S6, 22/2*S6, 49/2.0*S6, 22.5*S6);
-    }
-    
-    [self.navigationController.navigationBar addSubview:self.catagoryButton1];
-    [self.catagoryButton1 addTarget:self action:@selector(backToFirstViewController) forControlEvents:UIControlEventTouchUpInside];
-    
+    //导航条设置return 49/2.0*S6, 22.5*S6
+    [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
     [self createTextfield];
-    
-//    //添加搜索按钮
-//    self.exitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    UIView * searchView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 25*S6, 30*S6)];
-//    UITapGestureRecognizer * taps = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(logoutAction)];
-//    [searchView addGestureRecognizer:taps];
-//    
-//    CGFloat height;
-//    if(IS_IPHONE == IS_IPHONE_6){
-//        height = 5.0*S6;
-//    }else if (IS_IPHONE == IS_IPHONE_6P){
-//        height = 6.0*S6;
-//    }else if (IS_IPHONE == IS_IPHONE_5){
-//        height = 2*S6;
-//    }
-//    self.exitBtn.frame = CGRectMake(5*S6,height, 19*S6, 41/2.0*S6);
-//    [self.exitBtn setImage:[UIImage imageNamed:@"mine"] forState:UIControlStateNormal];
-//    [self.exitBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-//    [searchView addSubview:self.exitBtn];
-//    UIBarButtonItem * searBarBtn = [[UIBarButtonItem alloc]initWithCustomView:searchView];
-//    self.navigationItem.rightBarButtonItem = searBarBtn;
-//    [self.exitBtn addTarget:self action:@selector(logoutAction) forControlEvents:UIControlEventTouchUpInside];
 }
 
 -(void)configUI{
@@ -980,10 +939,9 @@
 }
 
 //返回首页
--(void)backToFirstViewController{
+-(void)back{
     
-    FirstViewController * firstVc = [[FirstViewController alloc]init];
-    [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
+    [self popToViewControllerWithDirection:@"left" type:NO];
 }
 
 //品类

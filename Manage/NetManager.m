@@ -113,11 +113,11 @@
     return IP_port;
 }
 
--(void)checkIPCompareWithPort:(CheckIPBlock)block{
+-(void)checkIPCompareWithIP:(NSString *)ip port:(NSString *)port callback:(CheckIPBlock)block{
     
     self.checkBlock = block;
-    
-    NSString * checkUrl = [NSString stringWithFormat:BANNERURL,[self getIPAddress]];
+    NSString * ip_port = [NSString stringWithFormat:@"%@:%@",ip,port];
+    NSString * checkUrl = [NSString stringWithFormat:BANNERURL,ip_port];
     NSURLRequest * request = [[NSURLRequest alloc]initWithURL:[NSURL URLWithString:checkUrl] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:3.0];
     connection = [NSURLConnection connectionWithRequest:request delegate:self];
     [connection start];
@@ -176,7 +176,8 @@
     NSString * ID = [[UIDevice currentDevice].identifierForVendor UUIDString];
     NSDictionary * dict = @{@"imei":ID,@"version":[Common appVersion]};
     [self downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
-        //        NSLog(@"%@",responseObject);
+        NSLog(@"%@",error.description);
+        NSLog(@"%@",responseObject);
     }];
 }
 
@@ -217,6 +218,28 @@
     
     NSFileManager * fm = [NSFileManager defaultManager];
     [fm removeItemAtPath:self.history_search_content error:nil];
+}
+
+-(NSMutableArray *)getAllServers{
+    
+//    NSFileManager * fm = [NSFileManager defaultManager];
+//    [fm removeItemAtPath:self.ip_PortPath error:nil];
+    
+    NSMutableArray * muArray = [NSMutableArray array];
+    NSArray * array = [NSArray arrayWithContentsOfFile:self.ip_PortPath];
+    for(NSDictionary * dict in array){
+        NSString * key = [[dict allKeys]lastObject];
+        NSString * value = [[dict allValues]lastObject];
+        NSString * str = [NSString stringWithFormat:@"%@:%@",value,key];
+        [muArray addObject:str];
+    }
+    return muArray;
+}
+
++(NSMutableArray *)batar_getAllServers{
+    
+    NetManager * manager = [NetManager shareManager];
+    return [manager getAllServers];
 }
 
 

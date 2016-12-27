@@ -36,8 +36,6 @@
 
 //导航栏搜索输入框
 @property (nonatomic,strong) UITextField * searchTextField;
-@property (nonatomic,strong) UIButton * catagoryButton;
-@property (nonatomic,strong) UIButton * searchBtn;
 
 //表格属性
 @property (nonatomic,strong) UITableView * tableView;
@@ -61,25 +59,20 @@
 @end
 
 @implementation FirstViewController
-
 //界面即将消失时
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    self.catagoryButton.hidden = YES;
-    self.searchTextField.hidden = YES;
-    self.searchBtn.hidden = YES;
-    self.bottomLine.hidden = YES;
     [self.searchTextField resignFirstResponder];
+    self.searchTextField.hidden = YES;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.catagoryButton.hidden = NO;
-    self.searchTextField.hidden = NO;
-    self.searchBtn.hidden = NO;
-    self.bottomLine.hidden = NO;
+    //导航条设置
+    [self setNavigation];
     [self.searchTextField resignFirstResponder];
+    self.searchTextField.hidden = NO;
 }
 
 -(void)reloadView{
@@ -97,11 +90,12 @@
     //隐藏系统的“返回导航按钮”
     self.navigationItem.hidesBackButton = YES;
     
-    //导航条设置
-    [self setNavigation];
-    
     //请求分类搜索界面的数据
     [self downloadCatagory];
+    
+    
+    //设置表格frame
+    [self setTableView];
     
     //加载数据
     [self reloadView];
@@ -186,7 +180,7 @@
     [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
         
         if(error == nil){
-            self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT);
+            self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT);
             [placeHolderImageView removeFromSuperview];
             
             NSArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -202,7 +196,7 @@
                 
                 BannerModel * model = [self.bannerArray objectAtIndex:i];
                 //拼接ip和port
-                NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
+                NSString * URLstring = [NSString stringWithFormat:NEWBANNERCONNET,[manager getIPAddress]];
                 [imagesURLStrings addObject:[NSString stringWithFormat:@"%@%@",URLstring,model.img]];
             }
             UIImage * gifImage = [UIImage imageNamed:BANNERPLACEHOLDER];
@@ -250,49 +244,10 @@
     self.bottomLine.backgroundColor = RGB_COLOR(204, 204, 204, 1);
     [self.navigationController.navigationBar addSubview:self.bottomLine];
     
-    
-    self.catagoryButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    if(IS_IPHONE == IS_IPHONE_6||IS_IPHONE == IS_IPHONE_6P){
-        
-        self.catagoryButton.frame = CGRectMake(31/2.0*S6, 20.5/2*S6, 49/2.0*S6, 22.5*S6);
-    }else{
-        self.catagoryButton.frame = CGRectMake(31/2.0*S6, 22/2*S6, 49/2.0*S6, 22.5*S6);
-    }
-    [self.catagoryButton setImage:[UIImage imageNamed:@"catagory_btn"] forState:UIControlStateNormal];
-    [self.catagoryButton addTarget:self action:@selector(pushForwardCatagoryController) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:self.catagoryButton];
+    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushCatagory) size:CGSizeMake(25*S6, 30*S6) selector:@selector(gotoMyVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:10*S6];
     
     [self createTextfield];
-    
-    //添加搜索按钮
-    self.searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIView * searchView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 25*S6, 30*S6)];
-    UITapGestureRecognizer * taps = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(gotoMyVc)];
-    [searchView addGestureRecognizer:taps];
-    
-    CGFloat height;
-    if(IS_IPHONE == IS_IPHONE_6){
-        height = 5.0*S6;
-    }else if (IS_IPHONE == IS_IPHONE_6P){
-        height = 6.0*S6;
-    }else if (IS_IPHONE == IS_IPHONE_5){
-        height = 2*S6;
-    }
-    
-    self.searchBtn.frame = CGRectMake(5*S6,height, 19*S6, 41/2.0*S6);
-    [self.searchBtn setImage:[UIImage imageNamed:@"mine"] forState:UIControlStateNormal];
-    [self.searchBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-    [searchView addSubview:self.searchBtn];
-    UIBarButtonItem * searBarBtn = [[UIBarButtonItem alloc]initWithCustomView:searchView];
-    self.navigationItem.rightBarButtonItem = searBarBtn;
-    [self.searchBtn addTarget:self action:@selector(gotoMyVc) forControlEvents:UIControlEventTouchUpInside];
-    
-    //设置表格frame
-    [self setTableView];
-    
-    //设置下面的集团LOGO
-    [self setLogo];
+
 }
 -(void)createTextfield{
     
@@ -321,7 +276,7 @@
     
     self.searchTextField.delegate = self;
     self.searchTextField.leftViewMode =UITextFieldViewModeAlways;
-    self.searchTextField.placeholder = @"输入您想要的宝贝";
+    self.searchTextField.placeholder = @"黄金珠宝";
     [self.navigationController.navigationBar addSubview:self.searchTextField];
     
     //改变输入框placeholder的字体大小和颜色
@@ -349,7 +304,8 @@
 
 //设置表格frame
 -(void)setTableView{
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT) style:UITableViewStylePlain];
+    
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) style:UITableViewStylePlain];
     self.tableView.backgroundColor = TABLEVIEWCOLOR;
     self.tableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.tableView];
@@ -421,11 +377,12 @@
                 [cell clickImageForDetai:^(NSInteger index) {
                     if(self.newestArray.count>index){
                         PopurityModel * model = self.newestArray[index];
-                        DetailViewController * detailVc = [[DetailViewController alloc]init];
+                        DetailViewController * detailVc = [DetailViewController shareDetailController];
                         detailVc.index = model.number;
                         [kUserDefaults removeObjectForKey:FROM_VC_TO_SAVE];
                         [kUserDefaults removeObjectForKey:TEMP_FROM_VC_TO_SAVE];
                         [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+                        self.hidesBottomBarWhenPushed = NO;
                     }
                     
                 }];
@@ -438,11 +395,12 @@
                 [cell clickImageForDetai:^(NSInteger index) {
                     if(self.popurityArray.count>index){
                         PopurityModel * model = self.popurityArray[index];
-                        DetailViewController * detailVc = [[DetailViewController alloc]init];
+                        DetailViewController * detailVc = [DetailViewController shareDetailController];
                         detailVc.index = model.number;
                         [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
                         [kUserDefaults removeObjectForKey:FROM_VC_TO_SAVE];
                         [kUserDefaults removeObjectForKey:TEMP_FROM_VC_TO_SAVE];
+                        self.hidesBottomBarWhenPushed = NO;
                     }
                 }];
             }
@@ -569,164 +527,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(void)setLogo{
-    
-    CGFloat bottomHeight = (28+68+16)/2*S6;
-    self.logoView = [[UIView alloc]initWithFrame:CGRectMake(0, Hscreen - bottomHeight, Wscreen, bottomHeight)];
-    self.logoView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.logoView];
-    
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showInfo)];
-    [self.logoView addGestureRecognizer:tap];
-    
-    [self getBottomData];
-}
-
--(void)getBottomData{
-    NetManager * manager = [NetManager shareManager];
-    NSString * urlStr = [NSString stringWithFormat:BOTTOMPIC,[manager getIPAddress]];
-    [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
-        
-        if(responseObject){
-            bottomDict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-            [self setBottomView];
-        }
-    }];
-}
-
--(void)setBottomView{
-    
-    NetManager * manager = [NetManager shareManager];
-    BOOL isopen = [bottomDict[@"isopen"]boolValue];
-    id imgObj = bottomDict[@"image"];
-    NSString * str;
-    if([imgObj isKindOfClass:[NSString class]]){
-        str = [imgObj stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    }else{
-        self.logoView .hidden = YES;
-    }
-    
-    if(isopen == NO){
-        [self.logoView removeFromSuperview];
-    }else{
-        NSString * imgUrl = [NSString stringWithFormat:BOTTOMIMG,[manager getIPAddress],str];
-        UIImageView * imgView = [[UIImageView alloc]initWithFrame:self.logoView.bounds];
-        [imgView sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage new] options:SDWebImageRetryFailed];
-        [self.logoView addSubview:imgView];
-    }
-}
-
--(void)showInfo{
-    
-    NetManager * manager = [NetManager shareManager];
-    NSString * urlStr = [NSString stringWithFormat:BOTTOMPIC,[manager getIPAddress]];
-    [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
-        
-        if(responseObject){
-            bottomDict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-            YLLocationManager * locationManager = [[YLLocationManager alloc]initShareLocationManager:bottomDict[@"address"] ViewController:self];
-            locationManager.bottomDict = bottomDict;
-            [locationManager createLocationManager];
-            NetManager * manager = [NetManager shareManager];
-            BOOL isopen = [bottomDict[@"isopen"]boolValue];
-            id imgObj = bottomDict[@"image"];
-            NSString * str;
-            if([imgObj isKindOfClass:[NSString class]]){
-                str = [imgObj stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-            }else{
-                self.logoView .hidden = YES;
-            }
-            
-            if(isopen == NO){
-                [self.logoView removeFromSuperview];
-            }else{
-                NSString * imgUrl = [NSString stringWithFormat:BOTTOMIMG,[manager getIPAddress],str];
-                UIImageView * imgView = [[UIImageView alloc]initWithFrame:self.logoView.bounds];
-                [imgView sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage new] options:SDWebImageRetryFailed];
-                [self.logoView addSubview:imgView];
-            }
-        }
-    }];
-}
-
-////设置下面的集团LOGO
-//-(void)setLogo{
-//
-//
-//    UIView * lineView = [[UIView alloc]initWithFrame:CGRectMake(0,0,Wscreen, 1*S6)];
-//    lineView.backgroundColor = BOARDCOLOR;
-//    [self.logoView addSubview:lineView];
-//
-//    self.max_Y = CGRectGetMaxY(lineView.frame);
-//    UIImageView * logoImageView = [[UIImageView alloc]initWithFrame:CGRectMake(115/2.0*S6, self.max_Y+10*S6, 200/2.0*S6, 70/2.0*S6)];
-//    logoImageView.image = [UIImage imageNamed:@"logo"];
-//    [self.logoView addSubview:logoImageView];
-//
-//    self.max_X = CGRectGetMaxX(logoImageView.frame);
-//    self.max_Y = CGRectGetMinY(logoImageView.frame);
-//
-//    UIImageView * positionImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.max_X+22*S6, self.max_Y,8*S6,10*S6)];
-//    positionImageView.image = [UIImage imageNamed:@"address"];
-//    [self.logoView addSubview:positionImageView];
-//
-//    self.max_X = CGRectGetMaxX(positionImageView.frame);
-//
-//    UILabel * positionLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.max_X+5*S6, self.max_Y, 300*S6, 10*S6)];
-//    positionLabel.text = @"深圳市罗湖区水贝二路特力大厦3楼";
-//    positionLabel.textColor = LOGOTEXTCOLOR;
-//    positionLabel.font = [UIFont systemFontOfSize:9*S6];
-//    [self.logoView addSubview:positionLabel];
-//
-//    self.max_Y = CGRectGetMaxY(positionImageView.frame);
-//    self.max_X = CGRectGetMinX(positionImageView.frame);
-//
-//    UIImageView * telImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.max_X, self.max_Y+5*S6, 8*S6, 8.5*S6)];
-//    telImageView.image = [UIImage imageNamed:@"phone_img"];
-//    [self.logoView addSubview:telImageView];
-//
-//    self.max_X = CGRectGetMaxX(telImageView.frame);
-//    UILabel * telLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.max_X+5*S6, self.max_Y+5*S6, 300*S6, 8.5*S6)];
-//    telLabel.text = @"0755-22929812";
-//    telLabel.textColor = LOGOTEXTCOLOR;
-//    telLabel.font = [UIFont systemFontOfSize:9*S6];
-//    [self.logoView addSubview:telLabel];
-//
-//    self.max_Y = CGRectGetMaxY(telImageView.frame);
-//    self.max_X = CGRectGetMinX(telImageView.frame);
-//
-//    UIImageView * netImageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.max_X, self.max_Y+5*S6, 8*S6, 8.5*S6)];
-//    netImageView.image = [UIImage imageNamed:@"mark_img"];
-//    [self.logoView addSubview:netImageView];
-//
-//    self.max_X = CGRectGetMaxX(netImageView.frame);
-//    UILabel * netLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.max_X+5*S6, self.max_Y+5*S6, 300*S6, 8.5*S6)];
-//    netLabel.text = @"www.batar.cn";
-//    netLabel.font = [UIFont systemFontOfSize:9*S6];
-//    netLabel.textColor = LOGOTEXTCOLOR;
-//    [self.logoView addSubview:netLabel];
-//}
-
-//滑动表格显示／隐藏下面的Logo
--(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
-    
-    if(velocity.y>0){
-        
-        [UIView animateWithDuration:0.3 animations:^{
-            
-            self.logoView.transform = CGAffineTransformMakeTranslation(0, self.logoView.frame.size.height);
-        }];
-        
-    }else{
-        [UIView animateWithDuration:0.3 animations:^{
-            
-            self.logoView.transform = CGAffineTransformIdentity;
-        }];
-    }
-    
-    [self.searchTextField resignFirstResponder];
-}
 //跳回详细分类界面
--(void)pushForwardCatagoryController{
+-(void)pushCatagory{
     
     CatagoryViewController * cataViewController = [[CatagoryViewController alloc]init];
     [self pushToViewControllerWithTransition:cataViewController withDirection:@"left" type:NO];

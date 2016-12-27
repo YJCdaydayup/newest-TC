@@ -10,9 +10,72 @@
 
 @implementation RootViewController
 
+//singleM(Controller)
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    _leftNavBtn.hidden = NO;
+    _rightNavBtn.hidden = NO;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    [super viewWillDisappear:animated];
+    _leftNavBtn.hidden = YES;
+    _rightNavBtn.hidden = YES;
+}
+
 -(void)viewDidLoad{
     
     [super viewDidLoad];
+    
+    self.app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [self createView];
+}
+
+-(instancetype)initWithController:(id)Vc{
+    
+    if(self = [super init]){
+        self.fatherVc = Vc;
+    }
+    return self;
+}
+
+-(void)batar_setNavibar:(NSString *)title{
+    self.title = title;
+}
+
+//左导航按钮
+-(void)batar_setLeftNavButton:(NSArray *)imgArray target:(id)target selector:(SEL)leftSel size:(CGSize)leftSize selector:(SEL)rightSel rightSize:(CGSize)rightSize topHeight:(CGFloat)height{
+    
+    
+    _leftNavBtn.hidden = YES;
+    _rightNavBtn.hidden = YES;
+    _leftNavBtn = nil;
+    _rightNavBtn = nil;
+    [_leftNavBtn removeFromSuperview];
+    [_rightNavBtn removeFromSuperview];
+    
+    UIButton * button = [Tools createButtonNormalImage:imgArray[0] selectedImage:nil tag:0 addTarget:target action:leftSel];
+    button.frame = CGRectMake(15*S6, 15*S6, 100*S6, 50*S6);
+    button.size = leftSize;
+    button.y = height;
+    button.hidden = NO;
+    _leftNavBtn = button;
+    [self.navigationController.navigationBar addSubview:button];
+    
+    UIButton * rightBtn = [Tools createButtonNormalImage:imgArray[1] selectedImage:nil tag:0 addTarget:target action:rightSel];
+    rightBtn.frame = CGRectMake(Wscreen-rightSize.width-15*S6, 15*S6, 100*S6, 50*S6);
+    rightBtn.size = rightSize;
+    rightBtn.y = height;
+    rightBtn.hidden = NO;
+    _rightNavBtn = rightBtn;
+    [self.navigationController.navigationBar addSubview:rightBtn];
+}
+
+-(void)createView{
+    
 }
 
 #pragma mark -计算产品描述Label的高度

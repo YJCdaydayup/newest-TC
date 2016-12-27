@@ -62,7 +62,7 @@
 
 -(void)createTitleLabel{
     
-    self.titleLabel = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetHeight(self.shadowImageView.frame)-13*S6, self.shadowImageView.width+5, 35*S6) textContent:self.titleStr withFont:[UIFont systemFontOfSize:13*S6] textColor:RGB_COLOR(255, 255, 255, 0.9) textAlignment:NSTextAlignmentCenter];
+    self.titleLabel = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetHeight(self.shadowImageView.frame)-13*S6, self.shadowImageView.width+5, 35*S6) textContent:self.titleStr withFont:[UIFont systemFontOfSize:15*S6] textColor:RGB_COLOR(255, 255, 255, 0.9) textAlignment:NSTextAlignmentCenter];
     [self.shadowImageView addSubview:self.titleLabel];
 }
 
