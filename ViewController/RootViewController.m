@@ -49,7 +49,7 @@
 //左导航按钮
 -(void)batar_setLeftNavButton:(NSArray *)imgArray target:(id)target selector:(SEL)leftSel size:(CGSize)leftSize selector:(SEL)rightSel rightSize:(CGSize)rightSize topHeight:(CGFloat)height{
     
-    
+    self.navigationItem.hidesBackButton = YES;
     _leftNavBtn.hidden = YES;
     _rightNavBtn.hidden = YES;
     _leftNavBtn = nil;

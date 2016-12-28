@@ -137,7 +137,6 @@
     if([str containsString:@"未查询"]){
         return;
     }
-    
     tableView.hidden = YES;
     [self searchContentWithTitle:self.dataArray[indexPath.row]];
     [self.search_Tf resignFirstResponder];

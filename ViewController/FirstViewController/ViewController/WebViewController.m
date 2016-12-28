@@ -41,6 +41,7 @@
     self.webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT)];
     [self.webView loadRequest:request];
     self.webView.delegate = self;
+    self.webView.scalesPageToFit = YES;
     [self.view addSubview:self.webView];
 }
 

@@ -17,6 +17,7 @@
 }
 
 @property (nonatomic,strong) XHSoundRecorder * audioRecorder;
+@property (nonatomic,strong)    UITextField * sendMessageTextfield;
 
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view;
 -(void)playWithData:(NSData *)data;

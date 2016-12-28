@@ -7,7 +7,8 @@
 //
 
 #import "RootViewController.h"
+#import "LBXScanViewController.h"
 
-@interface ScanViewController : RootViewController
+@interface ScanViewController : LBXScanViewController
 
 @end

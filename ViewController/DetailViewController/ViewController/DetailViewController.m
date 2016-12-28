@@ -76,9 +76,14 @@
 //判断是否上传成功的状态
 @property (nonatomic,assign) BOOL isUpload;
 
+@property (nonatomic,strong) YLVoicemanagerView * voiceManager;
+
 @end
 
 @implementation DetailViewController
+
+@synthesize voiceManager = _voiceManager;
+
 +(instancetype)shareDetailController{
     
     static DetailViewController * controller = nil;
@@ -108,8 +113,7 @@
     [kUserDefaults removeObjectForKey:RECORDPATH];
     
     //将播放停止
-    YLVoicemanagerView * voiceManager = [[YLVoicemanagerView alloc]initWithFrame:self.view.frame withVc:[UIView new]];
-    [voiceManager stopWhenPushAway];
+    [_voiceManager stopWhenPushAway];
 }
 
 - (void)viewDidLoad {
@@ -418,11 +422,17 @@
     
 #pragma mark - 这里填写录音控件
     self.automaticallyAdjustsScrollViewInsets = NO;
-    YLVoicemanagerView * YL = [[YLVoicemanagerView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(remark_label.frame)+10*S6, Wscreen, 230*S6) withVc:backgroundView];
-    [backgroundView addSubview:YL];
+    YLVoicemanagerView * voiceManager = [[YLVoicemanagerView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(remark_label.frame)+10*S6, Wscreen, 230*S6) withVc:backgroundView];
+    _voiceManager = voiceManager;
+    [backgroundView addSubview:voiceManager];
     
 #pragma mark - 底部
     [self createBottomView];
+}
+
+-(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    [_voiceManager.sendMessageTextfield resignFirstResponder];
 }
 
 #pragma mark -分享到第三方平台
@@ -600,9 +610,8 @@
     self.hud.labelText = @"产品备注正在上传...";
     self.hud.animationType = MBProgressHUDAnimationZoomOut;
     
-    YLVoicemanagerView * recordManager = [[YLVoicemanagerView alloc]initWithFrame:self.view.frame withVc:[UIView new]];
     NSMutableArray * reNameVoiceArray = [NSMutableArray array];//获取所有的语音数组
-    NSMutableArray * voiceArray = [recordManager getAllVoiceMessages];
+    NSMutableArray * voiceArray = [_voiceManager getAllVoiceMessages];
     for(int i = 0;i<voiceArray.count;i++){
         
         NSDictionary * dict = [voiceArray objectAtIndex:i];
@@ -619,8 +628,8 @@
     NSString * urlStr = [NSString stringWithFormat:UPLOADORDERCAR,[netmanager getIPAddress]];
     //    NSLog(@"%@",[recordManager getAllTextMessageStr]);
     NSDictionary * subDict;
-    if([recordManager getAllTextMessageStr].count>0){
-        subDict = @{@"number":detailModel.number,@"customerid":[kUserDefaults objectForKey:CustomerID],@"message":[self arrayToJson:[recordManager getAllTextMessageStr]]};
+    if([_voiceManager getAllTextMessageStr].count>0){
+        subDict = @{@"number":detailModel.number,@"customerid":[kUserDefaults objectForKey:CustomerID],@"message":[self arrayToJson:[_voiceManager getAllTextMessageStr]]};
     }else{
         subDict = @{@"number":detailModel.number,@"customerid":[kUserDefaults objectForKey:CustomerID],@"message":@""};
     }

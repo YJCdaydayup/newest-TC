@@ -23,6 +23,7 @@
 #import "YLVoicemanagerView.h"
 #import "SearchViewController.h"
 #import "YLLocationManager.h"
+#import "ScanViewController.h"
 
 #define serizeCell @"serizeCell"
 #define productCell @"productCell"
@@ -244,7 +245,7 @@
     self.bottomLine.backgroundColor = RGB_COLOR(204, 204, 204, 1);
     [self.navigationController.navigationBar addSubview:self.bottomLine];
     
-    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushCatagory) size:CGSizeMake(25*S6, 30*S6) selector:@selector(gotoMyVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:10*S6];
+    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(gotoMyVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:10*S6];
     
     [self createTextfield];
 
@@ -528,10 +529,12 @@
 }
 
 //跳回详细分类界面
--(void)pushCatagory{
+-(void)pushScanVc{
     
-    CatagoryViewController * cataViewController = [[CatagoryViewController alloc]init];
-    [self pushToViewControllerWithTransition:cataViewController withDirection:@"left" type:NO];
+    ScanViewController * scanVc = [[ScanViewController alloc]initWithController:self];
+    scanVc.hidesBottomBarWhenPushed = YES;
+    [self pushToViewControllerWithTransition:scanVc withDirection:@"left" type:NO];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 #pragma mark -轮播图的代理方法

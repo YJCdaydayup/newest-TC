@@ -18,7 +18,7 @@
 
 @interface YLVoicemanagerView(){
     
-    UITextField * sendMessageTextfield;
+ 
     UIButton * recordBtn;
     BOOL keyboardState;
     UIView * bgViews;
@@ -33,7 +33,7 @@
 @end
 
 @implementation YLVoicemanagerView
-
+@synthesize sendMessageTextfield = sendMessageTextfield;
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view{
     
     if(self = [super initWithFrame:frame]){
