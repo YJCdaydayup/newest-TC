@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		7C5D0220687278D694CD9400 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A43219DD68280B621D46F26 /* libPods.a */; };
+		8F0276391E157850006E78F6 /* BatarResultController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0276381E157850006E78F6 /* BatarResultController.m */; };
+		8F02763C1E15826B006E78F6 /* BatarResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F02763B1E15826B006E78F6 /* BatarResultModel.m */; };
+		8F02763E1E15B975006E78F6 /* UrlDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F02763D1E15B975006E78F6 /* UrlDefine.m */; };
+		8F0276411E15C0FA006E78F6 /* BatarCommandModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0276401E15C0FA006E78F6 /* BatarCommandModel.m */; };
+		8F0276441E15C28C006E78F6 /* BatarCommandSubModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0276431E15C28C006E78F6 /* BatarCommandSubModel.m */; };
 		8F0425441D709B16008C4148 /* placeHolder.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8F0425431D709B16008C4148 /* placeHolder.jpg */; };
 		8F0DBB091CDBA16700C1DF2F /* logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F0DBB081CDBA16700C1DF2F /* logo@3x.png */; };
 		8F0DBB0B1CDBA16D00C1DF2F /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F0DBB0A1CDBA16D00C1DF2F /* logo@2x.png */; };
@@ -141,6 +146,8 @@
 		8F4A19A41CDABD63006ED857 /* Tel@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F4A19981CDABD63006ED857 /* Tel@3x.png */; };
 		8F4A19A51CDABD63006ED857 /* web@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F4A19991CDABD63006ED857 /* web@3x.png */; };
 		8F4A19A61CDABD63006ED857 /* xilie1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F4A199A1CDABD63006ED857 /* xilie1@3x.png */; };
+		8F4BA53F1E146E8F009AFC2F /* scan_bg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F4BA53E1E146E8F009AFC2F /* scan_bg@3x.png */; };
+		8F4BA5411E146E92009AFC2F /* scan_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F4BA5401E146E92009AFC2F /* scan_bg@2x.png */; };
 		8F51C8A51D4BA87B007E4AB0 /* YLScrollerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51C8A41D4BA87B007E4AB0 /* YLScrollerView.m */; };
 		8F51FA761CE15DA200B128C5 /* ThemeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51FA751CE15DA200B128C5 /* ThemeViewController.m */; };
 		8F51FA791CE1647300B128C5 /* ThemeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F51FA781CE1647300B128C5 /* ThemeCell.m */; };
@@ -690,6 +697,15 @@
 		0A43219DD68280B621D46F26 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		452373736433AA54E329326B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		6AFFCA3009F291B13E58C517 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		8F0276371E157850006E78F6 /* BatarResultController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarResultController.h; sourceTree = "<group>"; };
+		8F0276381E157850006E78F6 /* BatarResultController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarResultController.m; sourceTree = "<group>"; };
+		8F02763A1E15826B006E78F6 /* BatarResultModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarResultModel.h; sourceTree = "<group>"; };
+		8F02763B1E15826B006E78F6 /* BatarResultModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarResultModel.m; sourceTree = "<group>"; };
+		8F02763D1E15B975006E78F6 /* UrlDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UrlDefine.m; sourceTree = "<group>"; };
+		8F02763F1E15C0FA006E78F6 /* BatarCommandModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarCommandModel.h; sourceTree = "<group>"; };
+		8F0276401E15C0FA006E78F6 /* BatarCommandModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarCommandModel.m; sourceTree = "<group>"; };
+		8F0276421E15C28C006E78F6 /* BatarCommandSubModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarCommandSubModel.h; sourceTree = "<group>"; };
+		8F0276431E15C28C006E78F6 /* BatarCommandSubModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarCommandSubModel.m; sourceTree = "<group>"; };
 		8F0425431D709B16008C4148 /* placeHolder.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = placeHolder.jpg; sourceTree = "<group>"; };
 		8F0DBB081CDBA16700C1DF2F /* logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo@3x.png"; path = "../../@3x/logo@3x.png"; sourceTree = "<group>"; };
 		8F0DBB0A1CDBA16D00C1DF2F /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo@2x.png"; path = "../../@2x/logo@2x.png"; sourceTree = "<group>"; };
@@ -901,6 +917,8 @@
 		8F4A19981CDABD63006ED857 /* Tel@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Tel@3x.png"; path = "../../@3x/Tel@3x.png"; sourceTree = "<group>"; };
 		8F4A19991CDABD63006ED857 /* web@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "web@3x.png"; path = "../../@3x/web@3x.png"; sourceTree = "<group>"; };
 		8F4A199A1CDABD63006ED857 /* xilie1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "xilie1@3x.png"; path = "../../@3x/xilie1@3x.png"; sourceTree = "<group>"; };
+		8F4BA53E1E146E8F009AFC2F /* scan_bg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scan_bg@3x.png"; sourceTree = "<group>"; };
+		8F4BA5401E146E92009AFC2F /* scan_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scan_bg@2x.png"; sourceTree = "<group>"; };
 		8F51C8A31D4BA87B007E4AB0 /* YLScrollerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLScrollerView.h; sourceTree = "<group>"; };
 		8F51C8A41D4BA87B007E4AB0 /* YLScrollerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLScrollerView.m; sourceTree = "<group>"; };
 		8F51FA741CE15DA200B128C5 /* ThemeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThemeViewController.h; sourceTree = "<group>"; };
@@ -1860,6 +1878,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		8F0276361E157833006E78F6 /* 搜索结果 */ = {
+			isa = PBXGroup;
+			children = (
+				8F0276371E157850006E78F6 /* BatarResultController.h */,
+				8F0276381E157850006E78F6 /* BatarResultController.m */,
+				8F02763A1E15826B006E78F6 /* BatarResultModel.h */,
+				8F02763B1E15826B006E78F6 /* BatarResultModel.m */,
+			);
+			path = "搜索结果";
+			sourceTree = "<group>";
+		};
 		8F12D3991CDE32C800712CDA /* 产品详情 */ = {
 			isa = PBXGroup;
 			children = (
@@ -2130,6 +2159,7 @@
 				8FB9CCFA1E0C8D9A00DA6E11 /* Foundation+Log.m */,
 				8F8DDB7C1CDBB10200F04D0C /* ColorComment.h */,
 				8F54D16F1D37DD8800006746 /* UrlDefine.h */,
+				8F02763D1E15B975006E78F6 /* UrlDefine.m */,
 				8F7D09701E119D7000E94955 /* Single.h */,
 			);
 			path = Define;
@@ -2244,6 +2274,7 @@
 				8F5E50D11D43DFF3004F404F /* RootViewController.m */,
 				8FD3C4FF1E0B1DC600AB40F2 /* BatarMainTabBarContoller.h */,
 				8FD3C5001E0B1DC600AB40F2 /* BatarMainTabBarContoller.m */,
+				8F0276361E157833006E78F6 /* 搜索结果 */,
 				8F7CBEF81E131F1A0033E7FB /* 扫描二维码 */,
 				8F12D3991CDE32C800712CDA /* 产品详情 */,
 				8F9A9C711E0B0913003537EB /* temp */,
@@ -3592,6 +3623,10 @@
 				8F61A7E11D42BBFD00D2B18C /* BannerModel.m */,
 				8F55F7C31D4924240010839D /* PopurityModel.h */,
 				8F55F7C41D4924240010839D /* PopurityModel.m */,
+				8F02763F1E15C0FA006E78F6 /* BatarCommandModel.h */,
+				8F0276401E15C0FA006E78F6 /* BatarCommandModel.m */,
+				8F0276421E15C28C006E78F6 /* BatarCommandSubModel.h */,
+				8F0276431E15C28C006E78F6 /* BatarCommandSubModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -3835,6 +3870,7 @@
 		8FD3C5481E0B504000AB40F2 /* 2x */ = {
 			isa = PBXGroup;
 			children = (
+				8F4BA5401E146E92009AFC2F /* scan_bg@2x.png */,
 				8F7D09711E11B93800E94955 /* set_bg@2x.png */,
 				8FA9D0001E0DA64D00DD0335 /* batar_group@2x.png */,
 				8FA9D0011E0DA64D00DD0335 /* batar_jew@2x.png */,
@@ -3879,6 +3915,7 @@
 		8FD3C5611E0B504000AB40F2 /* 3x */ = {
 			isa = PBXGroup;
 			children = (
+				8F4BA53E1E146E8F009AFC2F /* scan_bg@3x.png */,
 				8F7D09731E11B93B00E94955 /* set_bg@3x.png */,
 				8FA9CFF81E0DA63500DD0335 /* batar_group@3x.png */,
 				8FA9CFF91E0DA63500DD0335 /* batar_jew@3x.png */,
@@ -4121,6 +4158,7 @@
 				8F4081A71D80643E000E2975 /* save_selected@2x.png in Resources */,
 				8F8917DD1D6CAFC600CC0D8F /* hot_img@2x.png in Resources */,
 				8F8917F21D6CAFC600CC0D8F /* hot_img@3x.png in Resources */,
+				8F4BA53F1E146E8F009AFC2F /* scan_bg@3x.png in Resources */,
 				8F4081AA1D80643E000E2975 /* clean_saveCache@2x.png in Resources */,
 				8F9184401DDBF8D000FDD25F /* UMSocialLocalizable.strings in Resources */,
 				8F8DDBAB1CDBF78900F04D0C /* open@2x.png in Resources */,
@@ -4196,6 +4234,7 @@
 				8FD3C5811E0B504000AB40F2 /* confirm@2x.png in Resources */,
 				8F8069F91D48153B006CD3C0 /* lb2@2x.png in Resources */,
 				8FD3C5A81E0B504000AB40F2 /* waiting_confirm@3x.png in Resources */,
+				8F4BA5411E146E92009AFC2F /* scan_bg@2x.png in Resources */,
 				8FA9D0041E0DA64D00DD0335 /* batar_group@2x.png in Resources */,
 				8FD3C5801E0B504000AB40F2 /* back@2x.png in Resources */,
 				8F5EAE831D6E7B7D001DC54E /* address@2x.png in Resources */,
@@ -4386,6 +4425,7 @@
 				8F7D096F1E119CA800E94955 /* YLShoppingCarBottom.m in Sources */,
 				8F7CC1771E133A280033E7FB /* ZXDataMatrixEdifactEncoder.m in Sources */,
 				8F4809BB1DCD006400DD1385 /* SearchViewController.m in Sources */,
+				8F02763C1E15826B006E78F6 /* BatarResultModel.m in Sources */,
 				8F7CC1561E133A280033E7FB /* ZXCharacterSetECI.m in Sources */,
 				8F7CC1821E133A280033E7FB /* ZXMaxiCodeDecodedBitStreamParser.m in Sources */,
 				8F4A19371CDAB580006ED857 /* JSONValueTransformer.m in Sources */,
@@ -4409,6 +4449,7 @@
 				8F4A193F1CDAB580006ED857 /* UIView+MJExtension.m in Sources */,
 				8F5E50D51D44012A004F404F /* SerizeModel.m in Sources */,
 				8F7CC14E1E133A280033E7FB /* ZXGenericGFPoly.m in Sources */,
+				8F0276441E15C28C006E78F6 /* BatarCommandSubModel.m in Sources */,
 				8F7CC1C91E133A280033E7FB /* ZXPDF417DetectionResultRowIndicatorColumn.m in Sources */,
 				8F7CC1DD1E133A280033E7FB /* ZXQRCodeErrorCorrectionLevel.m in Sources */,
 				8F1389D91DC9917500974DE7 /* MyOrdersController.m in Sources */,
@@ -4551,6 +4592,7 @@
 				8F7CC16A1E133A280033E7FB /* ZXResult.m in Sources */,
 				8F7CC1651E133A280033E7FB /* ZXEncodeHints.m in Sources */,
 				8F7CC1571E133A280033E7FB /* ZXDecoderResult.m in Sources */,
+				8F0276411E15C0FA006E78F6 /* BatarCommandModel.m in Sources */,
 				8F7CC1591E133A280033E7FB /* ZXDetectorResult.m in Sources */,
 				8F7CC1811E133A280033E7FB /* ZXMaxiCodeBitMatrixParser.m in Sources */,
 				8F7CC1601E133A280033E7FB /* ZXBinarizer.m in Sources */,
@@ -4560,6 +4602,7 @@
 				8F4A19591CDAB580006ED857 /* YLAutoLayOut.m in Sources */,
 				8F5A80FA1D466D4000438D73 /* ThemeDetailModel.m in Sources */,
 				8F7CC1CE1E133A280033E7FB /* ZXPDF417BarcodeMatrix.m in Sources */,
+				8F02763E1E15B975006E78F6 /* UrlDefine.m in Sources */,
 				8F7CC1A81E133A280033E7FB /* ZXCode39Reader.m in Sources */,
 				8F7CC1511E133A280033E7FB /* ZXBitArray.m in Sources */,
 				8F7CC1E81E133A280033E7FB /* ZXQRCodeBlockPair.m in Sources */,
@@ -4571,6 +4614,7 @@
 				8F7CC15F1E133A280033E7FB /* ZXStringUtils.m in Sources */,
 				8F7CC17A1E133A280033E7FB /* ZXDataMatrixHighLevelEncoder.m in Sources */,
 				8F7CC11E1E133A280033E7FB /* ZXAztecState.m in Sources */,
+				8F0276391E157850006E78F6 /* BatarResultController.m in Sources */,
 				8F5668111CDD403200C39F75 /* SearchCatagoryViewController.m in Sources */,
 				8F8591541DE360AF0060146A /* VVAttrHeper.m in Sources */,
 				8F4A19361CDAB580006ED857 /* JSONKeyMapper.m in Sources */,

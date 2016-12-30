@@ -15,6 +15,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    
     _leftNavBtn.hidden = NO;
     _rightNavBtn.hidden = NO;
 }
@@ -22,8 +23,10 @@
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
+    
     _leftNavBtn.hidden = YES;
     _rightNavBtn.hidden = YES;
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 -(void)viewDidLoad{

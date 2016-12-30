@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PopurityModel.h"
+#import "BatarCommandSubModel.h"
 
 typedef void(^ClickImageBlock)(NSInteger index);
 

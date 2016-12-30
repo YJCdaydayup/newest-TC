@@ -941,7 +941,7 @@
 //返回首页
 -(void)back{
     
-    [self popToViewControllerWithDirection:@"left" type:NO];
+    [self popToViewControllerWithDirection:@"right" type:NO];
 }
 
 //品类

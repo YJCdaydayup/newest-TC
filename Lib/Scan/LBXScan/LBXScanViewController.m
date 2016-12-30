@@ -87,7 +87,6 @@
         
         UIView *videoView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
         videoView.backgroundColor = [UIColor clearColor];
-        videoView.backgroundColor = [UIColor yellowColor];
         [self.view insertSubview:videoView atIndex:0];
 
         self.scanObj = [[LBXScanWrapper alloc]initWithPreView:videoView

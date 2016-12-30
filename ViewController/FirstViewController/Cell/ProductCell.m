@@ -51,6 +51,8 @@
     UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(lastImg.frame)+40*S6, Wscreen, 10*S6)];
     bgView.backgroundColor = TABLEVIEWCOLOR;
     [self.contentView addSubview:bgView];
+    
+    [self configCellWithArray:imgArray];
 }
 
 -(void)configCellWithArray:(NSArray *)dataArray{
@@ -61,8 +63,8 @@
     }
 }
 
--(void)addImageData:(NSInteger)tag withModel:(PopurityModel *)model{
- 
+-(void)addImageData:(NSInteger)tag withModel:(BatarCommandSubModel *)model{
+    
     //拼接ip和port
     NetManager * manager = [NetManager shareManager];
     NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
@@ -91,7 +93,6 @@
     
     UIImageView * image = (UIImageView *)tap.view;
     if(self.block){
-        
         self.block(image.tag-6666);
     }
 }

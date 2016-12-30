@@ -100,7 +100,20 @@
 //    NSInteger height = 165/2.0*THUMBNAILRATE;
     
     imgView.image = [UIImage imageWithData:model.img];
+}
+-(void)configResultCellWithModel:(BatarResultModel *)model{
     
+    nameLabel.text = model.name;
+    self.numberLabel.text = model.number;
+    
+    //拼接ip和port
+        NetManager * manager = [NetManager shareManager];
+        NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
+        UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
+        NSInteger width = 110*THUMBNAILRATE;
+        NSInteger height = 165/2.0*THUMBNAILRATE;
+    
+     [imgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[NSString stringWithFormat:@"%@%@",URLstring,model.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

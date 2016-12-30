@@ -120,16 +120,6 @@
             urlStr = [NSString stringWithFormat:@"%@page=%@&itemperpage=%@",str,pageStr,@"10"];
         }
             break;
-        case 3:
-            //搜索数据
-        {
-            NSString * URLstring = [NSString stringWithFormat:SEARCHURL,[manager getIPAddress]];
-            NSString * str = [NSString stringWithFormat:@"%@?key=%@&",URLstring,self.catagoryIndex];
-            NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-            parmDict = nil;
-            urlStr = [NSString stringWithFormat:@"%@page=%@&size=%@",str,pageStr,@"10"];
-        }
-            break;
         case 4:
             break;
         case 5:

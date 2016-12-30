@@ -8,8 +8,8 @@
 
 #import "SearchViewController.h"
 #import "NetManager.h"
-#import "SingleSearchCatagoryViewController.h"
 #import "VVAttrHeper.h"
+#import "BatarResultController.h"
 
 @interface SearchViewController ()<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate>{
     UIView * _bgView;
@@ -32,6 +32,7 @@
     self.search_Tf.hidden = NO;
     self.search_tableView.hidden = YES;
     [self.search_Tf becomeFirstResponder];
+     self.view.transform = CGAffineTransformIdentity;
 }
 -(void)viewWillDisappear:(BOOL)animated{
     
@@ -258,11 +259,9 @@
     NetManager * manager = [NetManager shareManager];
     [manager saveSearchText:text];
     [self createHistoryView];
-    SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
-    singleVc.vc_flag = 3;
-    singleVc.catagoryItem = @"搜索结果";
-    singleVc.catagoryIndex = [text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    [self pushToViewControllerWithTransition:singleVc withDirection:@"left" type:NO];
+    BatarResultController * resultVc = [[BatarResultController alloc]initWithController:self];
+    resultVc.param = text;
+    [self pushToViewControllerWithTransition:resultVc withDirection:@"left" type:NO];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{

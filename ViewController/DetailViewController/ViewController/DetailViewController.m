@@ -102,12 +102,16 @@
     return self;
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    
-    //    self.ylScrollerView = nil;
-    //    [self.ylScrollerView removeFromSuperview];
     
     //移除消息路径
     [kUserDefaults removeObjectForKey:RECORDPATH];
@@ -118,9 +122,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 -(void)keyBoardWillShow:(NSNotification *)notification{
@@ -712,7 +713,7 @@
 //返回到上一个界面
 -(void)backOut{
     
-    [self popToViewControllerWithDirection:@"left" type:NO];
+    [self popToViewControllerWithDirection:@"right" type:NO];
 }
 
 -(NSMutableArray *)sortItemsArray{

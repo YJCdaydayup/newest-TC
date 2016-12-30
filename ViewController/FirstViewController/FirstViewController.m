@@ -13,8 +13,8 @@
 #import "SerizeCell.h"
 #import "ProductCell.h"
 #import "NetManager.h"
-#import "BannerModel.h"
-#import "PopurityModel.h"
+#import "BatarCommandModel.h"
+#import "BatarCommandSubModel.h"
 #import "SerizeViewController.h"
 #import "SingleSearchCatagoryViewController.h"
 #import "MyViewController.h"
@@ -24,6 +24,7 @@
 #import "SearchViewController.h"
 #import "YLLocationManager.h"
 #import "ScanViewController.h"
+#import "BannerModel.h"
 
 #define serizeCell @"serizeCell"
 #define productCell @"productCell"
@@ -40,8 +41,8 @@
 
 //表格属性
 @property (nonatomic,strong) UITableView * tableView;
-@property (nonatomic,strong) NSMutableArray *popurityArray;
-@property (nonatomic,strong) NSMutableArray * newestArray;
+//@property (nonatomic,strong) NSMutableArray *popurityArray;
+//@property (nonatomic,strong) NSMutableArray * newestArray;
 
 //轮播图
 @property (nonatomic,strong) SDCycleScrollView * cycleScrollView;
@@ -57,9 +58,15 @@
 @property (nonatomic,assign) CGFloat max_X;
 @property (nonatomic,assign) CGFloat max_Y;
 
+@property (nonatomic,strong) NetManager * manager;
+@property (nonatomic,strong) NSMutableArray<BatarCommandModel *> * dataArray;
+
 @end
 
 @implementation FirstViewController
+
+@synthesize manager = manager;
+
 //界面即将消失时
 -(void)viewWillDisappear:(BOOL)animated{
     
@@ -76,24 +83,16 @@
     self.searchTextField.hidden = NO;
 }
 
--(void)reloadView{
-    
-    //请求轮播图url
-    [self downloadBanner];
-    
-    //请求“人气产品”和“最新产品”数据
-    [self downloadNewestData];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    manager = [NetManager shareManager];
     
     //隐藏系统的“返回导航按钮”
     self.navigationItem.hidesBackButton = YES;
     
     //请求分类搜索界面的数据
     [self downloadCatagory];
-    
     
     //设置表格frame
     [self setTableView];
@@ -102,50 +101,55 @@
     [self reloadView];
 }
 
-#pragma mark -请求“人气产品”和“最新产品”数据
--(void)downloadNewestData{
+-(void)reloadView{
     
-    NetManager * manager = [NetManager shareManager];
-    //拼接ip和port
-    NSString * URLstring = [NSString stringWithFormat:POPULARITY,[manager getIPAddress]];
-    [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
-        
-        if(error == nil){
-            NSMutableArray * downArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-            for(int i=0;i<downArray.count;i++){
-                
-                PopurityModel * model = [[PopurityModel alloc]initWithDictionary:downArray[i] error:nil];
-                [self.popurityArray addObject:model];
-            }
-            [self.tableView reloadData];
-            if(downArray.count > 0){
-                //拼接ip和port
-                NSString * URLstring = [NSString stringWithFormat:NEWPRODUCT,[manager getIPAddress]];
-                [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
-                    
-                    if(error == nil){
-                        NSMutableArray * downArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-                        for(int i=0;i<downArray.count;i++){
-                            
-                            PopurityModel * model = [[PopurityModel alloc]initWithDictionary:downArray[i] error:nil];
-                            [self.newestArray addObject:model];
-                        }
-                        [self.tableView reloadData];
-                        //请求首页中间的菜单
-                        [self getMenueInfo:manager];
-                    }
-                }];
-            }
-        }
-    }];
+    //请求轮播图url
+    [self downloadBanner];
+    
+    [self getMenueInfo];
 }
+//-(void)downloadNewestData{
 
--(void)getMenueInfo:(NetManager *)manager{
+//    NetManager * manager = [NetManager shareManager];
+//    //拼接ip和port
+//    NSString * URLstring = [NSString stringWithFormat:POPULARITY,[manager getIPAddress]];
+//    [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
+//
+//        if(error == nil){
+//            NSMutableArray * downArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+//            for(int i=0;i<downArray.count;i++){
+//
+//                PopurityModel * model = [[PopurityModel alloc]initWithDictionary:downArray[i] error:nil];
+//                [self.popurityArray addObject:model];
+//            }
+//            [self.tableView reloadData];
+//            if(downArray.count > 0){
+//                //拼接ip和port
+//                NSString * URLstring = [NSString stringWithFormat:NEWPRODUCT,[manager getIPAddress]];
+//                [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
+//
+//                    if(error == nil){
+//                        NSMutableArray * downArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+//                        for(int i=0;i<downArray.count;i++){
+//
+//                            PopurityModel * model = [[PopurityModel alloc]initWithDictionary:downArray[i] error:nil];
+//                            [self.newestArray addObject:model];
+//                        }
+//                        [self.tableView reloadData];
+//                        //请求首页中间的菜单
+//
+//                    }
+//                }];
+//            }
+//        }
+//    }];
+//}
+
+-(void)getMenueInfo{
     
     NSString * urlStr = [NSString stringWithFormat:TUIGUANGINFO,[manager getIPAddress]];
     [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
         
-        [self.hud hide:YES];
         if(error==nil){
             
             NSMutableArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -157,13 +161,42 @@
             }
             
             //            [tuiGuangArr addObectsFromArray:tuiGuangArr];
-            
-            [self.tableView reloadData];
+        
+            [self downloadNewestData];
         }else{
             NSLog(@"%@",error.description);
         }
     }];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+
+#pragma mark -请求“人气产品”和“最新产品”数据
+-(void)downloadNewestData{
+    //拼接ip和port
+    [self.dataArray removeAllObjects];
+    NSString * URLstring = [NSString stringWithFormat:Batar_TUIJIAN,[manager getIPAddress]];
+    [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
+        
+        [self.hud hide:YES];
+        if(error == nil){
+            NSMutableArray * muArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:Nil];
+            for(NSDictionary * dict in muArray){
+                
+                NSMutableArray * array2 = [NSMutableArray array];
+                NSArray * subArray = dict[@"products"];
+                for(NSDictionary * subDict in subArray){
+                    BatarCommandSubModel * subModel = [[BatarCommandSubModel alloc]initWithDictionary:subDict error:nil];
+                    [array2 addObject:subModel];
+                }
+                BatarCommandModel * model = [[BatarCommandModel alloc]init];
+                model.products = array2;
+                model.themename = dict[@"themename"];
+                [self.dataArray addObject:model];
+            }
+            [self.tableView reloadData];
+        }
+    }];
 }
 
 #pragma mark -轮播图加载
@@ -174,7 +207,6 @@
     [self.hud show:YES];
     
     self.bannerArray = [NSMutableArray array];
-    NetManager * manager = [NetManager shareManager];
     //拼接ip和port
     NSString * URLstring = [NSString stringWithFormat:BANNERURL,[manager getIPAddress]];
     
@@ -192,7 +224,6 @@
             }
             
             NSMutableArray * imagesURLStrings = [NSMutableArray array];
-            NetManager * manager = [NetManager shareManager];
             for(int i=0;i<self.bannerArray.count;i++){
                 
                 BannerModel * model = [self.bannerArray objectAtIndex:i];
@@ -231,7 +262,6 @@
 #pragma mark -请求分类搜索界面的数据
 -(void)downloadCatagory{
     
-    NetManager * manager = [NetManager shareManager];
     [manager downloadCatagoryData];
 }
 
@@ -245,10 +275,10 @@
     self.bottomLine.backgroundColor = RGB_COLOR(204, 204, 204, 1);
     [self.navigationController.navigationBar addSubview:self.bottomLine];
     
-    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(gotoMyVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:10*S6];
+    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(goCatagoryVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:10*S6];
     
     [self createTextfield];
-
+    
 }
 -(void)createTextfield{
     
@@ -290,17 +320,17 @@
     self.searchTextField.layer.borderColor = [RGB_COLOR(76, 66, 41, 1)CGColor];
 }
 
+#pragma mark - 开始搜索
 -(void)searchVc{
     
     SearchViewController * searchVc = [[SearchViewController alloc]init];
     [self.navigationController pushViewController:searchVc animated:NO];
 }
 
-#pragma mark - 开始搜索
--(void)gotoMyVc{
+-(void)goCatagoryVc{
     
-    MyViewController * myVc = [[MyViewController alloc]init];
-    [self pushToViewControllerWithTransition:myVc withDirection:@"left" type:NO];
+    CatagoryViewController * catagoryVc = [[CatagoryViewController alloc]initWithController:self];
+    [self pushToViewControllerWithTransition:catagoryVc withDirection:@"left" type:NO];
 }
 
 //设置表格frame
@@ -314,9 +344,6 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.tableFooterView = [[UIView alloc]init];
-    
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
-    
     [self.tableView registerClass:[SerizeCell class] forCellReuseIdentifier:serizeCell];
     [self.tableView registerClass:[ProductCell class] forCellReuseIdentifier:productCell];
 }
@@ -325,7 +352,7 @@
 //表格的代理方法
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     
-    return 3;
+    return self.dataArray.count+1;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -359,52 +386,20 @@
             themeVc.themeTitle = model.actionaliasname;
             [self pushToViewControllerWithTransition:themeVc withDirection:@"right" type:NO];
         }];
-        
         return cell;
         
     }else{
         
         ProductCell * cell = [tableView dequeueReusableCellWithIdentifier:productCell];
         if(cell == nil){
-            
             cell = [[ProductCell alloc]init];
         }
-        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        if(indexPath.section == 1){
-            if(self.newestArray.count > 0){
-                [cell setImageView:self.newestArray];
-                [cell configCellWithArray:self.newestArray];
-                [cell clickImageForDetai:^(NSInteger index) {
-                    if(self.newestArray.count>index){
-                        PopurityModel * model = self.newestArray[index];
-                        DetailViewController * detailVc = [DetailViewController shareDetailController];
-                        detailVc.index = model.number;
-                        [kUserDefaults removeObjectForKey:FROM_VC_TO_SAVE];
-                        [kUserDefaults removeObjectForKey:TEMP_FROM_VC_TO_SAVE];
-                        [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
-                        self.hidesBottomBarWhenPushed = NO;
-                    }
-                    
-                }];
-            }
-        }else if(indexPath.section == 2){
+        if(self.dataArray.count > 0){
             
-            if(self.popurityArray.count > 0){
-                [cell setImageView:self.popurityArray];
-                [cell configCellWithArray:self.popurityArray];
-                [cell clickImageForDetai:^(NSInteger index) {
-                    if(self.popurityArray.count>index){
-                        PopurityModel * model = self.popurityArray[index];
-                        DetailViewController * detailVc = [DetailViewController shareDetailController];
-                        detailVc.index = model.number;
-                        [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
-                        [kUserDefaults removeObjectForKey:FROM_VC_TO_SAVE];
-                        [kUserDefaults removeObjectForKey:TEMP_FROM_VC_TO_SAVE];
-                        self.hidesBottomBarWhenPushed = NO;
-                    }
-                }];
-            }
+            NSMutableArray * array = self.dataArray[indexPath.row].products;
+            NSLog(@"------%zi",array.count);
+            [cell setImageView:array];
         }
         return cell;
     }
@@ -421,61 +416,30 @@
         }else{
             return 0;
         }
-    }else if(indexPath.section == 1){
-        if(self.newestArray.count%2==0){
-            return (175*self.newestArray.count/2.0+10)*S6;
-        }else{
-            return (175*(self.newestArray.count+1)/2.0+10)*S6;
-        }
     }else{
-        if(self.popurityArray.count%2==0){
-            return (175*self.popurityArray.count/2.0+10)*S6;
-        }else
-            return (175*(self.popurityArray.count+1)/2.0+10)*S6;
+        
+        NSInteger count = self.dataArray[indexPath.row].products.count;
+        if(count%2==0){
+            return (175*count/2.0+10)*S6;
+        }else{
+            return (175*(count+1)/2.0+10)*S6;
+        }
     }
 }
 
 //组头设置
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    NSArray * sectionImageNameArray = @[@"new_product",@"popur_product"];
-    NSArray *sectionTitleArray = @[@"新款产品",@"人气产品"];
-    
     UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 46*S6)];
     view.backgroundColor = [UIColor whiteColor];
     
-    UIImageView * sectionImageView = [[UIImageView alloc]initWithFrame:CGRectMake(3.5*S6, 16.5*S6, 18*S6, 17.5*S6)];
-    [view addSubview:sectionImageView];
+    UILabel * label = [Tools createLabelWithFrame:CGRectMake(0, 0, view.width, view.height) textContent:[NSString stringWithFormat:@"———— %@ ————",self.dataArray[section-1].themename] withFont:[UIFont systemFontOfSize:15*S6] textColor:TABBARTEXTCOLOR textAlignment:NSTextAlignmentCenter];
+//    label.font = [UIFont boldSystemFontOfSize:12*S6];
+    [view addSubview:label];
     
-    self.max_X = CGRectGetMaxX(sectionImageView.frame);
-    self.max_Y = CGRectGetMinY(sectionImageView.frame);
-    
-    UILabel * sectionLabel = [[UILabel alloc]initWithFrame:CGRectMake(self.max_X+7.5*S6, self.max_Y,60*S6, 15*S6)];
-    sectionLabel.textAlignment = NSTextAlignmentCenter;
-    sectionLabel.font = [UIFont systemFontOfSize:14*S6];
-    sectionLabel.textColor = RGB_COLOR(85, 85, 85, 1);
-    [view addSubview:sectionLabel];
-    
-    if(section == 1){
-        
-        sectionImageView.image = [UIImage imageNamed:sectionImageNameArray[0]];
-        sectionLabel.text = sectionTitleArray[0];
-        
-        UILabel * label1 = [self createMore:view selector:@selector(action1)];
-        UITapGestureRecognizer * tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(action1)];
-        [label1 addGestureRecognizer:tap1];
-    }else if(section == 2){
-        
-        sectionImageView.image = [UIImage imageNamed:sectionImageNameArray[1]];
-        sectionLabel.text = sectionTitleArray[1];
-        UILabel * label2 = [self createMore:view selector:@selector(action2)];
-        UITapGestureRecognizer * tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(action2)];
-        [label2 addGestureRecognizer:tap1];
-    }
-    
-    self.max_X = CGRectGetMaxX(sectionLabel.frame);
-    self.max_Y = CGRectGetMinY(sectionLabel.frame);
-    
+    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btn" selectedImage:nil tag:0 addTarget:self action:@selector(moreAction1)];
+    moreBtn.frame = CGRectMake(Wscreen-93/2.0*S6, 13.5*S6, 40*S6, 18*S6);
+    [view addSubview:moreBtn];
     return view;
 }
 
@@ -565,22 +529,30 @@
 }
 
 //懒加载
--(NSMutableArray *)popurityArray{
-    
-    if(!_popurityArray){
-        
-        _popurityArray = [NSMutableArray array];
-    }
-    return _popurityArray;
-}
+//-(NSMutableArray *)popurityArray{
+//
+//    if(!_popurityArray){
+//
+//        _popurityArray = [NSMutableArray array];
+//    }
+//    return _popurityArray;
+//}
+//
+//-(NSMutableArray *)newestArray{
+//
+//    if(!_newestArray){
+//
+//        _newestArray = [NSMutableArray array];
+//    }
+//    return _newestArray;
+//}
 
--(NSMutableArray *)newestArray{
+-(NSMutableArray *)dataArray{
     
-    if(!_newestArray){
-        
-        _newestArray = [NSMutableArray array];
+    if(_dataArray==nil){
+        _dataArray = [NSMutableArray array];
     }
-    return _newestArray;
+    return _dataArray;
 }
 
 - (void)didReceiveMemoryWarning {

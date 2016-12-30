@@ -6,100 +6,105 @@
 //  Copyright © 2016 杨力. All rights reserved.
 //
 
-#ifndef UrlDefine_h
-#define UrlDefine_h
+#import <UIKit/UIKit.h>
+
+@interface UrlDefine : NSObject
 
 /*客户登录*/
-#define LOGIN_URL @"http://%@/photo-album/order/user_reg"
+UIKIT_EXTERN NSString * const LOGIN_URL;
 
 /*轮播图*/
-#define BANNERURL @"http://%@/photo-album/index/tabimage"
+UIKIT_EXTERN NSString * const BANNERURL;
+
+/*首页款类*/
+UIKIT_EXTERN NSString * const Batar_TUIJIAN;
 
 /*新款产品*/
-#define NEWPRODUCT @"http://%@/photo-album/index/newProduct"
+UIKIT_EXTERN NSString * const NEWPRODUCT;
 
 /*人气产品*/
-#define POPULARITY @"http://%@/photo-album/index/popularity"
+UIKIT_EXTERN NSString * const POPULARITY;
 
 /*图片拼接url*/
-#define BANNERCONNET @"http://%@/photo-album/image/"
+UIKIT_EXTERN NSString * const BANNERCONNET;
+
 /*轮播图拼接url*/
-#define NEWBANNERCONNET @"http://%@/photo-album/index/image_tab/"
+UIKIT_EXTERN NSString * const NEWBANNERCONNET;
 
 /*点击轮播图url*/
-#define BANNERCLICKURL @"http://%@/photo-album/search/classify/"
+UIKIT_EXTERN NSString * const BANNERCLICKURL;
 
 /*分类搜索界面出现的按钮项目*/
-#define CATAFGORYITEM @"http://%@/photo-album/search/main"
+UIKIT_EXTERN NSString * const CATAFGORYITEM;
 
 /*分类搜索界面*/
-#define CATAGORYURL @"http://%@/photo-album/search/classify?"
+UIKIT_EXTERN NSString * const CATAGORYURL;
 
 /*分类分组界面跳转到单类界面*/
-#define CATAGORYPUSHURL @"http://%@/photo-album/search/classifycontext/"
+UIKIT_EXTERN NSString * const CATAGORYPUSHURL;
 
 /*系列界面*/
-#define SERIZEURL       @"http://%@/photo-album/series/main"
+UIKIT_EXTERN NSString * const SERIZEURL;
 
 /*主题界面*/
-#define MERRYURL        @"http://%@/photo-album/series/subview/"
+UIKIT_EXTERN NSString *const   MERRYURL;
 
 /*推荐界面*/
-#define RECOMMENDURL    @"http://%@/photo-album/search/recommend"
+UIKIT_EXTERN NSString *const  RECOMMENDURL;
 
 /*向服务器发送版本号和id*/
-#define Send_VersionToService  @"http://%@/photo-album/app/updateforios"
+UIKIT_EXTERN NSString *const  Send_VersionToService;
 
 /*上传我的购物车*/
-#define UPLOADORDERCAR  @"http://%@/photo-album/order/order_shop_add"
+UIKIT_EXTERN NSString *const  UPLOADORDERCAR;
 
 /*上传语音信息*/
-#define UPLOADVOICE     @"http://%@/photo-album/order/update_voice"
+UIKIT_EXTERN NSString *const  UPLOADVOICE ;
 
 /*搜索数据*/
-#define SEARCHURL       @"http://%@/photo-album/product/product_search"
+UIKIT_EXTERN NSString *const  SEARCHURL;
 
 /*查看我的购物车*/
-#define MYORDERCAR      @"http://%@/photo-album/order/order_shop_list"
+UIKIT_EXTERN NSString *const   MYORDERCAR ;
 
 /*删除我的购物车*/
-#define REMOVECARORDER  @"http://%@/photo-album/order/order_shop_delete"
+UIKIT_EXTERN NSString *const  REMOVECARORDER;
 
 /*确认订单*/
-#define CONFRIMORDR     @"http://%@/photo-album/order/order_confirm" 
+UIKIT_EXTERN NSString *const CONFRIMORDR;
 
 /*查看已经确认的订单*/
-#define CHECKORDER      @"http://%@/photo-album/order/order_list" 
+UIKIT_EXTERN NSString *const  CHECKORDER;
 
 /*删除最终确认的订单*/
-#define DELETEMYORDER   @"http://%@/photo-album/order/order_delete"
+UIKIT_EXTERN NSString *const  DELETEMYORDER;
 
 /*搜索提示*/
-#define SEARCHINDICOTOR @"http://%@/photo-album/index/autocomplete"
+UIKIT_EXTERN NSString *const  SEARCHINDICOTOR;
 
 /*分享*/
-#define ShAREPLATFORMS  @"http://%@/photo-album/weixin/product_detailed.html#%@"
+UIKIT_EXTERN NSString *const ShAREPLATFORMS;
 
 /*首页底部*/
-#define BOTTOMPIC       @"http://%@/photo-album/index/get_botton_bar"
+UIKIT_EXTERN NSString * const BOTTOMPIC;
 
 /*首页底部图片*/
-#define BOTTOMIMG       @"http://%@/photo-album/index/image_logo/%@"
+UIKIT_EXTERN NSString *const  BOTTOMIMG;
 
 /*获取首页推广信息*/
-#define TUIGUANGINFO    @"http://%@/photo-album/index/generalization"
+UIKIT_EXTERN NSString *const TUIGUANGINFO;
 
 /*获取推广的图片*/
-#define GETTUIGUANGIMG  @"http://%@/photo-album/index/image/"
+UIKIT_EXTERN NSString *const  GETTUIGUANGIMG;
 
 /*请求语音接口*/
-#define GETVOICEURL     @"http://%@/photo-album/order/voice/%@"
+UIKIT_EXTERN NSString *const GETVOICEURL;
 
 /*企业版App检测更新链接*/
-#define PLIST_URL       @"https://git.oschina.net/jeffyang/TestInternalDistribute2/raw/master/Info.plist?"
+UIKIT_EXTERN NSString *const PLIST_URL;
 
 /*iOS和安卓APP下载地址*/
-#define ANDARIOD_APPURL @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion"
-#define IOS_APPURL      @"http://fir.im/enterpriseUrl"
+UIKIT_EXTERN NSString *const ANDARIOD_APPURL;
+UIKIT_EXTERN NSString *const IOS_APPURL;
 
-#endif /* UrlDefine_h */
+@end
