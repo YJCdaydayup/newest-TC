@@ -25,6 +25,7 @@
 #import "YLLocationManager.h"
 #import "ScanViewController.h"
 #import "BannerModel.h"
+#import "MJRefresh.h"
 
 #define serizeCell @"serizeCell"
 #define productCell @"productCell"
@@ -96,8 +97,27 @@
     
     //设置表格frame
     [self setTableView];
+}
+
+//设置表格frame
+-(void)setTableView{
     
-    //加载数据
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) style:UITableViewStylePlain];
+    self.tableView.backgroundColor = TABLEVIEWCOLOR;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    [self.view addSubview:self.tableView];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.tableFooterView = [[UIView alloc]init];
+    [self.tableView registerClass:[SerizeCell class] forCellReuseIdentifier:serizeCell];
+    [self.tableView registerClass:[ProductCell class] forCellReuseIdentifier:productCell];
+    [self.tableView addHeaderWithTarget:self action:@selector(headerAction)];
+    
+    [self.tableView headerBeginRefreshing];
+}
+
+-(void)headerAction{
     [self reloadView];
 }
 
@@ -108,42 +128,6 @@
     
     [self getMenueInfo];
 }
-//-(void)downloadNewestData{
-
-//    NetManager * manager = [NetManager shareManager];
-//    //拼接ip和port
-//    NSString * URLstring = [NSString stringWithFormat:POPULARITY,[manager getIPAddress]];
-//    [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
-//
-//        if(error == nil){
-//            NSMutableArray * downArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-//            for(int i=0;i<downArray.count;i++){
-//
-//                PopurityModel * model = [[PopurityModel alloc]initWithDictionary:downArray[i] error:nil];
-//                [self.popurityArray addObject:model];
-//            }
-//            [self.tableView reloadData];
-//            if(downArray.count > 0){
-//                //拼接ip和port
-//                NSString * URLstring = [NSString stringWithFormat:NEWPRODUCT,[manager getIPAddress]];
-//                [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
-//
-//                    if(error == nil){
-//                        NSMutableArray * downArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-//                        for(int i=0;i<downArray.count;i++){
-//
-//                            PopurityModel * model = [[PopurityModel alloc]initWithDictionary:downArray[i] error:nil];
-//                            [self.newestArray addObject:model];
-//                        }
-//                        [self.tableView reloadData];
-//                        //请求首页中间的菜单
-//
-//                    }
-//                }];
-//            }
-//        }
-//    }];
-//}
 
 -(void)getMenueInfo{
     
@@ -159,9 +143,6 @@
                 BannerModel * model = [[BannerModel alloc]initWithDictionary:dict error:nil];
                 [tuiGuangArr addObject:model];
             }
-            
-            //            [tuiGuangArr addObectsFromArray:tuiGuangArr];
-        
             [self downloadNewestData];
         }else{
             NSLog(@"%@",error.description);
@@ -170,15 +151,12 @@
 //    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-
-#pragma mark -请求“人气产品”和“最新产品”数据
 -(void)downloadNewestData{
     //拼接ip和port
     [self.dataArray removeAllObjects];
     NSString * URLstring = [NSString stringWithFormat:Batar_TUIJIAN,[manager getIPAddress]];
     [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
         
-        [self.hud hide:YES];
         if(error == nil){
             NSMutableArray * muArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:Nil];
             for(NSDictionary * dict in muArray){
@@ -196,6 +174,7 @@
             }
             [self.tableView reloadData];
         }
+        [self.tableView headerEndRefreshing];
     }];
 }
 
@@ -203,8 +182,6 @@
 -(void)downloadBanner{
     
     [self createBannerPlaceImage];
-    
-    [self.hud show:YES];
     
     self.bannerArray = [NSMutableArray array];
     //拼接ip和port
@@ -252,11 +229,11 @@
 #pragma mark - 填充轮播默认图片
 -(void)createBannerPlaceImage{
     
-    self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT+150*S6, Wscreen, Hscreen-NAV_BAR_HEIGHT-150*S6);
-    placeHolderImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, 150)];
-    placeHolderImageView.image = [UIImage sd_animatedGIFNamed:@"move"];
-    placeHolderImageView.contentMode = UIViewContentModeCenter;
-    [self.view addSubview:placeHolderImageView];
+//    self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT+150*S6, Wscreen, Hscreen-NAV_BAR_HEIGHT-150*S6);
+//    placeHolderImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, 150)];
+//    placeHolderImageView.image = [UIImage sd_animatedGIFNamed:@"move"];
+//    placeHolderImageView.contentMode = UIViewContentModeCenter;
+//    [self.view addSubview:placeHolderImageView];
 }
 
 #pragma mark -请求分类搜索界面的数据
@@ -332,22 +309,6 @@
     CatagoryViewController * catagoryVc = [[CatagoryViewController alloc]initWithController:self];
     [self pushToViewControllerWithTransition:catagoryVc withDirection:@"left" type:NO];
 }
-
-//设置表格frame
--(void)setTableView{
-    
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) style:UITableViewStylePlain];
-    self.tableView.backgroundColor = TABLEVIEWCOLOR;
-    self.tableView.showsVerticalScrollIndicator = NO;
-    [self.view addSubview:self.tableView];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.tableFooterView = [[UIView alloc]init];
-    [self.tableView registerClass:[SerizeCell class] forCellReuseIdentifier:serizeCell];
-    [self.tableView registerClass:[ProductCell class] forCellReuseIdentifier:productCell];
-}
-
 
 //表格的代理方法
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -527,25 +488,6 @@
     [textField resignFirstResponder];
     return YES;
 }
-
-//懒加载
-//-(NSMutableArray *)popurityArray{
-//
-//    if(!_popurityArray){
-//
-//        _popurityArray = [NSMutableArray array];
-//    }
-//    return _popurityArray;
-//}
-//
-//-(NSMutableArray *)newestArray{
-//
-//    if(!_newestArray){
-//
-//        _newestArray = [NSMutableArray array];
-//    }
-//    return _newestArray;
-//}
 
 -(NSMutableArray *)dataArray{
     
