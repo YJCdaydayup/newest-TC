@@ -483,7 +483,7 @@
         return 46*S6;
     }
     else{
-        return 0;
+        return 0.0;
     }
 }
 
