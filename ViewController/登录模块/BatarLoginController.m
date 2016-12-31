@@ -70,6 +70,7 @@
     [self.view addSubview:line];
     
     self.serverView = [[YLServerAddView alloc]initWithView:self];
+    self.serverView.y = line.y+10*S6;
     [self.serverView updateServerView];
     
     UIButton * loginBtn = [Tools createNormalButtonWithFrame:CGRectMake(10, Hscreen-50*S6-NAV_BAR_HEIGHT, 300*S6, 40*S6) textContent:@"登录" withFont:[UIFont systemFontOfSize:18*S6] textColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];

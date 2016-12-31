@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BatarLoginController.h"
 #import "RootViewController.h"
 
 @interface YLServerAddView : UIView
 
 @property (nonatomic,strong) NSArray * serverArray;
 
--(instancetype)initWithView:(RootViewController *)motherVc;
+-(instancetype)initWithView:(BatarLoginController *)motherVc;
 -(void)updateServerView;
 @end

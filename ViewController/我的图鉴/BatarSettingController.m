@@ -48,7 +48,7 @@
 }
 
 -(void)createView{
-    [self batar_setLeftNavButton:@[@"",@"login"] target:self selector:nil size:CGSizeZero selector:@selector(logoOut) rightSize:CGSizeMake(22*S6, 22*S6) topHeight:15*S6];
+    [self batar_setLeftNavButton:@[@"",@"login"] target:self selector:nil size:CGSizeZero selector:@selector(logoOut) rightSize:CGSizeMake(22*S6, 22*S6) topHeight:11];
     [self batar_setNavibar:@"我的图鉴"];
     
     UIImageView * imgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, LineY(95))];

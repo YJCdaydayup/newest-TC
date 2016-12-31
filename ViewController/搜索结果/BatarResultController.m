@@ -22,6 +22,7 @@
 @property (nonatomic,strong) UITableView * tableView;
 @property (nonatomic,strong) NSMutableArray<BatarResultModel *>*dataArray;
 @property (nonatomic,strong) UITextField * result_Tf;
+@property (nonatomic,strong) UIButton * layoutBtn;
 
 @end
 
@@ -30,16 +31,18 @@
 @synthesize tableView = _tableView;
 @synthesize dataArray = _dataArray;
 @synthesize result_Tf = _result_Tf;
+@synthesize layoutBtn = _layoutBtn;
 
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    _layoutBtn.hidden = NO;
     if([self.fatherVc isKindOfClass:[SearchViewController class]]){
         self.result_Tf.hidden = NO;
         [self batar_setNavibar:nil];
     }else{
         self.result_Tf.hidden = YES;
-        [self batar_setNavibar:@"搜索结果"];
+        [self batar_setNavibar:@"扫描结果"];
     }
 }
 
@@ -47,6 +50,7 @@
     
     [super viewWillDisappear:animated];
     _result_Tf.hidden = YES;
+    _layoutBtn.hidden = YES;
 }
 
 -(void)viewDidLoad{
@@ -59,6 +63,12 @@
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
     [self createTextfield];
     
+    _layoutBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-55*S6, 33, 55*S6, 20*S6) textContent:@"切换" withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
+    [self.navigationController.view addSubview:_layoutBtn];
+    _layoutBtn.selected = NO;
+    [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
+
+    
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -69,6 +79,11 @@
     [_tableView addFooterWithTarget:self action:@selector(footerAction)];
     [_tableView headerBeginRefreshing];
     [self createData];
+}
+
+-(void)changeLayout{
+    
+    
 }
 
 -(void)createData{

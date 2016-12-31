@@ -8,6 +8,8 @@
 //
 
 #import "NetManager.h"
+//#import <IOKit/>
+
 @interface NetManager()<NSURLConnectionDataDelegate,NSURLConnectionDelegate>{
     
     NSURLConnection * connection;
@@ -171,6 +173,7 @@
 
 -(void)sendAppVersionToService{
     
+    
     NSString * ip = [self getIPAddress];
     NSString * urlStr = [NSString stringWithFormat:Send_VersionToService,ip];
     NSString * ID = [[UIDevice currentDevice].identifierForVendor UUIDString];
@@ -191,7 +194,7 @@
     
     NSMutableArray * newArray;
     if(![historyArray containsObject:text]){
-//        [historyArray addObject:text];
+        //        [historyArray addObject:text];
         [historyArray insertObject:text atIndex:0];
         //获取数组的最新10个数据
         if(historyArray.count>10){
@@ -222,8 +225,8 @@
 
 -(NSMutableArray *)getAllServers{
     
-//    NSFileManager * fm = [NSFileManager defaultManager];
-//    [fm removeItemAtPath:self.ip_PortPath error:nil];
+    //    NSFileManager * fm = [NSFileManager defaultManager];
+    //    [fm removeItemAtPath:self.ip_PortPath error:nil];
     
     NSMutableArray * muArray = [NSMutableArray array];
     NSArray * array = [NSArray arrayWithContentsOfFile:self.ip_PortPath];

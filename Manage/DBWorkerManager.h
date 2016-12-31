@@ -12,6 +12,7 @@
 
 typedef void(^DBSaveBlock)(NSMutableArray * dataArray);
 typedef void(^DetailDataBlock)(id responseObject);
+typedef void(^HistoryClearBlock)(BOOL clear);
 
 @interface DBWorkerManager : NSObject
 /*
@@ -102,5 +103,11 @@ typedef void(^DetailDataBlock)(id responseObject);
  加入购物车后，清除我的订购单数据库里面的数据
  **/
 -(void)order_cleanDBDataWithNumber:(NSString *)number;
+
+
+/*******************扫码历史数据********************/
+-(void)scan_insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number;
+-(void)scan_getAllObject:(DBSaveBlock)block;
+-(void)scan_cleanAllDBData:(HistoryClearBlock)block;
 
 @end

@@ -82,6 +82,7 @@
     [self setNavigation];
     [self.searchTextField resignFirstResponder];
     self.searchTextField.hidden = NO;
+    self.tabBarController.tabBar.hidden = NO;
 }
 
 - (void)viewDidLoad {
@@ -252,7 +253,7 @@
     self.bottomLine.backgroundColor = RGB_COLOR(204, 204, 204, 1);
     [self.navigationController.navigationBar addSubview:self.bottomLine];
     
-    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(goCatagoryVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:10*S6];
+    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(goCatagoryVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:8];
     
     [self createTextfield];
     
@@ -307,7 +308,9 @@
 -(void)goCatagoryVc{
     
     CatagoryViewController * catagoryVc = [[CatagoryViewController alloc]initWithController:self];
+    catagoryVc.hidesBottomBarWhenPushed = YES;
     [self pushToViewControllerWithTransition:catagoryVc withDirection:@"left" type:NO];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 //表格的代理方法
@@ -359,8 +362,14 @@
         if(self.dataArray.count > 0){
             
             NSMutableArray * array = self.dataArray[indexPath.row].products;
-            NSLog(@"------%zi",array.count);
             [cell setImageView:array];
+            [cell clickImageForDetai:^(NSInteger index) {
+               
+//                NSLog(@"%zi",index);
+                DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
+                detailVc.index = self.dataArray[indexPath.row].products[index].number;
+                [self pushToViewControllerWithTransition:detailVc withDirection:@"right" type:NO];
+            }];
         }
         return cell;
     }

@@ -936,6 +936,7 @@
     SerizeViewController * serizeViewController = [[SerizeViewController alloc]init];
 //    [self pushToViewControllerWithTransition:serizeViewController withDirection:@"left" type:NO];
     [self.navigationController pushViewController:serizeViewController animated:NO];
+    
 }
 
 //返回首页

@@ -26,7 +26,6 @@
     
     _leftNavBtn.hidden = YES;
     _rightNavBtn.hidden = YES;
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 -(void)viewDidLoad{
@@ -71,7 +70,7 @@
     UIButton * rightBtn = [Tools createButtonNormalImage:imgArray[1] selectedImage:nil tag:0 addTarget:target action:rightSel];
     rightBtn.frame = CGRectMake(Wscreen-rightSize.width-15*S6, 15*S6, 100*S6, 50*S6);
     rightBtn.size = rightSize;
-    rightBtn.y = height;
+    rightBtn.y = height+1*S6;
     rightBtn.hidden = NO;
     _rightNavBtn = rightBtn;
     [self.navigationController.navigationBar addSubview:rightBtn];

@@ -171,14 +171,16 @@
 -(void)searchVc{
     
     SearchViewController * searchVc = [[SearchViewController alloc]init];
+    searchVc.hidesBottomBarWhenPushed = NO;
     [self.navigationController pushViewController:searchVc animated:NO];
 }
 
--(void)outAction{
-    
-    MyViewController * myVc = [[MyViewController alloc]init];
-    [self pushToViewControllerWithTransition:myVc withDirection:@"left" type:NO];
-}
+//-(void)outAction{
+//    
+//    MyViewController * myVc = [[MyViewController alloc]init];
+//        MyViewController.hidesBottomBarWhenPushed = NO;
+//    [self pushToViewControllerWithTransition:myVc withDirection:@"left" type:NO];
+//}
 
 #pragma mark - 获取数据
 -(void)createData{
@@ -330,7 +332,7 @@
     SerizeModel * model = [self.dataArray objectAtIndex:indexPath.section];
     ThemeViewController * themeVc = [[ThemeViewController alloc]init];
     themeVc.themeTitle = model.name;
-    themeVc.indexParm = model.seriesindex;
+    themeVc.indexParm = model.seriesid;
 //    NSLog(@"%@",model.seriesindex);
     themeVc.fromVc = 1;
     [self.navigationController pushViewController:themeVc animated:YES];

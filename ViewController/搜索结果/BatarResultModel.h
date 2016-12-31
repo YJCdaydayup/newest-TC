@@ -9,6 +9,7 @@
 #import "JSONModel.h"
 
 @interface BatarResultModel : JSONModel
+
 //{"totlesize":18,
 //"page":[
 //{"category":"吊坠",
@@ -23,6 +24,6 @@
 @property (nonatomic,copy) NSString * name;
 @property (nonatomic,copy) NSString * number;
 @property (nonatomic,copy) NSString * image;
-@property (nonatomic,copy) NSString * number_module;
+//@property (nonatomic,copy) NSString * number_module;
 
 @end

@@ -45,5 +45,4 @@ typedef void(^CheckIPBlock)(NSString * response, NSError * error);
 -(NSMutableArray *)getSearchContent;
 -(void)cleanHistorySearch;
 
-
 @end

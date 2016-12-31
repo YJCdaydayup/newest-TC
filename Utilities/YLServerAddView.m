@@ -11,13 +11,13 @@
 #import "NetManager.h"
 #import "AppDelegate.h"
 
-#define FrameY  225
+#define FrameY  265.0
 #define FrameW  135.0
 #define FrameH  40
 
 @interface YLServerAddView()
 {
-    RootViewController * _bgVc;
+    BatarLoginController * _bgVc;
     NSMutableArray * _btnArray;
     NSString * selectIp_port;
     YLAddServer * addServer;
@@ -28,11 +28,10 @@
 
 @implementation YLServerAddView
 
--(instancetype)initWithView:(RootViewController *)motherVc{
+-(instancetype)initWithView:(BatarLoginController *)motherVc{
     
     if(self = [super init]){
         _bgVc = motherVc;
-        [motherVc.view addSubview:self];
     }
     return self;
 }
@@ -53,8 +52,10 @@
     }else{
         row = count/2+1;
     }
-    self.frame = CGRectMake(0, FrameY, 300*S6, (FrameH+10)*row*S6);
+    self.frame = CGRectMake(0, FrameY*S6, 300*S6, (FrameH+10)*row*S6);
+    self.y = FrameY*S6;
     self.centerX = _bgVc.view.centerX;
+    [_bgVc.view addSubview:self];
     NSArray * localImgNames = @[@"showking",@"batar_jew",@"king_batar",@"batar_group"];
     for(int i=0;i<count;i++){
         
@@ -105,7 +106,7 @@
 -(void)chooseServer:(UIButton *)btn{
     
     if(btn.tag == _btnArray.count-1){
-//        NSLog(@"添加按钮");
+        //        NSLog(@"添加按钮");
         [self addServer];
         return;
     }

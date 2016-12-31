@@ -10,4 +10,6 @@
 
 @interface BatarLoginController : RootViewController
 
+@property (nonatomic,strong) UIView * line;
+
 @end

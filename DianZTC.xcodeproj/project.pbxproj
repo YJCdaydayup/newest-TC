@@ -596,6 +596,8 @@
 		8F9184571DDBF91A00FDD25F /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F9184561DDBF91A00FDD25F /* libstdc++.tbd */; };
 		8F9184591DDBF93A00FDD25F /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F9184581DDBF93A00FDD25F /* libiconv.tbd */; };
 		8F91845B1DDBF94000FDD25F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F91845A1DDBF94000FDD25F /* Security.framework */; };
+		8F9E91BA1E170860002297ED /* ScanHistoryContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91B91E170860002297ED /* ScanHistoryContoller.m */; };
+		8F9E91BD1E171C7D002297ED /* ScanHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */; };
 		8FA9CFFC1E0DA63500DD0335 /* batar_group@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FA9CFF81E0DA63500DD0335 /* batar_group@3x.png */; };
 		8FA9CFFD1E0DA63500DD0335 /* batar_jew@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FA9CFF91E0DA63500DD0335 /* batar_jew@3x.png */; };
 		8FA9CFFE1E0DA63500DD0335 /* king_batar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FA9CFFA1E0DA63500DD0335 /* king_batar@3x.png */; };
@@ -1710,6 +1712,10 @@
 		8F9184561DDBF91A00FDD25F /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		8F9184581DDBF93A00FDD25F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		8F91845A1DDBF94000FDD25F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8F9E91B81E170860002297ED /* ScanHistoryContoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanHistoryContoller.h; sourceTree = "<group>"; };
+		8F9E91B91E170860002297ED /* ScanHistoryContoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanHistoryContoller.m; sourceTree = "<group>"; };
+		8F9E91BB1E171C7D002297ED /* ScanHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanHistoryCell.h; sourceTree = "<group>"; };
+		8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanHistoryCell.m; sourceTree = "<group>"; };
 		8FA9CFF81E0DA63500DD0335 /* batar_group@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "batar_group@3x.png"; sourceTree = "<group>"; };
 		8FA9CFF91E0DA63500DD0335 /* batar_jew@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "batar_jew@3x.png"; sourceTree = "<group>"; };
 		8FA9CFFA1E0DA63500DD0335 /* king_batar@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "king_batar@3x.png"; sourceTree = "<group>"; };
@@ -2582,6 +2588,10 @@
 			children = (
 				8F7CBEF91E131F2F0033E7FB /* ScanViewController.h */,
 				8F7CBEFA1E131F2F0033E7FB /* ScanViewController.m */,
+				8F9E91B81E170860002297ED /* ScanHistoryContoller.h */,
+				8F9E91B91E170860002297ED /* ScanHistoryContoller.m */,
+				8F9E91BB1E171C7D002297ED /* ScanHistoryCell.h */,
+				8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */,
 			);
 			path = "扫描二维码";
 			sourceTree = "<group>";
@@ -4580,6 +4590,7 @@
 				8F7CC1891E133A280033E7FB /* ZXAI01320xDecoder.m in Sources */,
 				8F7CC1201E133A280033E7FB /* ZXAztecDetectorResult.m in Sources */,
 				8F4A18821CDAB463006ED857 /* NSString+PJR.m in Sources */,
+				8F9E91BA1E170860002297ED /* ScanHistoryContoller.m in Sources */,
 				8F7CC1831E133A280033E7FB /* ZXMaxiCodeDecoder.m in Sources */,
 				8F9005D01DC8023100023F93 /* YLOrderControlView.m in Sources */,
 				8F7CC1101E133A280033E7FB /* LBXScanVideoZoomView.m in Sources */,
@@ -4614,6 +4625,7 @@
 				8F7CC15F1E133A280033E7FB /* ZXStringUtils.m in Sources */,
 				8F7CC17A1E133A280033E7FB /* ZXDataMatrixHighLevelEncoder.m in Sources */,
 				8F7CC11E1E133A280033E7FB /* ZXAztecState.m in Sources */,
+				8F9E91BD1E171C7D002297ED /* ScanHistoryCell.m in Sources */,
 				8F0276391E157850006E78F6 /* BatarResultController.m in Sources */,
 				8F5668111CDD403200C39F75 /* SearchCatagoryViewController.m in Sources */,
 				8F8591541DE360AF0060146A /* VVAttrHeper.m in Sources */,

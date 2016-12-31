@@ -12,6 +12,7 @@
 @interface DBWorkerManager(){
     FMDatabaseQueue * _dataBaseQueue;
     FMDatabaseQueue * _orderDataBaseQueue;
+    FMDatabaseQueue * _scanHistoryBaseQueue;
 }
 
 @property (nonatomic,copy) NSString * detailCachePath;
@@ -52,9 +53,11 @@ static DBWorkerManager * manager = nil;
     //    QFLog(@"docPath:%@",docPath);
     NSString * dbPath = [docPath stringByAppendingPathComponent:@"save.db"];
     NSString * dbPath1 = [docPath stringByAppendingPathComponent:@"order.db"];
+    NSString * dbPath2 = [docPath stringByAppendingPathComponent:@"scanHistory.db"];
     //    QFLog(@"dbPath:%@",dbPath);
     _dataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
     _orderDataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath1];
+    _scanHistoryBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath2];
     
     [self createTable];
 }
@@ -82,7 +85,18 @@ static DBWorkerManager * manager = nil;
         }else{
             //QFLog(@"%@",@"执行建表语句失败");
         }
+    }];
+    
+    NSString * sql2 = @"create table if not exists scanList(number text,img blob,name text)";
+    
+    [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
+        BOOL isSu = [db executeUpdate:sql2];
+        if(isSu){
+            //QFLog(@"%@",@"执行建表语句成功");
+        }else{
+            //QFLog(@"%@",@"执行建表语句失败");
+        }
     }];
 }
 
@@ -138,13 +152,41 @@ static DBWorkerManager * manager = nil;
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name];
             if (isSuccess) {
-                                QFLog(@"%@",@"执行插入语句成功");
+                QFLog(@"%@",@"执行插入语句成功");
             }else{
-                                QFLog(@"%@",@"执行插入语句失败");
+                QFLog(@"%@",@"执行插入语句失败");
             }
         }
     }];
 }
+
+-(void)scan_insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number{
+    
+    [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
+        
+        NSString * selectSql = @"select * from scanList where number = ?";
+        //查询sql语句
+        FMResultSet * set = [db executeQuery:selectSql,number];
+        BOOL isExist;
+        isExist = NO;
+        while([set next]){
+            isExist = YES;
+        }
+        
+        if(isExist == NO){
+            NSString * insertSQL = @"insert into scanList(number,img,name) values (?,?,?)";
+            //执行插入
+            BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name];
+            if (isSuccess) {
+//                QFLog(@"%@",@"scan执行插入语句成功");
+            }else{
+//                QFLog(@"%@",@"scan执行插入语句失败");
+            }
+//            NSLog(@"%@",imgData);
+        }
+    }];
+}
+
 
 -(void)order_getAllObject:(DBSaveBlock)block{
     
@@ -164,8 +206,27 @@ static DBWorkerManager * manager = nil;
         }
         block(array);
     }];
-
 }
+-(void)scan_getAllObject:(DBSaveBlock)block{
+    
+    [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
+        
+        NSString * selectSql = @"select * from scanList";
+        FMResultSet * rs = [db executeQuery:selectSql];
+        NSMutableArray * array = [NSMutableArray array];
+        while([rs next]){
+            
+            DBSaveModel * model = [[DBSaveModel alloc]init];
+            model.number = [rs stringForColumn:@"number"];
+            model.name = [rs stringForColumn:@"name"];
+            model.img = [rs dataForColumn:@"img"];
+            model.selected = NO;
+            [array addObject:model];
+        }
+        block(array);
+    }];
+}
+
 
 -(void)getAllObject:(DBSaveBlock)block{
     
@@ -233,6 +294,23 @@ static DBWorkerManager * manager = nil;
     }];
 }
 
+-(void)scan_cleanAllDBData:(HistoryClearBlock)block{
+    
+    NSString * deleteSql = @"delete from scanList";
+    [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
+        
+        BOOL isDelete = [db executeUpdate:deleteSql];
+        if(isDelete){
+            
+            QFLog(@"%@",@"移除数据库所有数据成功");
+            block(YES);
+        }else{
+            QFLog(@"%@",@"根据number移除数据失败");
+            block(NO);
+        }
+    }];
+}
+
 -(void)order_cleanAllDBData{
     
     NSString * deleteSql = @"delete from orderList";
@@ -270,11 +348,11 @@ static DBWorkerManager * manager = nil;
     NSDictionary * dict = @{number:responseObject};
     if(![CacheArray containsObject:dict]){
         [CacheArray addObject:dict];
-       BOOL isOK = [CacheArray writeToFile:self.orderCachePath atomically:YES];
+        BOOL isOK = [CacheArray writeToFile:self.orderCachePath atomically:YES];
         if(isOK){
-//            NSLog(@"保存订单缓存数据成功");
+            //            NSLog(@"保存订单缓存数据成功");
         }else{
-//            NSLog(@"保存订单缓存数据成功");
+            //            NSLog(@"保存订单缓存数据成功");
         }
     }
 }
@@ -398,7 +476,7 @@ static DBWorkerManager * manager = nil;
         
         for(DBSaveModel * model in dataArray){
             
-//            NSLog(@"bbbb:%@",model.number);
+            //            NSLog(@"bbbb:%@",model.number);
             
             if([model.number isEqualToString:number]){
                 isSaved = YES;

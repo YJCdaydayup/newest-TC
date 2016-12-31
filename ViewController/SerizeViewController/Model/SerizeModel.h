@@ -35,7 +35,7 @@
 
 @property (nonatomic,copy) NSMutableArray * imgs;
 @property (nonatomic,copy) NSString * name;
-@property (nonatomic,copy) NSString * seriesindex;
+@property (nonatomic,copy) NSString * seriesid;
 
 
 @end

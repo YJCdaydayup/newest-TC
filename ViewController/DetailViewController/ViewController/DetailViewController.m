@@ -18,7 +18,7 @@
 #import "MyOrdersController.h"
 #import "YLShareView.h"
 #import "YLLoginView.h"
-#import "AppDelegate.h"
+#import "ScanViewController.h"
 
 @interface DetailViewController ()<YLScrollerViewDelegate,STPhotoBrowserDelegate>{
     
@@ -120,6 +120,10 @@
     [_voiceManager stopWhenPushAway];
 }
 
+-(void)viewDidDisappear:(BOOL)animated{
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 }
@@ -204,7 +208,9 @@
     currentPhotoIndex = 0;
     UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
     if (modelArray.count > 0) {
-        [self.largeImageView  sd_setImageWithURL:[NSURL URLWithString:modelArray[0]] placeholderImage:gifImage];
+        [self.largeImageView sd_setImageWithURL:[NSURL URLWithString:modelArray[0]] placeholderImage:gifImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            [self addHistoryScan:image];
+        }];
     }
     
     [self.ylScrollerView configScrollView:NO WithArray:modelArray];
@@ -216,6 +222,12 @@
     }
     UITapGestureRecognizer * zoomAction = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(zoomActions)];
     [self.largeImageView addGestureRecognizer:zoomAction];
+}
+
+-(void)addHistoryScan:(UIImage *)image{
+    
+    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+    [manager scan_insertInfo:detailModel withData:UIImagePNGRepresentation(image) withNumber:detailModel.number];
 }
 
 #pragma mark -点击图片放大效果
@@ -332,7 +344,6 @@
         //判断是否已经收藏过
         DBWorkerManager * manager = [DBWorkerManager shareDBManager];
         save_Button.selected = [manager bt_productIsBeenSaveWithNumberID:detailModel.number];
-        
         //将产品ID改成消息路径
         [kUserDefaults setObject:detailModel.number forKey:RECORDPATH];
         [self setValueToView];
@@ -533,7 +544,7 @@
     
     [bottomControlView clickBottomBtn:^(NSInteger tag) {
         
-//        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        //        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         switch (tag) {
             case 0:{
                 [self popToViewControllerWithDirection:@"left" type:NO];
@@ -555,7 +566,7 @@
                 DBWorkerManager * manager = [DBWorkerManager shareDBManager];
                 [manager order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image)  withNumber:detailModel.number];
                 [manager order_saveDatailCache:detailModel.number withData:obj];
-//                [self addMyOrders];
+                //                [self addMyOrders];
             }
                 break;
                 

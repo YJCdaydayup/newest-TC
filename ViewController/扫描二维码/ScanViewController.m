@@ -8,6 +8,8 @@
 
 #import "ScanViewController.h"
 #import "BatarResultController.h"
+#import "ScanHistoryContoller.h"
+#import "DetailViewController.h"
 #import "NetManager.h"
 
 @interface ScanViewController()
@@ -35,6 +37,7 @@
 @synthesize inputBgView = _inputBgView;
 @synthesize coder_tf = _coder_tf;
 @synthesize confirmBtn = _confirmBtn;
+
 -(void)dealloc{
     
     [[NSNotificationCenter defaultCenter]removeObserver:self];
@@ -94,7 +97,6 @@
         _scanCoder.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height);
         _scanPhotos.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height);
         _inputCoder.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height);
-        self.app.window.transform = CGAffineTransformMakeTranslation(0, 0);
     }];
 }
 -(void)keyBoardWillHides:(NSNotification *)notification{
@@ -118,7 +120,7 @@
 -(void)createView{
     
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
-    _leftNViBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-65*S6, 40*S6, 55*S6, 20*S6) textContent:@"扫描历史" withFont:[UIFont systemFontOfSize:11*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+    _leftNViBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-65*S6, 33, 55*S6, 20*S6) textContent:@"扫描历史" withFont:[UIFont systemFontOfSize:11*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
     _leftNViBtn.layer.borderColor = [TEXTCOLOR CGColor];
     _leftNViBtn.layer.borderWidth = 0.5*S6;
     [self.navigationController.view addSubview:_leftNViBtn];
@@ -192,15 +194,20 @@
 - (void)scanResultWithArray:(NSArray<LBXScanResult*>*)array
 {
     for(LBXScanResult * result in array){
-        
         _descripeLabel.hidden = YES;
         _scanCoder.hidden = YES;
         _scanPhotos.hidden = YES;
         _inputCoder.hidden = YES;
         _inputBgView.hidden = YES;
-        BatarResultController * resultVc = [[BatarResultController alloc]initWithController:self];
-        resultVc.param = result.strScanned;
-        [self pushToViewControllerWithTransition:resultVc withDirection:@"left" type:NO];
+        
+        if(result.strScanned.length == 0){
+            [self showAlertViewWithTitle:@"未找到任何产品信息!"];
+            return;
+        }
+        
+        DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
+        detailVc.index = result.strScanned;
+        [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
     }
 }
 
@@ -245,7 +252,8 @@
 
 -(void)scanHistory{
     
-    
+    ScanHistoryContoller * historyVc = [[ScanHistoryContoller alloc]initWithController:self];
+    [self pushToViewControllerWithTransition:historyVc withDirection:@"right" type:NO];
 }
 
 -(UIView *)inputBgView{
