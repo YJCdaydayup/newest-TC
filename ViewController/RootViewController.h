@@ -52,4 +52,7 @@
 //弹出提示
 -(void)showAlertViewWithTitle:(NSString *)title;
 
+//删除已经push过的某个界面
+-(void)removeNaviPushedController:(id)controller;
+
 @end

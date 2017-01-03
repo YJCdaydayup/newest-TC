@@ -156,6 +156,17 @@
     }];
 }
 
+-(void)removeNaviPushedController:(id)controller{
+    NSMutableArray *marr = [[NSMutableArray alloc]initWithArray:self.navigationController.viewControllers];
+    for (UIViewController *vc in marr) {
+        if ([vc isKindOfClass:[controller class]]) {
+            [marr removeObject:vc];
+            break;
+        }
+    }
+    self.navigationController.viewControllers = marr;
+}
+
 -(YLProgressHUD *)ylHud{
     
     if(_ylHud == nil){

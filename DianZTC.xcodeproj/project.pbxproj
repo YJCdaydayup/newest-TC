@@ -516,6 +516,7 @@
 		8F89198C1D6D2C6B00CC0D8F /* STIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8919831D6D2C6B00CC0D8F /* STIndicatorView.m */; };
 		8F89198D1D6D2C6B00CC0D8F /* STPhotoBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8919851D6D2C6B00CC0D8F /* STPhotoBrowserController.m */; };
 		8F89198E1D6D2C6B00CC0D8F /* STPhotoBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8919871D6D2C6B00CC0D8F /* STPhotoBrowserView.m */; };
+		8F89887C1E1C0531009D2A0E /* BatarShapeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F89887B1E1C0531009D2A0E /* BatarShapeController.m */; };
 		8F8D02AB1DE4B94300DFE7E4 /* OrderDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8D02AA1DE4B94300DFE7E4 /* OrderDetailController.m */; };
 		8F8DDB831CDBB8FA00F04D0C /* SerizeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8DDB811CDBB8FA00F04D0C /* SerizeCell.m */; };
 		8F8DDB871CDBE07600F04D0C /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F8DDB861CDBE07600F04D0C /* ProductCell.m */; };
@@ -1594,6 +1595,8 @@
 		8F8919851D6D2C6B00CC0D8F /* STPhotoBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPhotoBrowserController.m; sourceTree = "<group>"; };
 		8F8919861D6D2C6B00CC0D8F /* STPhotoBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STPhotoBrowserView.h; sourceTree = "<group>"; };
 		8F8919871D6D2C6B00CC0D8F /* STPhotoBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPhotoBrowserView.m; sourceTree = "<group>"; };
+		8F89887A1E1C0531009D2A0E /* BatarShapeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarShapeController.h; sourceTree = "<group>"; };
+		8F89887B1E1C0531009D2A0E /* BatarShapeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarShapeController.m; sourceTree = "<group>"; };
 		8F8D02A91DE4B94300DFE7E4 /* OrderDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderDetailController.h; sourceTree = "<group>"; };
 		8F8D02AA1DE4B94300DFE7E4 /* OrderDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderDetailController.m; sourceTree = "<group>"; };
 		8F8DDB7C1CDBB10200F04D0C /* ColorComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorComment.h; sourceTree = "<group>"; };
@@ -1889,6 +1892,8 @@
 			children = (
 				8F0276371E157850006E78F6 /* BatarResultController.h */,
 				8F0276381E157850006E78F6 /* BatarResultController.m */,
+				8F89887A1E1C0531009D2A0E /* BatarShapeController.h */,
+				8F89887B1E1C0531009D2A0E /* BatarShapeController.m */,
 				8F02763A1E15826B006E78F6 /* BatarResultModel.h */,
 				8F02763B1E15826B006E78F6 /* BatarResultModel.m */,
 			);
@@ -4769,6 +4774,7 @@
 				8F7CC1401E133A280033E7FB /* ZXURLTOResultParser.m in Sources */,
 				8F7CC1E11E133A280033E7FB /* ZXQRCodeAlignmentPattern.m in Sources */,
 				8F803B4D1E0EFBC40005B7A2 /* BatarSettingController.m in Sources */,
+				8F89887C1E1C0531009D2A0E /* BatarShapeController.m in Sources */,
 				8F9005CD1DC7BC1700023F93 /* YLLoginView.m in Sources */,
 				8F7CC13B1E133A280033E7FB /* ZXTelParsedResult.m in Sources */,
 				8F5E50D21D43DFF3004F404F /* RootViewController.m in Sources */,

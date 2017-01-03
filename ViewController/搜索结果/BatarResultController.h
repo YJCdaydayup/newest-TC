@@ -10,6 +10,8 @@
 
 @interface BatarResultController : RootViewController
 
+@property (nonatomic,assign) CGPoint currentPoint;
 @property (nonatomic,copy) NSString * param;
+@property (nonatomic,strong) NSMutableArray * initialDataArray;
 
 @end

@@ -11,11 +11,14 @@
 #import "SearchViewController.h"
 #import "MySelectedOrderCell.h"
 #import "DetailViewController.h"
+#import "BatarShapeController.h"
+#import "RecommandImageModel.h"
+#import "ScanViewController.h"
 #import "MJRefresh.h"
 #import "NetManager.h"
 
 #define CODECELL @"codeCell"
-@interface BatarResultController()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
+@interface BatarResultController()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIScrollViewDelegate>{
     NSInteger page;
 }
 
@@ -36,12 +39,13 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    _layoutBtn.hidden = NO;
-    if([self.fatherVc isKindOfClass:[SearchViewController class]]){
+    if(![self.fatherVc isKindOfClass:[ScanViewController class]]){
         self.result_Tf.hidden = NO;
+        _layoutBtn.hidden = NO;
         [self batar_setNavibar:nil];
     }else{
         self.result_Tf.hidden = YES;
+        _layoutBtn.hidden = YES;
         [self batar_setNavibar:@"扫描结果"];
     }
 }
@@ -67,7 +71,7 @@
     [self.navigationController.view addSubview:_layoutBtn];
     _layoutBtn.selected = NO;
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
-
+    
     
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen)];
     _tableView.delegate = self;
@@ -75,15 +79,20 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
-    [_tableView addHeaderWithTarget:self action:@selector(headerAction)];
+    //    [_tableView addHeaderWithTarget:self action:@selector(headerAction)];
     [_tableView addFooterWithTarget:self action:@selector(footerAction)];
-    [_tableView headerBeginRefreshing];
+    [self headerAction];
     [self createData];
 }
 
 -(void)changeLayout{
     
-    
+    BatarShapeController * shapeVc = [[BatarShapeController alloc]initWithController:self];
+    shapeVc.param = self.param;
+    shapeVc.initialDataArray = self.dataArray;
+    shapeVc.currentPoint = self.currentPoint;
+    [self.navigationController pushViewController:shapeVc animated:NO];
+    [self removeNaviPushedController:self];
 }
 
 -(void)createData{
@@ -93,7 +102,7 @@
     self.param = [self.param stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString * str = [NSString stringWithFormat:@"%@?key=%@&",URLstring,self.param];
     NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-    NSString * urlStr = [NSString stringWithFormat:@"%@page=%@&size=%@",str,pageStr,@"10"];
+    NSString * urlStr = [NSString stringWithFormat:@"%@page=%@&size=%@",str,pageStr,@"100"];
     [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
         NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         NSArray * array = dict[@"page"];
@@ -134,14 +143,50 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    DetailViewController * detailVc = [DetailViewController shareDetailController];
+    DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
     detailVc.index = self.dataArray[indexPath.row].number;
     [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
 }
 
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    
+    //获取偏移量
+    self.currentPoint = scrollView.contentOffset;
+}
+
 -(void)headerAction{
+    
+    if(self.initialDataArray.count>0){
+        
+        [self getInitialData];
+        [self.tableView reloadData];
+        [self changeScrollPosition];
+        [self.tableView headerEndRefreshing];
+        [self.tableView footerEndRefreshing];
+        [self.initialDataArray removeAllObjects];
+        return;
+    }
+    
     page = 0;
     [self createData];
+}
+
+#pragma mark - 改变偏移位置
+-(void)changeScrollPosition{
+    
+    [self.tableView setContentOffset:self.currentPoint animated:NO];
+}
+
+-(void)getInitialData{
+    
+    [self.dataArray removeAllObjects];
+    for(RecommandImageModel * initialModel in self.initialDataArray){
+        BatarResultModel * model = [[BatarResultModel alloc]init];
+        model.number = initialModel.number;
+        model.name = initialModel.name;
+        model.image = initialModel.img;
+        [self.dataArray addObject:model];
+    }
 }
 
 -(void)footerAction{
