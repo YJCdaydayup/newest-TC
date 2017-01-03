@@ -82,5 +82,7 @@
 #define LONG_PRODUCT_ID @"long_product_id"                 //记录长的那个产品ID
 #define FROM_VC_TO_SAVE @"from_vc_to_save"                 //从哪个界面跳到收藏页
 #define TEMP_FROM_VC_TO_SAVE @"temp_from_vc"               //临时接收赋值
+#define LAYOUTRATE1 0.8
+#define LAYOUTRATE2 1.5                                   //搜索结果界面切换比率
 
 #endif /* ColorComment_h */

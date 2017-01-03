@@ -54,6 +54,8 @@ NSString * const singleCell = @"singleCell";
 
 -(void)createView{
     
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
     [self createTextfield];
     
@@ -61,7 +63,7 @@ NSString * const singleCell = @"singleCell";
     [self.navigationController.view addSubview:_layoutBtn];
     _layoutBtn.selected = NO;
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
-
+    
     [self configCollectionView];
 }
 
@@ -71,6 +73,7 @@ NSString * const singleCell = @"singleCell";
     resultVc.param = self.param;
     resultVc.initialDataArray = self.dataArray;
     resultVc.currentPoint = self.currentPoint;
+    NSLog(@"%.f",self.currentPoint.y);
     [self.navigationController pushViewController:resultVc animated:NO];
     [self removeNaviPushedController:self];
 }
@@ -124,19 +127,19 @@ NSString * const singleCell = @"singleCell";
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc]init];
     [flowLayOut setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen) collectionViewLayout:flowLayOut];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT) collectionViewLayout:flowLayOut];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.backgroundColor = RGB_COLOR(237, 237, 237, 1);
     [self.view addSubview:self.collectionView];
     
-//    [self.collectionView addHeaderWithTarget:self action:@selector(headerAction)];
+    //    [self.collectionView addHeaderWithTarget:self action:@selector(headerAction)];
     [self.collectionView addFooterWithTarget:self action:@selector(footerAction)];
     
     //注册Cell
     [self.collectionView registerClass:[SingleCollectionViewCell class] forCellWithReuseIdentifier:singleCell];
     
-//    [self.collectionView headerBeginRefreshing];
+    //    [self.collectionView headerBeginRefreshing];
     [self headerAction];
 }
 
@@ -160,7 +163,8 @@ NSString * const singleCell = @"singleCell";
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
-    [self.collectionView setContentOffset:self.currentPoint animated:NO];
+//    self.currentPoint = CGPointMake(self.currentPoint.x, self.currentPoint.y*LAYOUTRATE2);
+//    [self.collectionView setContentOffset:self.currentPoint animated:NO];
 }
 
 -(void)getInitialData{

@@ -64,6 +64,7 @@
 
 -(void)createView{
     
+    self.automaticallyAdjustsScrollViewInsets = NO;
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
     [self createTextfield];
     
@@ -73,7 +74,7 @@
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
     
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen)];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -174,7 +175,8 @@
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
-    [self.tableView setContentOffset:self.currentPoint animated:NO];
+//    self.currentPoint = CGPointMake(self.currentPoint.x, self.currentPoint.y*LAYOUTRATE1);
+//    [self.tableView setContentOffset:self.currentPoint animated:NO];
 }
 
 -(void)getInitialData{
