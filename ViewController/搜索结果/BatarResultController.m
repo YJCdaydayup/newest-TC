@@ -7,13 +7,13 @@
 //
 
 #import "BatarResultController.h"
-#import "BatarResultModel.h"
 #import "SearchViewController.h"
 #import "MySelectedOrderCell.h"
 #import "DetailViewController.h"
 #import "BatarShapeController.h"
 #import "RecommandImageModel.h"
 #import "ScanViewController.h"
+#import "BatarResultModel.h"
 #import "MJRefresh.h"
 #import "NetManager.h"
 
@@ -35,6 +35,7 @@
 @synthesize dataArray = _dataArray;
 @synthesize result_Tf = _result_Tf;
 @synthesize layoutBtn = _layoutBtn;
+@synthesize cellIndex = _cellIndex;
 
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -73,7 +74,6 @@
     _layoutBtn.selected = NO;
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
     
-    
     _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
@@ -91,7 +91,7 @@
     BatarShapeController * shapeVc = [[BatarShapeController alloc]initWithController:self];
     shapeVc.param = self.param;
     shapeVc.initialDataArray = self.dataArray;
-    shapeVc.currentPoint = self.currentPoint;
+    shapeVc.cellIndex = self.cellIndex;
     [self.navigationController pushViewController:shapeVc animated:NO];
     [self removeNaviPushedController:self];
 }
@@ -134,25 +134,20 @@
     BatarResultModel * model = self.dataArray[indexPath.row];
     [cell configResultCellWithModel:model];
     cell.select_btn.hidden = YES;
+    _cellIndex = indexPath.row-5;
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
     return 102.5*S6;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
     detailVc.index = self.dataArray[indexPath.row].number;
     [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
-}
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    
-    //获取偏移量
-    self.currentPoint = scrollView.contentOffset;
 }
 
 -(void)headerAction{
@@ -167,16 +162,15 @@
         [self.initialDataArray removeAllObjects];
         return;
     }
-    
     page = 0;
     [self createData];
 }
 
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
-    
-//    self.currentPoint = CGPointMake(self.currentPoint.x, self.currentPoint.y*LAYOUTRATE1);
-//    [self.tableView setContentOffset:self.currentPoint animated:NO];
+ 
+//    NSIndexPath * scrollIndexPath = [NSIndexPath indexPathForRow:self.cellIndex inSection:0];
+//    [_tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{

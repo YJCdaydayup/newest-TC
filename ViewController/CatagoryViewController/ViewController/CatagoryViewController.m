@@ -933,10 +933,9 @@
 #pragma mark -跳转到系列界面，将选中的“品类”中的选项通过数组带过去
 -(void)pushForwardSerizeController{
     
-    SerizeViewController * serizeViewController = [[SerizeViewController alloc]init];
-//    [self pushToViewControllerWithTransition:serizeViewController withDirection:@"left" type:NO];
+    SerizeViewController * serizeViewController = [[SerizeViewController alloc]initWithController:self];
     [self.navigationController pushViewController:serizeViewController animated:NO];
-    
+    [self removeNaviPushedController:self];
 }
 
 //返回首页

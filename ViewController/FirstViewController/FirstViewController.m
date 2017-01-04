@@ -253,7 +253,7 @@
     self.bottomLine.backgroundColor = RGB_COLOR(204, 204, 204, 1);
     [self.navigationController.navigationBar addSubview:self.bottomLine];
     
-    [self batar_setLeftNavButton:@[@"scan",@"catagory_btn"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(goCatagoryVc) rightSize:CGSizeMake(49/2.0*S6, 45/2.0*S6) topHeight:8];
+    [self batar_setLeftNavButton:@[@"scan",@"search_type"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(goCatagoryVc) rightSize:CGSizeMake(33*S6,30*S6) topHeight:8];
     
     [self createTextfield];
     

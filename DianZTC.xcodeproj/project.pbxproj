@@ -2053,8 +2053,7 @@
 				8F4809B91DCD006400DD1385 /* SearchViewController.h */,
 				8F4809BA1DCD006400DD1385 /* SearchViewController.m */,
 			);
-			name = "搜索界面";
-			path = "../搜索界面";
+			path = "搜索界面";
 			sourceTree = "<group>";
 		};
 		8F4A18171CDAB0CA006ED857 = {
@@ -2285,6 +2284,9 @@
 				8F5E50D11D43DFF3004F404F /* RootViewController.m */,
 				8FD3C4FF1E0B1DC600AB40F2 /* BatarMainTabBarContoller.h */,
 				8FD3C5001E0B1DC600AB40F2 /* BatarMainTabBarContoller.m */,
+				8F4809B81DCD004400DD1385 /* 搜索界面 */,
+				8F8DDB8A1CDBF35500F04D0C /* 产品分类 */,
+				8F5668011CDD25FF00C39F75 /* 产品系列 */,
 				8F0276361E157833006E78F6 /* 搜索结果 */,
 				8F7CBEF81E131F1A0033E7FB /* 扫描二维码 */,
 				8F12D3991CDE32C800712CDA /* 产品详情 */,
@@ -2504,7 +2506,7 @@
 				8F5668031CDD25FF00C39F75 /* Model */,
 			);
 			name = "产品系列";
-			path = ../SerizeViewController;
+			path = SerizeViewController;
 			sourceTree = "<group>";
 		};
 		8F5668021CDD25FF00C39F75 /* Cell */ = {
@@ -3665,7 +3667,7 @@
 				8F8DDB8C1CDBF37200F04D0C /* Model */,
 			);
 			name = "产品分类";
-			path = ../CatagoryViewController;
+			path = CatagoryViewController;
 			sourceTree = "<group>";
 		};
 		8F8DDB8B1CDBF37200F04D0C /* Cell */ = {
@@ -3821,12 +3823,9 @@
 				8F4081BB1D806C86000E2975 /* 我的设置 */,
 				8F1389D61DC9914900974DE7 /* 购物车单 */,
 				8F8D02A81DE4B91300DFE7E4 /* 订单详情 */,
-				8F4809B81DCD004400DD1385 /* 搜索界面 */,
 				8F1389D51DC9914900974DE7 /* 我的订单 */,
 				8F51FA701CE15D9400B128C5 /* 主题界面 */,
 				8F56680B1CDD401900C39F75 /* 分类搜索 */,
-				8F5668011CDD25FF00C39F75 /* 产品系列 */,
-				8F8DDB8A1CDBF35500F04D0C /* 产品分类 */,
 				8F4A19601CDAB9CB006ED857 /* 欢迎登录 */,
 			);
 			path = temp;

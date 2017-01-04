@@ -68,7 +68,7 @@
     [self.navigationController.navigationBar addSubview:button];
     
     UIButton * rightBtn = [Tools createButtonNormalImage:imgArray[1] selectedImage:nil tag:0 addTarget:target action:rightSel];
-    rightBtn.frame = CGRectMake(Wscreen-rightSize.width-15*S6, 15*S6, 100*S6, 50*S6);
+    rightBtn.frame = CGRectMake(Wscreen-rightSize.width-14*S6, 15*S6, 100*S6, 50*S6);
     rightBtn.size = rightSize;
     rightBtn.y = height+1*S6;
     rightBtn.hidden = NO;

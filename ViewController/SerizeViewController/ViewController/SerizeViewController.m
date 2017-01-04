@@ -341,20 +341,14 @@
 //返回主页
 -(void)backToFirstViewController{
     
-    FirstViewController * firstVc = [[FirstViewController alloc]init];
-    [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
+    [self popToViewControllerWithDirection:@"right" type:NO];
 }
 //返回上一个分类界面
 -(void)backToCatagory{
-    
-    if(self.pushFlag == 0){
-        CatagoryViewController * catagoryVc = [[CatagoryViewController alloc]init];
-        [self.navigationController pushViewController:catagoryVc animated:NO];
-    }else{
-        FirstViewController * firstVc = [[FirstViewController alloc]init];
-        [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
-    }
 
+    CatagoryViewController * catagoryVc = [[CatagoryViewController alloc]initWithController:self];
+    [self.navigationController pushViewController:catagoryVc animated:NO];
+    [self removeNaviPushedController:self];
 }
 
 - (void)didReceiveMemoryWarning {

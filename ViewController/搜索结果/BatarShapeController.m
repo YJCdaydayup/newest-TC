@@ -33,6 +33,7 @@ NSString * const singleCell = @"singleCell";
 
 @synthesize result_Tf = _result_Tf;
 @synthesize layoutBtn = _layoutBtn;
+@synthesize cellIndex = _cellIndex;
 
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -57,6 +58,7 @@ NSString * const singleCell = @"singleCell";
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
+    
     [self createTextfield];
     
     _layoutBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-55*S6, 33, 55*S6, 20*S6) textContent:@"切换" withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
@@ -72,8 +74,7 @@ NSString * const singleCell = @"singleCell";
     BatarResultController * resultVc = [[BatarResultController alloc]initWithController:self];
     resultVc.param = self.param;
     resultVc.initialDataArray = self.dataArray;
-    resultVc.currentPoint = self.currentPoint;
-    NSLog(@"%.f",self.currentPoint.y);
+    resultVc.cellIndex = self.cellIndex;
     [self.navigationController pushViewController:resultVc animated:NO];
     [self removeNaviPushedController:self];
 }
@@ -163,8 +164,13 @@ NSString * const singleCell = @"singleCell";
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
-//    self.currentPoint = CGPointMake(self.currentPoint.x, self.currentPoint.y*LAYOUTRATE2);
-//    [self.collectionView setContentOffset:self.currentPoint animated:NO];
+//    if(self.cellIndex%2 == 0){
+//        self.cellIndex = self.cellIndex/2;
+//    }else{
+//        self.cellIndex = (self.cellIndex+1)/2;
+//    }
+//    NSIndexPath * scrollIndexPath = [NSIndexPath indexPathForRow:self.cellIndex inSection:0];
+//    [self.collectionView scrollToItemAtIndexPath:scrollIndexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{
@@ -265,7 +271,7 @@ NSString * const singleCell = @"singleCell";
         detailVc.index = cell.number;
         [weakSelf.navigationController pushViewController:detailVc animated:YES];
     }];
-    
+    _cellIndex = indexPath.row;
     return cell;
 }
 
@@ -288,10 +294,6 @@ NSString * const singleCell = @"singleCell";
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     
     return 0;
-}
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    self.currentPoint = scrollView.contentOffset;
 }
 
 -(NSMutableArray *)dataArray{

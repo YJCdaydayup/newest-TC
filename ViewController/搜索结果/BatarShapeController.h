@@ -10,7 +10,7 @@
 
 @interface BatarShapeController : RootViewController
 
-@property (nonatomic,assign) CGPoint currentPoint;
+@property (nonatomic,assign) NSInteger cellIndex;
 @property (nonatomic,strong) NSMutableArray * initialDataArray;
 @property (nonatomic,strong) NSString * param;
 
