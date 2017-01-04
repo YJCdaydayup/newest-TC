@@ -407,8 +407,8 @@
 //    label.font = [UIFont boldSystemFontOfSize:12*S6];
     [view addSubview:label];
     
-    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btn" selectedImage:nil tag:0 addTarget:self action:@selector(moreAction1)];
-    moreBtn.frame = CGRectMake(Wscreen-93/2.0*S6, 13.5*S6, 40*S6, 18*S6);
+    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btns" selectedImage:nil tag:0 addTarget:self action:@selector(moreAction1)];
+    moreBtn.frame = CGRectMake(Wscreen-93/2.0*S6, 15*S6, 40*S6, 18*S6);
     [view addSubview:moreBtn];
     return view;
 }

@@ -75,6 +75,7 @@
             [btn addTarget:self action:@selector(chooseServer:) forControlEvents:UIControlEventTouchUpInside];
             btn.layer.borderColor = [BOARDCOLOR CGColor];
             btn.layer.borderWidth = 0.5*S6;
+            btn.titleLabel.numberOfLines = 0;
         }
         btn.layer.cornerRadius = 5*S6;
         btn.layer.masksToBounds = YES;
@@ -150,7 +151,47 @@
     __block typeof(self)weakSelf = self;
     [addServer clickConfirmBlock:^{
         [weakSelf updateServerView];
+        //取货当前ip，port
+        selectIp_port = [self.serverArray lastObject];
+        [kUserDefaults setObject:[self getIpWithPort:selectIp_port][0] forKey:IPSTRING];
+        [kUserDefaults setObject:[self getIpWithPort:selectIp_port][1] forKey:PORTSTRING];
+        
+        [self getSelectedBtn];
+        NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
     }];
+}
+
+-(void)getSelectedBtn{
+    
+    NSString * ip = [kUserDefaults objectForKey:IPSTRING];
+    NSString * port = [kUserDefaults objectForKey:PORTSTRING];
+    
+    NSString * temp;
+    NSString * ip_port = [NSString stringWithFormat:@"%@:%@",ip,port];
+    for(NSString * str in self.serverArray){
+        if([str isEqualToString:ip_port]){
+            temp = str;
+            break;
+        }
+    }
+    
+    for(UIButton * btn in _btnArray){
+        btn.selected = NO;
+    }
+    NSInteger index = [self.serverArray indexOfObject:temp];
+    UIButton * btn = [_btnArray objectAtIndex:index];
+    btn.selected = YES;
+    
+    if(btn.selected){
+        btn.layer.borderWidth = 0;
+        self.selectImgView.hidden = NO;
+        self.selectImgView.frame = btn.bounds;
+        [btn addSubview:self.selectImgView];
+    }else{
+        self.selectImgView.hidden = YES;
+        btn.layer.borderWidth = 0.5*S6;
+        btn.layer.borderColor = [BOARDCOLOR CGColor];
+    }
 }
 
 -(UIImage *)btnSelectedImg:(NSString *)currentImg{

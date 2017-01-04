@@ -41,8 +41,6 @@ NSString * const CellID = @"cellID";
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    
-    
 }
 
 -(void)createView{

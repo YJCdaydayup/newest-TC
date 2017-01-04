@@ -128,7 +128,7 @@ NSString * const singleCell = @"singleCell";
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc]init];
     [flowLayOut setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT) collectionViewLayout:flowLayOut];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) collectionViewLayout:flowLayOut];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.backgroundColor = RGB_COLOR(237, 237, 237, 1);
@@ -164,13 +164,14 @@ NSString * const singleCell = @"singleCell";
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
+//    self.cellIndex = self.cellIndex-5;
 //    if(self.cellIndex%2 == 0){
 //        self.cellIndex = self.cellIndex/2;
 //    }else{
 //        self.cellIndex = (self.cellIndex+1)/2;
 //    }
-//    NSIndexPath * scrollIndexPath = [NSIndexPath indexPathForRow:self.cellIndex inSection:0];
-//    [self.collectionView scrollToItemAtIndexPath:scrollIndexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    NSIndexPath * scrollIndexPath = [NSIndexPath indexPathForRow:self.cellIndex+3 inSection:0];
+    [self.collectionView scrollToItemAtIndexPath:scrollIndexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{

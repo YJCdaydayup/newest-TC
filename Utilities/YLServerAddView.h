@@ -16,4 +16,5 @@
 
 -(instancetype)initWithView:(BatarLoginController *)motherVc;
 -(void)updateServerView;
+-(void)getSelectedBtn;
 @end

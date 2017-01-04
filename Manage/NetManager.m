@@ -225,8 +225,8 @@
 
 -(NSMutableArray *)getAllServers{
     
-    //    NSFileManager * fm = [NSFileManager defaultManager];
-    //    [fm removeItemAtPath:self.ip_PortPath error:nil];
+//        NSFileManager * fm = [NSFileManager defaultManager];
+//        [fm removeItemAtPath:self.ip_PortPath error:nil];
     
     NSMutableArray * muArray = [NSMutableArray array];
     NSArray * array = [NSArray arrayWithContentsOfFile:self.ip_PortPath];

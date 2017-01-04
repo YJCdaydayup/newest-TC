@@ -266,10 +266,25 @@
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     
+    if(![self judgeSpace:textField.text]){
+        return NO;
+    }
+    
     [self searchContentWithTitle:textField.text];
     [textField resignFirstResponder];
     [self createHistoryView];
     return YES;
+}
+
+-(BOOL)judgeSpace:(NSString *)text{
+    
+    NSArray * array = [text componentsSeparatedByString:@" "];
+    NSInteger lenth = text.length;
+    if(array.count-1 == lenth){
+        return NO;
+    }else{
+        return YES;
+    }
 }
 
 -(CGFloat)getProductTextWidth:(NSString *)text{
@@ -287,7 +302,9 @@
 
 #pragma mark - 搜索内容
 -(void)searchActions{
-    
+    if(![self judgeSpace:_search_Tf.text]){
+        return ;
+    }
     [self searchContentWithTitle:self.search_Tf.text];
     [self createHistoryView];
     [self.search_Tf resignFirstResponder];

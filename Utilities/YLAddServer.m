@@ -139,6 +139,8 @@
     
     [self.user_code_field resignFirstResponder];
     [self.user_port_field resignFirstResponder];
+    
+    [self cancelAction];
 }
 
 -(void)move{

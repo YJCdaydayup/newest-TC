@@ -38,6 +38,8 @@
 		8F31D16F1DE6128A00962818 /* YLCustomerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F31D16E1DE6128A00962818 /* YLCustomerHUD.m */; };
 		8F31D1751DE6449D00962818 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F31D1721DE6449D00962818 /* libmp3lame.a */; };
 		8F31D1761DE6449D00962818 /* XHSoundRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F31D1741DE6449D00962818 /* XHSoundRecorder.m */; };
+		8F373CA01E1DA507005FDEB1 /* more_btns@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F373C9F1E1DA507005FDEB1 /* more_btns@2x.png */; };
+		8F373CA21E1DA515005FDEB1 /* more_btns@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F373CA11E1DA515005FDEB1 /* more_btns@3x.png */; };
 		8F3DB7711DB031E600AD78A2 /* YLLoginAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F3DB7701DB031E600AD78A2 /* YLLoginAlert.m */; };
 		8F4081A61D80643E000E2975 /* mine@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F40819F1D80643E000E2975 /* mine@2x.png */; };
 		8F4081A71D80643E000E2975 /* save_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F4081A01D80643E000E2975 /* save_selected@2x.png */; };
@@ -742,6 +744,8 @@
 		8F31D1721DE6449D00962818 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
 		8F31D1731DE6449D00962818 /* XHSoundRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XHSoundRecorder.h; sourceTree = "<group>"; };
 		8F31D1741DE6449D00962818 /* XHSoundRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XHSoundRecorder.m; sourceTree = "<group>"; };
+		8F373C9F1E1DA507005FDEB1 /* more_btns@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_btns@2x.png"; sourceTree = "<group>"; };
+		8F373CA11E1DA515005FDEB1 /* more_btns@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_btns@3x.png"; sourceTree = "<group>"; };
 		8F3DB76F1DB031E600AD78A2 /* YLLoginAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLLoginAlert.h; sourceTree = "<group>"; };
 		8F3DB7701DB031E600AD78A2 /* YLLoginAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLLoginAlert.m; sourceTree = "<group>"; };
 		8F40819F1D80643E000E2975 /* mine@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mine@2x.png"; path = "../mine@2x.png"; sourceTree = "<group>"; };
@@ -3884,6 +3888,7 @@
 		8FD3C5481E0B504000AB40F2 /* 2x */ = {
 			isa = PBXGroup;
 			children = (
+				8F373C9F1E1DA507005FDEB1 /* more_btns@2x.png */,
 				8F4BA5401E146E92009AFC2F /* scan_bg@2x.png */,
 				8F7D09711E11B93800E94955 /* set_bg@2x.png */,
 				8FA9D0001E0DA64D00DD0335 /* batar_group@2x.png */,
@@ -3929,6 +3934,7 @@
 		8FD3C5611E0B504000AB40F2 /* 3x */ = {
 			isa = PBXGroup;
 			children = (
+				8F373CA11E1DA515005FDEB1 /* more_btns@3x.png */,
 				8F4BA53E1E146E8F009AFC2F /* scan_bg@3x.png */,
 				8F7D09731E11B93B00E94955 /* set_bg@3x.png */,
 				8FA9CFF81E0DA63500DD0335 /* batar_group@3x.png */,
@@ -4117,6 +4123,7 @@
 				8F9005EA1DC8044F00023F93 /* showKeyboard@2x.png in Resources */,
 				8F9005ED1DC8044F00023F93 /* my_voice_btn@2x.png in Resources */,
 				8FD3C58A1E0B504000AB40F2 /* setting_nor@2x.png in Resources */,
+				8F373CA01E1DA507005FDEB1 /* more_btns@2x.png in Resources */,
 				8F5EAE8B1D6E7B8E001DC54E /* address@2x.png in Resources */,
 				8F4A18331CDAB0CA006ED857 /* LaunchScreen.storyboard in Resources */,
 				8FA9D0071E0DA64D00DD0335 /* outside@2x.png in Resources */,
@@ -4149,6 +4156,7 @@
 				8FD3C59A1E0B504000AB40F2 /* discover_nol@3x.png in Resources */,
 				8F9005FF1DC8045A00023F93 /* my_saved@3x.png in Resources */,
 				8F9006091DC8045A00023F93 /* share_out@3x.png in Resources */,
+				8F373CA21E1DA515005FDEB1 /* more_btns@3x.png in Resources */,
 				8F9005FE1DC8045A00023F93 /* myorders@3x.png in Resources */,
 				8F7D09741E11B93B00E94955 /* set_bg@3x.png in Resources */,
 				8F9184501DDBF8D000FDD25F /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
@@ -4871,7 +4879,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -4895,7 +4903,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4918,7 +4926,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4935,7 +4943,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -4948,7 +4956,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
@@ -4991,7 +4999,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -5003,7 +5011,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
@@ -5046,7 +5054,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
