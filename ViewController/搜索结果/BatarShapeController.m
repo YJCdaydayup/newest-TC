@@ -61,7 +61,10 @@ NSString * const singleCell = @"singleCell";
     
     [self createTextfield];
     
-    _layoutBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-55*S6, 33, 55*S6, 20*S6) textContent:@"切换" withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
+    
+    _layoutBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-38*S6, 31, 22*S6, 22*S6) textContent:nil withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
+    [_layoutBtn setImage:[UIImage imageNamed:@"shape_sel"] forState:UIControlStateNormal];
+    [_layoutBtn setImage:[UIImage imageNamed:@"shape_nol"] forState:UIControlStateHighlighted];
     [self.navigationController.view addSubview:_layoutBtn];
     _layoutBtn.selected = NO;
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];

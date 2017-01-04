@@ -508,9 +508,12 @@
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(backOut) size:CGSizeMake(24.5*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:13.5*S6];
     
     //收藏按钮
-    save_Button = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 0, 0) textContent:@"点击收藏" withFont:[UIFont systemFontOfSize:16*S6] textColor:RGB_COLOR(231, 140, 59, 1) textAlignment:NSTextAlignmentRight];
-    [save_Button setTitle:@"取消收藏" forState:UIControlStateSelected];
-    save_Button.frame = CGRectMake(100, 0, 85*S6, 41/2.0*S6);
+    save_Button = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 0, 0) textContent:nil withFont:[UIFont systemFontOfSize:16*S6] textColor:RGB_COLOR(231, 140, 59, 1) textAlignment:NSTextAlignmentRight];
+//    [save_Button setTitle:@"取消收藏" forState:UIControlStateSelected];
+    [save_Button setImage:[UIImage imageNamed:@"save_nor"] forState:UIControlStateNormal];
+    [save_Button setImage:[UIImage imageNamed:@"save_sel"] forState:UIControlStateSelected];
+    [save_Button setImage:[UIImage imageNamed:@"save_sel"] forState:UIControlStateHighlighted];
+    save_Button.frame = CGRectMake(100, 0, 25*S6, 32*S6);
     [save_Button addTarget:self action:@selector(saveAction:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem * rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:save_Button];
