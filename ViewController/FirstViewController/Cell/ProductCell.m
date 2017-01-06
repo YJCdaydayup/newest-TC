@@ -35,16 +35,19 @@
     
     for(int i=0;i<imgArray.count;i++){
         
-        UIImageView * imgView = [[UIImageView alloc]initWithFrame:CGRectMake(5*S6+i%2*185*S6, i/2*175*S6, 180*S6, 135*S6)];
+        UIImageView * imgView = [[UIImageView alloc]initWithFrame:CGRectMake(6*S6+i%2*185*S6, i/2*175*S6+1*S6, 178*S6, 135*S6)];
         imgView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.contentView addSubview:imgView];
+//        imgView.layer.borderWidth = 0.5f;
+//        imgView.layer.borderColor = [[UIColor redColor] CGColor];
+    
         
-        _bgVc = [[UIView alloc]initWithFrame:CGRectMake(5*S6+i%2*185*S6, i/2*175*S6, 180*S6, 175*S6)];
+        _bgVc = [[UIControl alloc]initWithFrame:CGRectMake(5*S6+i%2*185*S6, i/2*175*S6, 180*S6, 175*S6)];
         _bgVc.backgroundColor = [UIColor clearColor];
-        [self.contentView addSubview:_bgVc];
-        
         _bgVc.layer.borderWidth = 0.5f;
         _bgVc.layer.borderColor = [BTNBORDCOLOR CGColor];
+        [self.contentView addSubview:_bgVc];
+            [self.contentView addSubview:imgView];
+        
         
         self.max_X = CGRectGetMinX(imgView.frame);
         self.max_Y = CGRectGetMaxY(imgView.frame);

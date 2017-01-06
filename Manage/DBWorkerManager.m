@@ -53,14 +53,22 @@ static DBWorkerManager * manager = nil;
     //    QFLog(@"docPath:%@",docPath);
     NSString * dbPath = [docPath stringByAppendingPathComponent:@"save.db"];
     NSString * dbPath1 = [docPath stringByAppendingPathComponent:@"order.db"];
-    NSString * dbPath2 = [docPath stringByAppendingPathComponent:@"scanHistory.db"];
     //    QFLog(@"dbPath:%@",dbPath);
     _dataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
     _orderDataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath1];
-    _scanHistoryBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath2];
-    
     [self createTable];
 }
+
+-(void)createScanDB{
+    
+    NSArray * docArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    //获取Document下面的目录地址
+    NSString * docPath = [docArray lastObject];
+    NSString * dbPath2 = [docPath stringByAppendingPathComponent:@"scanHistory.db"];
+    _scanHistoryBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath2];
+    [self createTable];
+}
+
 
 -(void)createTable{
     
@@ -87,17 +95,32 @@ static DBWorkerManager * manager = nil;
         }
     }];
     
-    NSString * sql2 = @"create table if not exists scanList(number text,img blob,name text)";
+    //创建不同服务器下面的表
+     NSString * mult_sql = [NSString stringWithFormat:@"create table if not exists %@scanList(number text,img text,name text,date text)",[self getScanDBMD5]];
     
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
-        BOOL isSu = [db executeUpdate:sql2];
+        BOOL isSu = [db executeUpdate:mult_sql];
         if(isSu){
             //QFLog(@"%@",@"执行建表语句成功");
         }else{
             //QFLog(@"%@",@"执行建表语句失败");
         }
     }];
+}
+
+-(NSString *)getScanDBMD5{
+    
+    NetManager * manager = [NetManager shareManager];
+    NSArray * array = [[manager getIPAddress]componentsSeparatedByString:@":"];
+    NSString * str = [NSString stringWithFormat:@"%@%@",array[0],array[1]];
+    NSArray * array2 = [str componentsSeparatedByString:@"."];
+    NSMutableString * muStr = [NSMutableString string];
+    [muStr appendString:@"YL"];
+    for(NSString * str1 in array2){
+        [muStr appendString:str1];
+    }
+    return muStr;
 }
 
 /*
@@ -160,29 +183,31 @@ static DBWorkerManager * manager = nil;
     }];
 }
 
--(void)scan_insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number{
+-(void)scan_insertInfo:(DetailModel *)model withData:(NSString *)imgUrl withNumber:(NSString *)number date:(NSString *)date{
     
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
-        NSString * selectSql = @"select * from scanList where number = ?";
+        NSString * mult_sql = [NSString stringWithFormat:@"select * from %@scanList where number = ?",[self getScanDBMD5]];
+//        NSString * selectSql = @"select * from scanList where number = ?";
         //查询sql语句
-        FMResultSet * set = [db executeQuery:selectSql,number];
+        FMResultSet * set = [db executeQuery:mult_sql,number];
         BOOL isExist;
         isExist = NO;
         while([set next]){
             isExist = YES;
         }
         
+        NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date) values (?,?,?,?)",[self getScanDBMD5]];
         if(isExist == NO){
-            NSString * insertSQL = @"insert into scanList(number,img,name) values (?,?,?)";
+//            NSString * insertSQL = @"insert into scanList(number,img,name,date) values (?,?,?,?)";
             //执行插入
-            BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name];
+            BOOL isSuccess = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date];
             if (isSuccess) {
-//                QFLog(@"%@",@"scan执行插入语句成功");
+                //                QFLog(@"%@",@"scan执行插入语句成功");
             }else{
-//                QFLog(@"%@",@"scan执行插入语句失败");
+                //                QFLog(@"%@",@"scan执行插入语句失败");
             }
-//            NSLog(@"%@",imgData);
+            //            NSLog(@"%@",imgData);
         }
     }];
 }
@@ -211,15 +236,18 @@ static DBWorkerManager * manager = nil;
     
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
-        NSString * selectSql = @"select * from scanList";
-        FMResultSet * rs = [db executeQuery:selectSql];
+        NSString * mult_sql = [NSString stringWithFormat:@"select * from %@scanList",[self getScanDBMD5]];
+        
+//        NSString * selectSql = @"select * from scanList";
+        FMResultSet * rs = [db executeQuery:mult_sql];
         NSMutableArray * array = [NSMutableArray array];
         while([rs next]){
             
             DBSaveModel * model = [[DBSaveModel alloc]init];
             model.number = [rs stringForColumn:@"number"];
             model.name = [rs stringForColumn:@"name"];
-            model.img = [rs dataForColumn:@"img"];
+            model.img = [rs stringForColumn:@"img"];
+            model.date = [rs stringForColumn:@"date"];
             model.selected = NO;
             [array addObject:model];
         }
@@ -296,10 +324,12 @@ static DBWorkerManager * manager = nil;
 
 -(void)scan_cleanAllDBData:(HistoryClearBlock)block{
     
-    NSString * deleteSql = @"delete from scanList";
+    NSString * mult_sql = [NSString stringWithFormat:@"delete from %@scanList",[self getScanDBMD5]];
+    
+//    NSString * deleteSql = @"delete from scanList";
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
-        BOOL isDelete = [db executeUpdate:deleteSql];
+        BOOL isDelete = [db executeUpdate:mult_sql];
         if(isDelete){
             
             QFLog(@"%@",@"移除数据库所有数据成功");

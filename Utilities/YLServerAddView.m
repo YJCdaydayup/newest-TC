@@ -175,6 +175,9 @@
         }
     }
     
+    if(_btnArray.count==1){
+        return;
+    }
     for(UIButton * btn in _btnArray){
         btn.selected = NO;
     }

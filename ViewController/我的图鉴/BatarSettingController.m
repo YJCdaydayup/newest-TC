@@ -106,8 +106,6 @@
         [self.view addSubview:btn];
         if(i == 2){
             button = btn;
-        }else if (i == 1){
-            [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         }
         [btn addTarget:self action:@selector(findMidSetting:) forControlEvents:UIControlEventTouchUpInside];
     }

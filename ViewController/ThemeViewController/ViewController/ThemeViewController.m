@@ -308,19 +308,7 @@
 //返回首页
 -(void)backToFirstViewController{
     
-    FirstViewController * firstViewController = [[FirstViewController alloc]init];
-    SerizeViewController * serizeVc = [[SerizeViewController alloc]init];
-    
-    if(self.fromVc !=1){
-        [self pushToViewControllerWithTransition:firstViewController withDirection:@"right" type:NO];
-    }else{
-        if([kUserDefaults objectForKey:SHOWMENUE]){
-            serizeVc.pushFlag = 0;
-        }else{
-            serizeVc.pushFlag = 1;
-        }
-        [self pushToViewControllerWithTransition:serizeVc withDirection:@"right" type:NO];
-    }
+    [self popToViewControllerWithDirection:@"right" type:NO];
 }
 
 //懒加载

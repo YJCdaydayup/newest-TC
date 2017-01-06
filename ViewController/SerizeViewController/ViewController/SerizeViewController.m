@@ -347,6 +347,7 @@
 -(void)backToCatagory{
 
     CatagoryViewController * catagoryVc = [[CatagoryViewController alloc]initWithController:self];
+    catagoryVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:catagoryVc animated:NO];
     [self removeNaviPushedController:self];
 }

@@ -14,6 +14,7 @@
 @property (nonatomic,strong) UIImageView * imgView;
 @property (nonatomic,strong) UILabel * name;
 @property (nonatomic,strong) UILabel * number;
+@property (nonatomic,strong) UILabel * date;
 @property (nonatomic,strong) DBSaveModel * model;
 
 @end

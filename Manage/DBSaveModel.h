@@ -13,6 +13,7 @@
 @property (nonatomic,copy) NSString * number;
 @property (nonatomic,strong) id img;
 @property (nonatomic,copy) NSString * name;
+@property (nonatomic,copy) NSString * date;
 @property (nonatomic,assign) BOOL selected;
 
 @end

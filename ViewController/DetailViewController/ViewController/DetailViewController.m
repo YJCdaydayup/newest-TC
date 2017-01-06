@@ -209,7 +209,7 @@
     UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
     if (modelArray.count > 0) {
         [self.largeImageView sd_setImageWithURL:[NSURL URLWithString:modelArray[0]] placeholderImage:gifImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            [self addHistoryScan:image];
+            [self addHistoryScan:modelArray[0]];
         }];
     }
     
@@ -224,10 +224,26 @@
     [self.largeImageView addGestureRecognizer:zoomAction];
 }
 
--(void)addHistoryScan:(UIImage *)image{
+-(NSString *)getCurrentDate{
+    
+    NSDate *  senddate = [NSDate date];
+    
+    NSDateFormatter  * dateformatter = [[NSDateFormatter alloc] init];
+    
+    [dateformatter setDateFormat:@"YYYY-MM-dd"];
+    
+    NSString * locationString = [dateformatter stringFromDate:senddate];
+    
+    NSLog(@"%@",locationString);
+    
+    return locationString;
+}
+
+-(void)addHistoryScan:(NSString *)imageUrl{
     
     DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-    [manager scan_insertInfo:detailModel withData:UIImagePNGRepresentation(image) withNumber:detailModel.number];
+    [manager createScanDB];
+    [manager scan_insertInfo:detailModel withData:imageUrl withNumber:detailModel.number date:[self getCurrentDate]];
 }
 
 #pragma mark -点击图片放大效果

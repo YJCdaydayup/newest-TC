@@ -928,6 +928,7 @@
 -(void)pushForwardSerizeController{
     
     SerizeViewController * serizeViewController = [[SerizeViewController alloc]initWithController:self];
+    serizeViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:serizeViewController animated:NO];
     [self removeNaviPushedController:self];
 }
