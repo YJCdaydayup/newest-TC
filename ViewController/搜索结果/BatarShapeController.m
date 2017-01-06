@@ -26,6 +26,7 @@ NSString * const singleCell = @"singleCell";
 @property (nonatomic,strong) NSMutableArray * dataArray;
 @property (nonatomic,strong) UITextField * result_Tf;
 @property (nonatomic,strong) UIButton * layoutBtn;
+@property (nonatomic,strong) NSIndexPath * indexPath;
 
 @end
 
@@ -33,7 +34,6 @@ NSString * const singleCell = @"singleCell";
 
 @synthesize result_Tf = _result_Tf;
 @synthesize layoutBtn = _layoutBtn;
-@synthesize cellIndex = _cellIndex;
 
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -76,8 +76,8 @@ NSString * const singleCell = @"singleCell";
     
     BatarResultController * resultVc = [[BatarResultController alloc]initWithController:self];
     resultVc.param = self.param;
+    resultVc.currentIndexPath = self.currentIndexPath;
     resultVc.initialDataArray = self.dataArray;
-    resultVc.cellIndex = self.cellIndex;
     [self.navigationController pushViewController:resultVc animated:NO];
     [self removeNaviPushedController:self];
 }
@@ -131,10 +131,10 @@ NSString * const singleCell = @"singleCell";
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc]init];
     [flowLayOut setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) collectionViewLayout:flowLayOut];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen-4*S6, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) collectionViewLayout:flowLayOut];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.backgroundColor = RGB_COLOR(237, 237, 237, 1);
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.collectionView];
     
     //    [self.collectionView addHeaderWithTarget:self action:@selector(headerAction)];
@@ -167,14 +167,15 @@ NSString * const singleCell = @"singleCell";
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
-//    self.cellIndex = self.cellIndex-5;
-//    if(self.cellIndex%2 == 0){
-//        self.cellIndex = self.cellIndex/2;
-//    }else{
-//        self.cellIndex = (self.cellIndex+1)/2;
-//    }
-    NSIndexPath * scrollIndexPath = [NSIndexPath indexPathForRow:self.cellIndex+3 inSection:0];
-    [self.collectionView scrollToItemAtIndexPath:scrollIndexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    if(self.currentIndexPath.row<=4){
+        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row inSection:self.currentIndexPath.section];
+    }else{
+        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+5 inSection:self.currentIndexPath.section];
+    }
+    //    self.currentIndexPath = [[NSIndexPath alloc]initWithIndex:self.currentIndexPath.row+3];
+    
+    
+    [self.collectionView scrollToItemAtIndexPath:self.indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{
@@ -262,10 +263,8 @@ NSString * const singleCell = @"singleCell";
     
     SingleCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:singleCell forIndexPath:indexPath];
     if(cell == nil){
-        
-        cell = [[SingleCollectionViewCell alloc]initWithFrame:CGRectMake(0,0, 173*S6, 160*S6)];
+        cell = [[SingleCollectionViewCell alloc]initWithFrame:CGRectMake(0,0, 0*S6, 179*S6)];
     }
-    
     [cell configCell:self.dataArray[indexPath.row]];
     
     __block typeof(self)weakSelf = self;
@@ -275,29 +274,31 @@ NSString * const singleCell = @"singleCell";
         detailVc.index = cell.number;
         [weakSelf.navigationController pushViewController:detailVc animated:YES];
     }];
-    _cellIndex = indexPath.row;
     return cell;
 }
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     
-    return UIEdgeInsetsMake(0,0, 2.5*S6,0);
+    return UIEdgeInsetsMake(0,5*S6, 0*S6,0*S6);
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    
-    if(IS_IPHONE == IS_IPHONE_5||IS_IPHONE == IS_IPHONE_4_OR_LESS){
         
-        return CGSizeMake((20+345+10.5)/2.0*S6, 375/2.0*S6);
-    }else{
-        
-        return CGSizeMake((20+345+10)/2.0*S6, 375/2.0*S6);
-    }
+        return CGSizeMake(179*S6, 179*S6);
 }
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     
-    return 0;
+    return 5*S6;
+}
+
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
+    return 2*S6;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    self.currentIndexPath = indexPath;
 }
 
 -(NSMutableArray *)dataArray{

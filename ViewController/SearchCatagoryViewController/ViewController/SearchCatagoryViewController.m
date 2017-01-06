@@ -166,11 +166,15 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
-    SearchCatagoryModel * model = [self.dataArray objectAtIndex:indexPath.section];
-    singleVc.vc_flag = 2;
+    SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
+    singleVc.vc_flag = 0;
     singleVc.catagoryItem = self.pinleiArray[indexPath.section];
-    singleVc.catagoryIndex = model.categoryindex;
+    NSMutableDictionary * muDict = [self dictionaryWithJsonString:[self.parmDict objectForKey:@"parm"]];
+    NSInteger row = indexPath.row + 1;
+    NSNumber * rowStr = @(row);
+    NSArray * array = [[NSArray alloc]initWithObjects:rowStr, nil];
+    [muDict setObject:array forKey:@"category"];
+    singleVc.parmDict = muDict;
     [self.navigationController pushViewController:singleVc animated:YES];
 }
 

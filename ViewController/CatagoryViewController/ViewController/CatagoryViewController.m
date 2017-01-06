@@ -167,12 +167,6 @@
     [self setCataTableView];
 }
 
--(void)logoutAction{
-   
-    MyViewController * myVc = [[MyViewController alloc]init];
-    [self pushToViewControllerWithTransition:myVc withDirection:@"left" type:NO];
-}
-
 -(void)createTextfield{
     
     CGFloat tf_Y;

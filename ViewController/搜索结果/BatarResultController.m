@@ -26,6 +26,7 @@
 @property (nonatomic,strong) NSMutableArray<BatarResultModel *>*dataArray;
 @property (nonatomic,strong) UITextField * result_Tf;
 @property (nonatomic,strong) UIButton * layoutBtn;
+@property (nonatomic,strong) NSIndexPath * indexPath;
 
 @end
 
@@ -35,7 +36,6 @@
 @synthesize dataArray = _dataArray;
 @synthesize result_Tf = _result_Tf;
 @synthesize layoutBtn = _layoutBtn;
-@synthesize cellIndex = _cellIndex;
 
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -92,8 +92,8 @@
     
     BatarShapeController * shapeVc = [[BatarShapeController alloc]initWithController:self];
     shapeVc.param = self.param;
+    shapeVc.currentIndexPath = self.currentIndexPath;
     shapeVc.initialDataArray = self.dataArray;
-    shapeVc.cellIndex = self.cellIndex;
     [self.navigationController pushViewController:shapeVc animated:NO];
     [self removeNaviPushedController:self];
 }
@@ -136,7 +136,6 @@
     BatarResultModel * model = self.dataArray[indexPath.row];
     [cell configResultCellWithModel:model];
     cell.select_btn.hidden = YES;
-    _cellIndex = indexPath.row-5;
     return cell;
 }
 
@@ -150,6 +149,10 @@
     DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
     detailVc.index = self.dataArray[indexPath.row].number;
     [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+}
+
+-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    self.currentIndexPath = indexPath;
 }
 
 -(void)headerAction{
@@ -170,13 +173,13 @@
 
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
-
-    if(self.cellIndex<=5){
-        [_tableView scrollsToTop];
-        return;
+    
+    if(self.currentIndexPath.row%2){
+        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+6 inSection:self.currentIndexPath.section];
+    }else{
+        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row/2 inSection:self.currentIndexPath.section];
     }
-    NSIndexPath * scrollIndexPath = [NSIndexPath indexPathForRow:self.cellIndex inSection:0];
-    [_tableView scrollToRowAtIndexPath:scrollIndexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    [_tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{

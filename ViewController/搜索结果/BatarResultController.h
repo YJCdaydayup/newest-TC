@@ -10,8 +10,8 @@
 
 @interface BatarResultController : RootViewController
 
-@property (nonatomic,assign)  NSInteger cellIndex;
-@property (nonatomic,copy) NSString * param;
-@property (nonatomic,strong) NSMutableArray * initialDataArray;
+@property (nonatomic,strong)  NSIndexPath * currentIndexPath;
+@property (nonatomic,copy)    NSString * param;
+@property (nonatomic,strong)  NSMutableArray * initialDataArray;
 
 @end

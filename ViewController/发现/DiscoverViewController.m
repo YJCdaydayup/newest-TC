@@ -117,10 +117,10 @@
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc]init];
     [flowLayOut setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen) collectionViewLayout:flowLayOut];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, Wscreen-4*S6, Hscreen) collectionViewLayout:flowLayOut];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    self.collectionView.backgroundColor = RGB_COLOR(237, 237, 237, 1);
+    self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.collectionView];
     
     [self.collectionView addHeaderWithTarget:self action:@selector(headerAction)];
@@ -162,23 +162,21 @@
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     
-    return UIEdgeInsetsMake(0,0, 2.5*S6,0);
+    return UIEdgeInsetsMake(0,5*S6, 0*S6,0*S6);
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    if(IS_IPHONE == IS_IPHONE_5||IS_IPHONE == IS_IPHONE_4_OR_LESS){
-        
-        return CGSizeMake((20+345+10.5)/2.0*S6, 375/2.0*S6);
-    }else{
-        
-        return CGSizeMake((20+345+10)/2.0*S6, 375/2.0*S6);
-    }
+    return CGSizeMake(179*S6, 179*S6);
 }
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     
-    return 0;
+    return 5*S6;
+}
+
+-(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
+    return 2*S6;
 }
 
 -(NSMutableArray *)dataArray{

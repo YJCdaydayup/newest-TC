@@ -68,7 +68,7 @@
     [self.navigationController.navigationBar addSubview:button];
     
     UIButton * rightBtn = [Tools createButtonNormalImage:imgArray[1] selectedImage:nil tag:0 addTarget:target action:rightSel];
-    rightBtn.frame = CGRectMake(Wscreen-rightSize.width-14*S6, 15*S6, 100*S6, 50*S6);
+    rightBtn.frame = CGRectMake(Wscreen-rightSize.width-14*S6, 15*S6, 33*S6, 30*S6);
     rightBtn.size = rightSize;
     rightBtn.y = height+1*S6;
     rightBtn.hidden = NO;
@@ -173,6 +173,21 @@
         _ylHud = [[YLProgressHUD alloc]initWithView:self.view];
     }
     return _ylHud;
+}
+
+-(NSMutableDictionary *)dictionaryWithJsonString:(NSString *)jsonString{
+    
+    if (jsonString == nil) {
+        return nil;
+    }
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSMutableDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData                                                        options:NSJSONReadingMutableContainers error:&err];
+    if(err) {
+        NSLog(@"json解析失败：%@",err);
+        return nil;
+    }
+    return dic;
 }
 
 -(MBProgressHUD *)hud{

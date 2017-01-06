@@ -17,6 +17,9 @@
     if(self = [super initWithFrame:frame]){
         
         [self configImageView];
+        
+        self.layer.borderColor = [BOARDCOLOR CGColor];
+        self.layer.borderWidth = 0.5*S6;
     }
     return self;
 }
@@ -24,19 +27,24 @@
 
 -(void)configImageView{
     
-    self.showImageView = [[UIImageView alloc]initWithFrame:CGRectMake(10*S6, 10*S6, 173*S6, 130*S6)];
-    self.showImageView.layer.borderWidth = 2.5*S6;
-    self.showImageView.layer.borderColor = [RGB_COLOR(227, 227, 227, 0.3) CGColor];
+    self.showImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0*S6,0, 179*S6, 154*S6)];
+//    self.showImageView.layer.borderWidth = 0.5*S6;
+//    self.showImageView.layer.borderColor = [RGB_COLOR(29, 227, 227, 1) CGColor];
     [self.contentView addSubview:self.showImageView];
     
     //添加半透明的View
-    self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10*S6,148*S6,173*S6,16*S6)];
+    self.titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10*S6,145*S6,173*S6,16*S6)];
     self.titleLabel.textAlignment = NSTextAlignmentCenter;
-    self.titleLabel.font = [UIFont systemFontOfSize:16*S6];
+    self.titleLabel.font = [UIFont systemFontOfSize:13*S6];
     self.titleLabel.textColor = [UIColor blackColor];
     self.titleLabel.alpha = 0.9;
+    self.titleLabel.centerX = self.showImageView.centerX;
     [self addSubview:self.titleLabel];
     self.backgroundColor = [UIColor whiteColor];
+    
+    self.numberLabel = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(self.titleLabel.frame)+2*S6, Wscreen, 9*S6) textContent:nil withFont:[UIFont systemFontOfSize:9*S6] textColor:RGB_COLOR(102, 102, 102, 1) textAlignment:NSTextAlignmentCenter];
+    self.numberLabel.centerX = self.showImageView.centerX;
+    [self.contentView addSubview:self.numberLabel];
     
     self.showImageView.userInteractionEnabled = YES;
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickSingleImage)];
@@ -59,8 +67,8 @@
 
 -(void)configCell:(id)model{
     
-    NSInteger width = 173*THUMBNAILRATE;
-    NSInteger height = 130*THUMBNAILRATE;
+    NSInteger width = 179*THUMBNAILRATE;
+    NSInteger height = 154*THUMBNAILRATE;
     
     if([model isKindOfClass:[RecommandImageModel class]]){
         
@@ -77,6 +85,7 @@
         }else{
             self.titleLabel.text = @"Product Name";
         }
+        self.numberLabel.text = re_Model.number;
     }
 }
 

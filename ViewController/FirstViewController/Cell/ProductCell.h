@@ -18,6 +18,7 @@ typedef void(^ClickImageBlock)(NSInteger index);
 @property (nonatomic,assign) CGFloat max_Y;
 
 @property (nonatomic,copy) ClickImageBlock block;
+@property (nonatomic,strong) UIView * bgVc;
 
 -(void)configCellWithArray:(NSArray *)dataArray;
 -(void)clickImageForDetai:(ClickImageBlock)block;

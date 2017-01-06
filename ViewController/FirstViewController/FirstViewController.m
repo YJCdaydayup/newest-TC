@@ -253,7 +253,7 @@
     self.bottomLine.backgroundColor = RGB_COLOR(204, 204, 204, 1);
     [self.navigationController.navigationBar addSubview:self.bottomLine];
     
-    [self batar_setLeftNavButton:@[@"scan",@"search_type"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(goCatagoryVc) rightSize:CGSizeMake(33*S6,30*S6) topHeight:8];
+    [self batar_setLeftNavButton:@[@"scan",@"search_type"] target:self selector:@selector(pushScanVc) size:CGSizeMake(25*S6, 30*S6) selector:@selector(goCatagoryVc) rightSize:CGSizeMake(33*S6,30*S6) topHeight:7*S6];
     
     [self createTextfield];
     
@@ -338,17 +338,23 @@
             [cell setImageViewWithArray:tuiGuangArr];
         }
         [cell clickImageWithBlock:^(NSInteger index) {
-            
             BannerModel * model = tuiGuangArr[index];
             if(model.actionname.length==0){
-                
                 [self showAlertViewWithTitle:@"未找到数据"];
                 return ;
             }
-            ThemeViewController * themeVc = [[ThemeViewController alloc]init];
-            themeVc.indexParm = model.actionname;
-            themeVc.themeTitle = model.actionaliasname;
-            [self pushToViewControllerWithTransition:themeVc withDirection:@"right" type:NO];
+            
+            if([model.type integerValue] == 1){
+                
+                
+                
+            }else{
+                
+                ThemeViewController * themeVc = [[ThemeViewController alloc]init];
+                themeVc.indexParm = model.actionname;
+                themeVc.themeTitle = model.actionaliasname;
+                [self pushToViewControllerWithTransition:themeVc withDirection:@"right" type:NO];
+            }
         }];
         return cell;
         
@@ -390,9 +396,9 @@
         
         NSInteger count = self.dataArray[indexPath.row].products.count;
         if(count%2==0){
-            return (175*count/2.0+10)*S6;
+            return (175*count/2.0+5)*S6;
         }else{
-            return (175*(count+1)/2.0+10)*S6;
+            return (175*(count+1)/2.0+5)*S6;
         }
     }
 }

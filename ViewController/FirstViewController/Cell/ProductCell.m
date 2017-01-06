@@ -13,6 +13,14 @@
 
 @implementation ProductCell
 
+@synthesize bgVc = _bgVc;
+
+-(void)prepareForReuse{
+    
+    [_bgVc removeFromSuperview];
+    _bgVc = nil;
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
@@ -31,14 +39,20 @@
         imgView.contentMode = UIViewContentModeScaleAspectFit;
         [self.contentView addSubview:imgView];
         
-        imgView.layer.borderWidth = 0.5f;
-        imgView.layer.borderColor = [BTNBORDCOLOR CGColor];
+        _bgVc = [[UIView alloc]initWithFrame:CGRectMake(5*S6+i%2*185*S6, i/2*175*S6, 180*S6, 175*S6)];
+        _bgVc.backgroundColor = [UIColor clearColor];
+        [self.contentView addSubview:_bgVc];
+        
+        _bgVc.layer.borderWidth = 0.5f;
+        _bgVc.layer.borderColor = [BTNBORDCOLOR CGColor];
         
         self.max_X = CGRectGetMinX(imgView.frame);
         self.max_Y = CGRectGetMaxY(imgView.frame);
         
-        UILabel * titleLabel = [Tools createLabelWithFrame:CGRectMake(0, 140*S6,180*S6, 15) textContent:nil withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+        UILabel * titleLabel = [Tools createLabelWithFrame:CGRectMake(0, 140*S6,180*S6, 15) textContent:nil withFont:[UIFont systemFontOfSize:13*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+        UILabel * numberLabel = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(titleLabel.frame)+2*S6, 180*S6, 9*S6) textContent:nil withFont:[UIFont systemFontOfSize:9*S6] textColor:RGB_COLOR(102, 102, 102, 1) textAlignment:NSTextAlignmentCenter];
         [imgView addSubview:titleLabel];
+        [imgView addSubview:numberLabel];
         
         imgView.tag = 6666+i;
         if(i==imgArray.count-1){
@@ -48,7 +62,7 @@
         [self addClickAction:imgView withTag:imgView.tag];
     }
     
-    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(lastImg.frame)+40*S6, Wscreen, 10*S6)];
+    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(lastImg.frame)+40*S6, Wscreen, 5*S6)];
     bgView.backgroundColor = TABLEVIEWCOLOR;
     [self.contentView addSubview:bgView];
     
@@ -56,7 +70,7 @@
 }
 
 -(void)configCellWithArray:(NSArray *)dataArray{
-
+    
     for(int i=0;i<dataArray.count;i++){
         
         [self addImageData:i withModel:dataArray[i]];
@@ -77,7 +91,9 @@
     
     [imgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:model.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
     UILabel * nameLabel = imgView.subviews.firstObject;
+    UILabel * numberLabel = imgView.subviews[1];
     nameLabel.text = model.name;
+    numberLabel.text = model.number;
 }
 
 //给图片添加点击事件

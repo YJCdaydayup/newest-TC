@@ -90,6 +90,9 @@ NSString * const GETVOICEURL = @"http://%@/photo-album/order/voice/%@";
 /*企业版App检测更新链接*/
 NSString * const PLIST_URL = @"https://git.oschina.net/jeffyang/TestInternalDistribute2/raw/master/Info.plist?";
 
+/*type=1时,首页推广点击*/
+NSString *const RECOMMANDCLICK = @"http://%@/photo-album/product/get_series_product";
+
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";
 NSString * const IOS_APPURL = @"http://fir.im/enterpriseUrl";

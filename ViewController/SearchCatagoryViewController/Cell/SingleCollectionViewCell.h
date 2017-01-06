@@ -15,6 +15,8 @@ typedef void(^ClickImageBlock)(NSString * number);
 
 @property (nonatomic,strong) UIImageView * showImageView;
 @property (nonatomic,strong) UILabel * titleLabel;
+@property (nonatomic,strong) UILabel * numberLabel;
+
 
 @property (nonatomic,copy) ClickImageBlock block;
 

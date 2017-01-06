@@ -45,6 +45,7 @@
     // 启动图片延时: 1秒
     [NSThread sleepForTimeInterval:1];
     
+    [[UINavigationBar appearance]setFrame:CGRectMake(0, 20, self.window.width, 100)];
     [[UINavigationBar appearance]setBarTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance]setTitleTextAttributes:@{NSForegroundColorAttributeName:TEXTCOLOR,NSFontAttributeName:[UIFont systemFontOfSize:17*S6]}];
     

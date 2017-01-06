@@ -43,6 +43,9 @@
 //将数组转json字符串
 -(NSString *)arrayToJson:(NSMutableArray *)array;
 
+//将json字符串转字典
+-(NSMutableDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
+
 //数组转json
 - (NSString*)myArrayToJson:(NSMutableArray *)array;
 

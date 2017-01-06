@@ -103,6 +103,10 @@ UIKIT_EXTERN NSString *const GETVOICEURL;
 /*企业版App检测更新链接*/
 UIKIT_EXTERN NSString *const PLIST_URL;
 
+/*type=1时,首页推广点击*/
+UIKIT_EXTERN NSString *const RECOMMANDCLICK;
+
+
 /*iOS和安卓APP下载地址*/
 UIKIT_EXTERN NSString *const ANDARIOD_APPURL;
 UIKIT_EXTERN NSString *const IOS_APPURL;

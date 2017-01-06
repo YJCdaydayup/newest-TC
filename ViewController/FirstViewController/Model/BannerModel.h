@@ -23,6 +23,7 @@
 @property (nonatomic,copy) NSString * index;
 @property (nonatomic,copy) NSString * aliasname;
 @property (nonatomic,copy) NSString * actionaliasname;
+@property (nonatomic,strong) NSNumber * type;
 
 
 
