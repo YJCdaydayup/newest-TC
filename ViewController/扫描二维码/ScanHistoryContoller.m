@@ -12,6 +12,7 @@
 #import "DBWorkerManager.h"
 #import "DBSaveModel.h"
 #import "ScanHistoryCell.h"
+#import "ScanViewController.h"
 
 NSString * const CellID = @"cellID";
 
@@ -54,7 +55,7 @@ NSString * const CellID = @"cellID";
     [self.navigationController.view addSubview:_cleanHistoryBtn];
     [_cleanHistoryBtn addTarget:self action:@selector(cleanHistory) forControlEvents:UIControlEventTouchUpInside];
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen-NAV_BAR_HEIGHT)];
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen)];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -102,13 +103,13 @@ NSString * const CellID = @"cellID";
         [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
     }else if([model.searchType isEqualToString:CodeTypeInaccurary]){
         
-        BatarResultController * searchVc = [[BatarResultController alloc]initWithController:[ScanHistoryContoller new]];
+        BatarResultController * searchVc = [[BatarResultController alloc]initWithController:[ScanViewController new]];
         searchVc.param = model.number;
         [self pushToViewControllerWithTransition:searchVc withDirection:@"left" type:NO];
     }else{
         //错误码
         NSLog(@"%@",model.searchType);
-        [self showAlertViewWithTitle:@"此编码不存在"];
+        [self showAlertViewWithTitle:@"未发现对应产品"];
     }
 }
 

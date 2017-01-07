@@ -63,13 +63,23 @@ singleM(SaveController)
     for(UIView * subView in self.view.subviews){
         [subView removeFromSuperview];
     }
-    [self setVc];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
     [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+}
+
+-(void)createView{
+    
+    [self configUI];
+    [self setVc];
+    
 }
 
 -(void)configUI{
@@ -97,9 +107,6 @@ singleM(SaveController)
     //设置表格
     [self configCollectionView];
     
-    //请求数据
-    [self createData];
-    
     //添加底部控制栏
     controlView = [[SaveContolView alloc]init];
     [self.view addSubview:controlView];
@@ -110,12 +117,13 @@ singleM(SaveController)
         [self selectAllCell];
     }];
     
+    __block typeof(self)weakSelf = self;
     //点击删除按钮
     [controlView clickCancelBtn:^{
         
-        if(self.numberIDArray.count == 0){
+        if(weakSelf.numberIDArray.count == 0){
             alertController = [UIAlertController alertControllerWithTitle:@"暂未选择任何收藏产品" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            [self presentViewController:alertController animated:YES completion:^{
+            [weakSelf presentViewController:alertController animated:YES completion:^{
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [alertController dismissViewControllerAnimated:YES completion:nil];
                 });
@@ -125,7 +133,6 @@ singleM(SaveController)
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            __block typeof(self)weakSelf = self;
             UIAlertController * alertController1 = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction * action;
             UIAlertAction * action1;
@@ -147,14 +154,6 @@ singleM(SaveController)
         });
     }];
     
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-
-    
-    [self configUI];
 }
 
 -(void)selectAllCell{
@@ -283,13 +282,18 @@ singleM(SaveController)
     //注册Cell
     [self.collectionView registerClass:[SaveCollectionCell class] forCellWithReuseIdentifier:saveCell];
     
+    
+    //请求数据
+
     DBWorkerManager * manager = [DBWorkerManager shareDBManager];
     [manager getAllObject:^(NSMutableArray *dataArray) {
         
         if(dataArray.count==0){
             [self showIndicator];
         }else{
-            
+            [self.dataArray removeAllObjects];
+            [self.dataArray addObjectsFromArray:dataArray];
+            [self.collectionView reloadData];
         }
     }];
 }
@@ -400,39 +404,6 @@ singleM(SaveController)
 
 //返回到上一个界面
 -(void)backAct{
-    
-    NSString * str = [kUserDefaults objectForKey:FROM_VC_TO_SAVE];
-    if([str isEqualToString:@"mine"]||[str isEqualToString:@"order"]){
-        [self popToViewControllerWithDirection:@"right" type:NO];
-        return;
-    }
-    
-    NSString * str2 = [kUserDefaults objectForKey:TEMP_FROM_VC_TO_SAVE];
-    
-    if([str2 isEqualToString:@"mine"]){
-        
-        MyViewController * myVc = [[MyViewController alloc]init];
-        [self pushToViewControllerWithTransition:myVc withDirection:@"right" type:NO];
-        return;
-    }
-    
-    if([str2 isEqualToString:@"order"]){
-        
-        FinalOrderViewController * finalVc = [[FinalOrderViewController alloc]init];
-        finalVc.isFromSavaVc = YES;
-        [self pushToViewControllerWithTransition:finalVc withDirection:@"right" type:NO];
-        return;
-    }
-    
-    if([[kUserDefaults objectForKey:SAVE_PUSH_FLAG]integerValue]>0){
-        
-        //从收藏也“push”回来的
-        DetailViewController * detailVc = [[DetailViewController alloc]init];
-        detailVc.fromSaveVc = 0;
-        detailVc.index = [kUserDefaults objectForKey:LONG_PRODUCT_ID];
-        [self pushToViewControllerWithTransition:detailVc withDirection:@"right" type:NO];
-        return;
-    }
     [self popToViewControllerWithDirection:@"right" type:NO];
 }
 

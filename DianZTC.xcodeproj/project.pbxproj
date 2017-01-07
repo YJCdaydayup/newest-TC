@@ -617,6 +617,7 @@
 		8F94A7991E21688700BDBEF6 /* erweima@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F94A7971E21688700BDBEF6 /* erweima@2x.png */; };
 		8F94A79C1E21688E00BDBEF6 /* erweima@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F94A79A1E21688E00BDBEF6 /* erweima@3x.png */; };
 		8F94A79D1E21688E00BDBEF6 /* tiaoma@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F94A79B1E21688E00BDBEF6 /* tiaoma@3x.png */; };
+		8F94A7A01E21968A00BDBEF6 /* DiscoverShapeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F94A79F1E21968A00BDBEF6 /* DiscoverShapeController.m */; };
 		8F9E91BA1E170860002297ED /* ScanHistoryContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91B91E170860002297ED /* ScanHistoryContoller.m */; };
 		8F9E91BD1E171C7D002297ED /* ScanHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */; };
 		8FA9CFFC1E0DA63500DD0335 /* batar_group@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FA9CFF81E0DA63500DD0335 /* batar_group@3x.png */; };
@@ -1756,6 +1757,8 @@
 		8F94A7971E21688700BDBEF6 /* erweima@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "erweima@2x.png"; sourceTree = "<group>"; };
 		8F94A79A1E21688E00BDBEF6 /* erweima@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "erweima@3x.png"; sourceTree = "<group>"; };
 		8F94A79B1E21688E00BDBEF6 /* tiaoma@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tiaoma@3x.png"; sourceTree = "<group>"; };
+		8F94A79E1E21968A00BDBEF6 /* DiscoverShapeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverShapeController.h; sourceTree = "<group>"; };
+		8F94A79F1E21968A00BDBEF6 /* DiscoverShapeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverShapeController.m; sourceTree = "<group>"; };
 		8F9E91B81E170860002297ED /* ScanHistoryContoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanHistoryContoller.h; sourceTree = "<group>"; };
 		8F9E91B91E170860002297ED /* ScanHistoryContoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanHistoryContoller.m; sourceTree = "<group>"; };
 		8F9E91BB1E171C7D002297ED /* ScanHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanHistoryCell.h; sourceTree = "<group>"; };
@@ -3888,6 +3891,8 @@
 			children = (
 				8F7D09641E11839C00E94955 /* DiscoverViewController.h */,
 				8F7D09651E11839C00E94955 /* DiscoverViewController.m */,
+				8F94A79E1E21968A00BDBEF6 /* DiscoverShapeController.h */,
+				8F94A79F1E21968A00BDBEF6 /* DiscoverShapeController.m */,
 			);
 			path = "发现";
 			sourceTree = "<group>";
@@ -4628,6 +4633,7 @@
 				8F7CC1441E133A280033E7FB /* ZXVINResultParser.m in Sources */,
 				8F5668141CDD765900C39F75 /* SingleSearchCatagoryViewController.m in Sources */,
 				8F7CC16E1E133A280033E7FB /* ZXDataMatrixDataBlock.m in Sources */,
+				8F94A7A01E21968A00BDBEF6 /* DiscoverShapeController.m in Sources */,
 				8F7CC14C1E133A280033E7FB /* ZXWhiteRectangleDetector.m in Sources */,
 				8F7CC1111E133A280033E7FB /* LBXScanView.m in Sources */,
 				8F4A19441CDAB580006ED857 /* SDCollectionViewCell.m in Sources */,

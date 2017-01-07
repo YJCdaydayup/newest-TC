@@ -1,78 +1,65 @@
 //
-//  SearchResultController.m
+//  DiscoverShapeController.m
 //  DianZTC
 //
-//  Created by 杨力 on 29/12/2016.
-//  Copyright © 2016 杨力. All rights reserved.
+//  Created by 杨力 on 7/1/2017.
+//  Copyright © 2017 杨力. All rights reserved.
 //
 
-#import "BatarResultController.h"
-#import "SearchViewController.h"
-#import "MySelectedOrderCell.h"
+#import "DiscoverShapeController.h"
+#import "DiscoverViewController.h"
 #import "DetailViewController.h"
-#import "BatarShapeController.h"
-#import "RecommandImageModel.h"
-#import "ScanViewController.h"
 #import "BatarResultModel.h"
+#import "RecommandImageModel.h"
+#import "MySelectedOrderCell.h"
 #import "MJRefresh.h"
 #import "NetManager.h"
 
-#define CODECELL @"codeCell"
-@interface BatarResultController()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UIScrollViewDelegate>{
+#define CODERCELL  @"codercell"
+
+@interface DiscoverShapeController ()<UITableViewDataSource,UITableViewDelegate,UIScrollViewDelegate>{
     NSInteger page;
 }
 
 @property (nonatomic,strong) UITableView * tableView;
 @property (nonatomic,strong) NSMutableArray<BatarResultModel *>*dataArray;
-@property (nonatomic,strong) UITextField * result_Tf;
 @property (nonatomic,strong) UIButton * layoutBtn;
 @property (nonatomic,strong) NSIndexPath * indexPath;
 
 @end
 
-@implementation BatarResultController
+@implementation DiscoverShapeController
+
 
 @synthesize tableView = _tableView;
 @synthesize dataArray = _dataArray;
-@synthesize result_Tf = _result_Tf;
 @synthesize layoutBtn = _layoutBtn;
 
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
-    
-    self.tabBarController.tabBar.hidden = YES;
     _layoutBtn.hidden = NO;
-    if(![self.fatherVc isKindOfClass:[ScanViewController class]]){
-        self.result_Tf.hidden = NO;
-        [self batar_setNavibar:nil];
-    }else{
-        self.result_Tf.hidden = YES;
-        [self batar_setNavibar:@"搜索结果"];
-    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-    _result_Tf.hidden = YES;
     _layoutBtn.hidden = YES;
 }
 
--(void)viewDidLoad{
-    
+- (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
 }
 
 -(void)createView{
     
+    [self batar_setNavibar:@"发现"];
     self.automaticallyAdjustsScrollViewInsets = NO;
-    [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
-    [self createTextfield];
     
     _layoutBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-38*S6, 31, 22*S6, 22*S6) textContent:nil withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
     [_layoutBtn setImage:[UIImage imageNamed:@"shape_sel"] forState:UIControlStateNormal];
-    [_layoutBtn setImage:[UIImage imageNamed:@"shape_sel"] forState:UIControlStateHighlighted];
+    [_layoutBtn setImage:[UIImage imageNamed:@"shape_nor"] forState:UIControlStateHighlighted];
     [self.navigationController.view addSubview:_layoutBtn];
     _layoutBtn.selected = NO;
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
@@ -83,21 +70,82 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_tableView];
     
-    //    [_tableView addHeaderWithTarget:self action:@selector(headerAction)];
+    [_tableView addHeaderWithTarget:self action:@selector(headerAction)];
     [_tableView addFooterWithTarget:self action:@selector(footerAction)];
     [self headerAction];
 }
 
 -(void)changeLayout{
     
-    BatarShapeController * shapeVc = [[BatarShapeController alloc]initWithController:[ScanViewController new]];
-    shapeVc.param = self.param;
+    DiscoverViewController * shapeVc = [[DiscoverViewController alloc]initWithController:self];
     shapeVc.currentIndexPath = self.currentIndexPath;
     shapeVc.initialDataArray = self.dataArray;
     [self.navigationController pushViewController:shapeVc animated:NO];
     [self removeNaviPushedController:self];
 }
 
+-(void)createData{
+    
+    [self.hud show:YES];
+    
+    NSDictionary * parmDict;
+    NSString * urlStr;
+    NetManager * manager = [NetManager shareManager];
+    NSString * URLstring1 = [NSString stringWithFormat:RECOMMENDURL,[manager getIPAddress]];
+    NSString * URLstring = [NSString stringWithFormat:URLstring1,[manager getIPAddress]];
+    urlStr = URLstring;
+    NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+    parmDict = @{@"page":pageStr,@"itemperpage":@"10"};
+    [manager downloadDataWithUrl:urlStr parm:parmDict callback:^(id responseObject, NSError *error) {
+        
+        if(error == nil){
+            [self.hud hide:YES];
+            if(page == 0){
+                
+                [self.dataArray removeAllObjects];
+            }
+            
+            id obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSMutableArray * downArray = [NSMutableArray array];
+            if([obj isKindOfClass:[NSDictionary class]]){
+                
+                NSDictionary * muDict = obj;
+                NSMutableArray * muArray = muDict[@"page"];
+                for(NSDictionary * dict in muArray){
+                    
+                    BatarResultModel * model = [[BatarResultModel alloc]initWithDictionary:dict error:nil];
+                    [downArray addObject:model];
+                }
+                
+            }else{
+                NSMutableArray * muArray = obj;
+                NSDictionary * muDict = muArray[0];
+                NSArray * array = muDict[@"context"];
+                for(int i=0;i<array.count;i++){
+                    
+                    BatarResultModel * model = [[BatarResultModel alloc]init];
+                    model.name = array[i][@"name"];
+                    model.number = array[i][@"number"];
+                    model.image = array[i][@"img"];
+                    [downArray addObject:model];
+                }
+            }
+            [self.dataArray addObjectsFromArray:downArray];
+            if(self.dataArray.count==0){
+                [self showAlertViewWithTitle:@"未搜到任何产品信息!"];
+                [self.tableView headerEndRefreshing];
+                return;
+            }
+            [self.tableView reloadData];
+            [self.tableView headerEndRefreshing];
+            [self.tableView footerEndRefreshing];
+        }else{
+            
+            NSLog(@"%@",error.description);
+        }
+    }];
+}
+/*
 -(void)createData{
     
     NetManager * manager = [NetManager shareManager];
@@ -121,6 +169,7 @@
         [_tableView footerEndRefreshing];
     }];
 }
+ */
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.dataArray.count;
@@ -128,9 +177,9 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    MySelectedOrderCell * cell = [tableView dequeueReusableCellWithIdentifier:CODECELL];
+    MySelectedOrderCell * cell = [tableView dequeueReusableCellWithIdentifier:CODERCELL];
     if(cell == nil){
-        cell = [[MySelectedOrderCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CODECELL];
+        cell = [[MySelectedOrderCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CODERCELL];
     }
     
     BatarResultModel * model = self.dataArray[indexPath.row];
@@ -174,12 +223,12 @@
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
-    if(self.currentIndexPath.row%2){
-        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+6 inSection:self.currentIndexPath.section];
-    }else{
-        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row/2 inSection:self.currentIndexPath.section];
-    }
-    [_tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+//    if(self.currentIndexPath.row%2){
+//        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+6 inSection:self.currentIndexPath.section];
+//    }else{
+//        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row/2 inSection:self.currentIndexPath.section];
+//    }
+//    [_tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{
@@ -199,44 +248,6 @@
     [self createData];
 }
 
--(void)createTextfield{
-    
-    CGFloat tf_Y;
-    if(IS_IPHONE == IS_IPHONE_5||IS_IPHONE == IS_IPHONE_4_OR_LESS){
-        tf_Y = 62/2.0;
-    }else if(IS_IPHONE == IS_IPHONE_6){
-        tf_Y = 57/2.0;
-    }else if (IS_IPHONE == IS_IPHONE_6P){
-        tf_Y = 53/2.0;
-    }
-    self.result_Tf = [[UITextField alloc]initWithFrame:CGRectMake((33+49+33)/2.0*S6, 8.0*S6, 262.5*S6, tf_Y*S6)];
-    [self.result_Tf resignFirstResponder];
-    self.result_Tf.backgroundColor = [UIColor whiteColor];
-    self.result_Tf.layer.cornerRadius = 5*S6;
-    self.result_Tf.clipsToBounds = YES;
-    UIView * leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0,10*S6 , 55/2.0*S6)];
-    self.result_Tf.leftView = leftView;
-    self.result_Tf.clearButtonMode = UITextFieldViewModeAlways;
-    self.result_Tf.leftViewMode =UITextFieldViewModeAlways;
-    self.result_Tf.placeholder = @"输入您想要的宝贝";
-    self.result_Tf.returnKeyType = UIReturnKeySearch;
-    [self.navigationController.navigationBar addSubview:self.result_Tf];
-    self.result_Tf.userInteractionEnabled = YES;
-    //改变输入框placeholder的字体大小和颜色
-    [self.result_Tf setValue:RGB_COLOR(153, 153, 153, 1) forKeyPath:@"_placeholderLabel.textColor"];
-    self.result_Tf.font = [UIFont systemFontOfSize:14*S6];
-    //改变输入框输入时字体的颜色
-    self.result_Tf.delegate = self;
-    self.result_Tf.textColor = RGB_COLOR(153, 153, 153, 1);
-    self.result_Tf.font = [UIFont systemFontOfSize:14*S6];
-    self.result_Tf.layer.borderWidth = 1.0*S6;
-    self.result_Tf.layer.borderColor = [RGB_COLOR(76, 66, 41, 1)CGColor];
-}
-
--(void)textFieldDidBeginEditing:(UITextField *)textField{
-    [self.navigationController popViewControllerAnimated:NO];
-}
-
 -(void)back{
     [self popToViewControllerWithDirection:@"right" type:NO];
 }
@@ -248,5 +259,20 @@
     }
     return _dataArray;
 }
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

@@ -1,14 +1,14 @@
 //
-//  DiscoverViewController.h
+//  DiscoverShapeController.h
 //  DianZTC
 //
-//  Created by 杨力 on 26/12/2016.
-//  Copyright © 2016 杨力. All rights reserved.
+//  Created by 杨力 on 7/1/2017.
+//  Copyright © 2017 杨力. All rights reserved.
 //
 
 #import "RootViewController.h"
 
-@interface DiscoverViewController : RootViewController
+@interface DiscoverShapeController : RootViewController
 
 @property (nonatomic,strong)  NSIndexPath * currentIndexPath;
 @property (nonatomic,strong)  NSMutableArray * initialDataArray;

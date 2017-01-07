@@ -74,17 +74,39 @@
     }
     
     [self.imgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[NSString stringWithFormat:@"%@",model.img] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
-    if(model.name.length==0){
-        self.name.text = model.number;
-        self.name.width = Wscreen;
-        self.date.text = model.date;
-    }else{
+    
+    if([model.searchType isEqualToString:CodeTypeAccurary]){
+        //精确
         self.number.text = model.number;
         self.name.text = model.name;
         self.date.text = model.date;
         self.name.width = [self getWidth:model.name];
         self.number.x = CGRectGetMaxX(self.name.frame)+20*S6;
+    }else if ([model.searchType isEqualToString:CodeTypeInaccurary]){
+        //模糊
+        self.name.text = model.number;
+        self.name.width = Wscreen;
+        self.date.text = model.date;
+    }else{
+        //不存在
+        self.name.text = @"未发现对应产品";
+        self.number.text = model.number;
+        self.date.text = model.date;
+        self.name.width = [self getWidth:self.name.text];
+        self.number.x = CGRectGetMaxX(self.name.frame)+20*S6;
     }
+    
+//    if(model.name.length==0){
+//        self.name.text = model.number;
+//        self.name.width = Wscreen;
+//        self.date.text = model.date;
+//    }else{
+//        self.number.text = model.number;
+//        self.name.text = model.name;
+//        self.date.text = model.date;
+//        self.name.width = [self getWidth:model.name];
+//        self.number.x = CGRectGetMaxX(self.name.frame)+20*S6;
+//    }
 }
 
 @end

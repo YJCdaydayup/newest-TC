@@ -8,6 +8,7 @@
 
 #import "BatarShapeController.h"
 #import "RecommandImageModel.h"
+#import "ScanViewController.h"
 #import "SingleCollectionViewCell.h"
 #import "BatarResultController.h"
 #import "DetailViewController.h"
@@ -38,12 +39,20 @@ NSString * const singleCell = @"singleCell";
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    
+    self.tabBarController.tabBar.hidden = YES;
     _layoutBtn.hidden = NO;
-    self.result_Tf.hidden = NO;
-    [self batar_setNavibar:nil];
+    if(![self.fatherVc isKindOfClass:[ScanViewController class]]){
+        self.result_Tf.hidden = NO;
+        [self batar_setNavibar:nil];
+    }else{
+        self.result_Tf.hidden = YES;
+        [self batar_setNavibar:@"搜索结果"];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
+    
     [super viewWillDisappear:animated];
     _result_Tf.hidden = YES;
     _layoutBtn.hidden = YES;
@@ -63,8 +72,8 @@ NSString * const singleCell = @"singleCell";
     
     
     _layoutBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-38*S6, 31, 22*S6, 22*S6) textContent:nil withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
-    [_layoutBtn setImage:[UIImage imageNamed:@"shape_sel"] forState:UIControlStateNormal];
-    [_layoutBtn setImage:[UIImage imageNamed:@"shape_nol"] forState:UIControlStateHighlighted];
+    [_layoutBtn setImage:[UIImage imageNamed:@"shape_nor"] forState:UIControlStateNormal];
+    [_layoutBtn setImage:[UIImage imageNamed:@"shape_nor"] forState:UIControlStateHighlighted];
     [self.navigationController.view addSubview:_layoutBtn];
     _layoutBtn.selected = NO;
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
@@ -74,7 +83,7 @@ NSString * const singleCell = @"singleCell";
 
 -(void)changeLayout{
     
-    BatarResultController * resultVc = [[BatarResultController alloc]initWithController:self];
+    BatarResultController * resultVc = [[BatarResultController alloc]initWithController:[ScanViewController new]];
     resultVc.param = self.param;
     resultVc.currentIndexPath = self.currentIndexPath;
     resultVc.initialDataArray = self.dataArray;
@@ -131,7 +140,7 @@ NSString * const singleCell = @"singleCell";
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc]init];
     [flowLayOut setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen-4*S6, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) collectionViewLayout:flowLayOut];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen-4*S6, Hscreen-NAV_BAR_HEIGHT) collectionViewLayout:flowLayOut];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.backgroundColor = [UIColor whiteColor];
