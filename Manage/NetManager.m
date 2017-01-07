@@ -246,4 +246,23 @@
 }
 
 
++(void)judgeCoderWithCode:(NSString *)code Type:(CoderTypeBlock)block{
+    
+    NetManager * manager = [NetManager shareManager];
+    NSString * url = [NSString stringWithFormat:CODETYPE,[manager getIPAddress]];
+    NSDictionary * dict = @{@"key":code};
+    [manager downloadDataWithUrl:url parm:dict callback:^(id responseObject, NSError *error) {
+       
+        NSArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        if(array.count==0){
+            //不存在
+            block(CoderTypeFailCoder);
+        }else if(array.count == 1){
+            block(CoderTypeAccurateType);
+        }else{
+            block(CoderTypeInaccurateType);
+        }
+    }];
+}
+
 @end

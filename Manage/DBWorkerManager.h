@@ -106,7 +106,7 @@ typedef void(^HistoryClearBlock)(BOOL clear);
 
 /*******************扫码历史数据********************/
 -(void)createScanDB;
--(void)scan_insertInfo:(DetailModel *)model withData:(NSString *)imgUrl withNumber:(NSString *)number date:(NSString *)date;
+-(void)scan_insertInfo:(DetailModel *)model withData:(NSString *)imgUrl withNumber:(NSString *)number date:(NSString *)date type:(NSString *)codeType searchType:(NSString *)searchType;
 -(void)scan_getAllObject:(DBSaveBlock)block;
 -(void)scan_cleanAllDBData:(HistoryClearBlock)block;
 

@@ -162,6 +162,9 @@
 
 -(void)setWindowTabbar{
     
+    //登录后，下次进来改变入口
+    [kUserDefaults setObject:BatarEntrance forKey:BatarEntrance];
+    
     AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     BatarMainTabBarContoller * tabbar = [[BatarMainTabBarContoller alloc]init];
     app.window.rootViewController = tabbar;

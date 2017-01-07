@@ -8,6 +8,7 @@
 
 #import "ScanHistoryContoller.h"
 #import "DetailViewController.h"
+#import "BatarResultController.h"
 #import "DBWorkerManager.h"
 #import "DBSaveModel.h"
 #import "ScanHistoryCell.h"
@@ -94,9 +95,21 @@ NSString * const CellID = @"cellID";
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
-    detailVc.index = self.dataArray[indexPath.row].number;
-    [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+    DBSaveModel * model = self.dataArray[indexPath.row];
+    if([model.searchType isEqualToString:CodeTypeAccurary]){
+        DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
+        detailVc.index = model.number;
+        [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+    }else if([model.searchType isEqualToString:CodeTypeInaccurary]){
+        
+        BatarResultController * searchVc = [[BatarResultController alloc]initWithController:[ScanHistoryContoller new]];
+        searchVc.param = model.number;
+        [self pushToViewControllerWithTransition:searchVc withDirection:@"left" type:NO];
+    }else{
+        //错误码
+        NSLog(@"%@",model.searchType);
+        [self showAlertViewWithTitle:@"此编码不存在"];
+    }
 }
 
 -(void)cleanHistory{

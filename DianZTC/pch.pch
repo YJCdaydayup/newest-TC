@@ -34,6 +34,7 @@
 #import "FMDB.h"
 #import "STShareTool.h"
 #import "Single.h"
+#import "YLCommnetDefine.h"
 
 //界面及代理类
 #import "AppDelegate.h"

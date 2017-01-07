@@ -13,5 +13,53 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ViewController/&#x641c;&#x7d22;&#x7ed3;&#x679c;/BatarResultController.m"
+            timestampString = "505506423.003308"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "-createData"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[BatarResultController createData]"
+                  moduleName = "DianZTC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C/BatarResultController.m"
+                  timestampString = "505513526.696435"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "108"
+                  endingLineNumber = "108"
+                  offsetFromSymbolStart = "788">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__35-[BatarResultController createData]_block_invoke"
+                  moduleName = "DianZTC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C/BatarResultController.m"
+                  timestampString = "505513526.696635"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "108"
+                  endingLineNumber = "108"
+                  offsetFromSymbolStart = "98">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

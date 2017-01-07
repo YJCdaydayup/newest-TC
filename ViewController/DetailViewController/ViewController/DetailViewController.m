@@ -209,7 +209,9 @@
     UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
     if (modelArray.count > 0) {
         [self.largeImageView sd_setImageWithURL:[NSURL URLWithString:modelArray[0]] placeholderImage:gifImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            [self addHistoryScan:modelArray[0]];
+            if([self.fatherVc isKindOfClass:[ScanViewController class]]){
+                [self addHistoryScan:modelArray[0]];
+            }
         }];
     }
     
@@ -224,26 +226,11 @@
     [self.largeImageView addGestureRecognizer:zoomAction];
 }
 
--(NSString *)getCurrentDate{
-    
-    NSDate *  senddate = [NSDate date];
-    
-    NSDateFormatter  * dateformatter = [[NSDateFormatter alloc] init];
-    
-    [dateformatter setDateFormat:@"YYYY-MM-dd  HH:mm:ss"];
-    
-    NSString * locationString = [dateformatter stringFromDate:senddate];
-    
-//    NSLog(@"%@",locationString);
-    
-    return locationString;
-}
-
 -(void)addHistoryScan:(NSString *)imageUrl{
     
     DBWorkerManager * manager = [DBWorkerManager shareDBManager];
     [manager createScanDB];
-    [manager scan_insertInfo:detailModel withData:imageUrl withNumber:detailModel.number date:[self getCurrentDate]];
+    [manager scan_insertInfo:detailModel withData:imageUrl withNumber:detailModel.number date:[self getCurrentDate] type:self.codeType searchType:self.searchType];
 }
 
 #pragma mark -点击图片放大效果
@@ -525,7 +512,7 @@
     
     //收藏按钮
     save_Button = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 0, 0) textContent:nil withFont:[UIFont systemFontOfSize:16*S6] textColor:RGB_COLOR(231, 140, 59, 1) textAlignment:NSTextAlignmentRight];
-//    [save_Button setTitle:@"取消收藏" forState:UIControlStateSelected];
+    //    [save_Button setTitle:@"取消收藏" forState:UIControlStateSelected];
     [save_Button setImage:[UIImage imageNamed:@"save_nor"] forState:UIControlStateNormal];
     [save_Button setImage:[UIImage imageNamed:@"save_sel"] forState:UIControlStateSelected];
     [save_Button setImage:[UIImage imageNamed:@"save_sel"] forState:UIControlStateHighlighted];

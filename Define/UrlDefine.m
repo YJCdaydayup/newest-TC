@@ -91,7 +91,10 @@ NSString * const GETVOICEURL = @"http://%@/photo-album/order/voice/%@";
 NSString * const PLIST_URL = @"https://git.oschina.net/jeffyang/TestInternalDistribute2/raw/master/Info.plist?";
 
 /*type=1时,首页推广点击*/
-NSString *const RECOMMANDCLICK = @"http://%@/photo-album/product/get_series_product";
+NSString * const RECOMMANDCLICK = @"http://%@/photo-album/product/get_series_product";
+
+/*判断码的类型：精确，模糊，错误码*/
+NSString * const CODETYPE = @"http://%@/photo-album/index/_autocomplete";
 
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";

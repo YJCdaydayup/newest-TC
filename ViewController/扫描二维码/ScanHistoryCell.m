@@ -48,26 +48,43 @@
 }
 
 -(void)setModel:(DBSaveModel *)model{
-
-// 保存的img的格式:model.img = http://192.168.21.158:8888/photo-album/image/161108150641668_4ebc0d4af0259834378a82faefd0999b.jpg
+    
+    /*
+     @property (nonatomic,copy) NSString * number;
+     @property (nonatomic,strong) id img;
+     @property (nonatomic,copy) NSString * name;
+     @property (nonatomic,copy) NSString * date;
+     @property (nonatomic,copy) NSString * type;
+     @property (nonatomic,copy) NSString * searchType;
+     */
+    // 保存的img的格式:model.img = http://192.168.21.158:8888/photo-album/image/161108150641668_4ebc0d4af0259834378a82faefd0999b.jpg
     
     NSInteger width = 75*THUMBNAILRATE;
     NSInteger height = 55*THUMBNAILRATE;
+    UIImage * gifImage;
+    if([model.type isEqualToString:CodeTypeQRCode]){
+        //二维码
+        gifImage = [UIImage imageNamed:@"erweima"];
+    }else if([model.type isEqualToString:CodeTypeBarCode]){
+        //条形码
+        gifImage = [UIImage imageNamed:@"tiaoma"];
+    }else{
+        //错误码
+        gifImage = [UIImage imageNamed:@"tiaoma"];
+    }
     
-    UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
-//    [self.imgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[NSString stringWithFormat:@"%@",model.img] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
-    
-    [self.imgView sd_setImageWithPreviousCachedImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[NSString stringWithFormat:@"%@",model.img] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage options:SDWebImageLowPriority progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-       self.imgView.image = image;
-        cacheType = SDImageCacheTypeNone;
-    }];
-    
-    self.number.text = model.number;
-    self.name.text = model.name;
-    self.date.text = model.date;
-    
-    self.name.width = [self getWidth:model.name];
-    self.number.x = CGRectGetMaxX(self.name.frame)+20*S6;
+    [self.imgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[NSString stringWithFormat:@"%@",model.img] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
+    if(model.name.length==0){
+        self.name.text = model.number;
+        self.name.width = Wscreen;
+        self.date.text = model.date;
+    }else{
+        self.number.text = model.number;
+        self.name.text = model.name;
+        self.date.text = model.date;
+        self.name.width = [self getWidth:model.name];
+        self.number.x = CGRectGetMaxX(self.name.frame)+20*S6;
+    }
 }
 
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailViewController : RootViewController
+
 +(instancetype)shareDetailController;
 @property (nonatomic,copy) NSString * index;
 @property (nonatomic,copy) NSString * number;
@@ -17,4 +18,9 @@
 @property (nonatomic,assign) BOOL isFromSearchVc;
 @property (nonatomic,assign) BOOL isFromSaveVc;
 @property (nonatomic,assign) BOOL isFromThemeVc;
+
+//扫码界面传递参数
+@property (nonatomic,copy) NSString * codeType;
+@property (nonatomic,copy) NSString * searchType;
+
 @end

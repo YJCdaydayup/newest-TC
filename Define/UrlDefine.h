@@ -106,6 +106,8 @@ UIKIT_EXTERN NSString *const PLIST_URL;
 /*type=1时,首页推广点击*/
 UIKIT_EXTERN NSString *const RECOMMANDCLICK;
 
+/*判断码的类型：精确，模糊，错误码*/
+UIKIT_EXTERN NSString * const CODETYPE;
 
 /*iOS和安卓APP下载地址*/
 UIKIT_EXTERN NSString *const ANDARIOD_APPURL;

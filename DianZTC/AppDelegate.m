@@ -51,10 +51,17 @@
     
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
     
-    BatarMainTabBarContoller * mainVc = [[BatarMainTabBarContoller alloc]init];
-    self.window.rootViewController = mainVc;
+    if([kUserDefaults objectForKey:BatarEntrance]){
+        
+        BatarMainTabBarContoller * mainVc = [[BatarMainTabBarContoller alloc]init];
+        self.window.rootViewController = mainVc;
+        [self.window makeKeyAndVisible];
+    }else{
+        
+        BatarLoginController * loginVc = [[BatarLoginController alloc]init];
+        self.window.rootViewController = loginVc;
+    }
     
     return YES;
 }

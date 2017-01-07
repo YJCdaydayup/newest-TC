@@ -612,6 +612,11 @@
 		8F9184571DDBF91A00FDD25F /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F9184561DDBF91A00FDD25F /* libstdc++.tbd */; };
 		8F9184591DDBF93A00FDD25F /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F9184581DDBF93A00FDD25F /* libiconv.tbd */; };
 		8F91845B1DDBF94000FDD25F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F91845A1DDBF94000FDD25F /* Security.framework */; };
+		8F94A7951E215BBA00BDBEF6 /* YLCommnetDefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F94A7941E215BBA00BDBEF6 /* YLCommnetDefine.m */; };
+		8F94A7981E21688700BDBEF6 /* tiaoma@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F94A7961E21688700BDBEF6 /* tiaoma@2x.png */; };
+		8F94A7991E21688700BDBEF6 /* erweima@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F94A7971E21688700BDBEF6 /* erweima@2x.png */; };
+		8F94A79C1E21688E00BDBEF6 /* erweima@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F94A79A1E21688E00BDBEF6 /* erweima@3x.png */; };
+		8F94A79D1E21688E00BDBEF6 /* tiaoma@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F94A79B1E21688E00BDBEF6 /* tiaoma@3x.png */; };
 		8F9E91BA1E170860002297ED /* ScanHistoryContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91B91E170860002297ED /* ScanHistoryContoller.m */; };
 		8F9E91BD1E171C7D002297ED /* ScanHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */; };
 		8FA9CFFC1E0DA63500DD0335 /* batar_group@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8FA9CFF81E0DA63500DD0335 /* batar_group@3x.png */; };
@@ -1745,6 +1750,12 @@
 		8F9184561DDBF91A00FDD25F /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		8F9184581DDBF93A00FDD25F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		8F91845A1DDBF94000FDD25F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		8F94A7931E215BBA00BDBEF6 /* YLCommnetDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLCommnetDefine.h; sourceTree = "<group>"; };
+		8F94A7941E215BBA00BDBEF6 /* YLCommnetDefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLCommnetDefine.m; sourceTree = "<group>"; };
+		8F94A7961E21688700BDBEF6 /* tiaoma@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tiaoma@2x.png"; sourceTree = "<group>"; };
+		8F94A7971E21688700BDBEF6 /* erweima@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "erweima@2x.png"; sourceTree = "<group>"; };
+		8F94A79A1E21688E00BDBEF6 /* erweima@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "erweima@3x.png"; sourceTree = "<group>"; };
+		8F94A79B1E21688E00BDBEF6 /* tiaoma@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tiaoma@3x.png"; sourceTree = "<group>"; };
 		8F9E91B81E170860002297ED /* ScanHistoryContoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanHistoryContoller.h; sourceTree = "<group>"; };
 		8F9E91B91E170860002297ED /* ScanHistoryContoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanHistoryContoller.m; sourceTree = "<group>"; };
 		8F9E91BB1E171C7D002297ED /* ScanHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanHistoryCell.h; sourceTree = "<group>"; };
@@ -2200,6 +2211,8 @@
 				8F8DDB7C1CDBB10200F04D0C /* ColorComment.h */,
 				8F54D16F1D37DD8800006746 /* UrlDefine.h */,
 				8F02763D1E15B975006E78F6 /* UrlDefine.m */,
+				8F94A7931E215BBA00BDBEF6 /* YLCommnetDefine.h */,
+				8F94A7941E215BBA00BDBEF6 /* YLCommnetDefine.m */,
 				8F7D09701E119D7000E94955 /* Single.h */,
 			);
 			path = Define;
@@ -3914,6 +3927,8 @@
 		8FD3C5481E0B504000AB40F2 /* 2x */ = {
 			isa = PBXGroup;
 			children = (
+				8F94A7961E21688700BDBEF6 /* tiaoma@2x.png */,
+				8F94A7971E21688700BDBEF6 /* erweima@2x.png */,
 				8F373CAB1E1DB8E7005FDEB1 /* save_nor@2x.png */,
 				8F373CAC1E1DB8E7005FDEB1 /* save_sel@2x.png */,
 				8F373CAD1E1DB8E7005FDEB1 /* shape_nor@2x.png */,
@@ -3964,6 +3979,8 @@
 		8FD3C5611E0B504000AB40F2 /* 3x */ = {
 			isa = PBXGroup;
 			children = (
+				8F94A79A1E21688E00BDBEF6 /* erweima@3x.png */,
+				8F94A79B1E21688E00BDBEF6 /* tiaoma@3x.png */,
 				8F373CB31E1DBA0A005FDEB1 /* login_logo@3x.png */,
 				8F373CB41E1DBA0A005FDEB1 /* users@3x.png */,
 				8F373CB51E1DBA0A005FDEB1 /* close@3x.png */,
@@ -4182,12 +4199,14 @@
 				8F8917F61D6CAFC600CC0D8F /* no_btn@2x.png in Resources */,
 				8F806A051D48267F006CD3C0 /* able_btn@3x.png in Resources */,
 				8F8917CD1D6CAFC600CC0D8F /* catagory_btn@2x.png in Resources */,
+				8F94A79D1E21688E00BDBEF6 /* tiaoma@3x.png in Resources */,
 				8F5C4F301D5E191400C737A5 /* start@2x.png in Resources */,
 				8F8E8E421DDF83730089D585 /* rightImg@2x.gif in Resources */,
 				8F4A19841CDABD5D006ED857 /* hot@2x.png in Resources */,
 				8FC318031D5CCCFF00E56D31 /* Images.xcassets in Resources */,
 				8F4A199C1CDABD63006ED857 /* basha@3x.png in Resources */,
 				8F8917E31D6CAFC600CC0D8F /* exit_btn@3x.png in Resources */,
+				8F94A79C1E21688E00BDBEF6 /* erweima@3x.png in Resources */,
 				8F373CAA1E1DB8DE005FDEB1 /* save_nor@3x.png in Resources */,
 				8F4A19A21CDABD63006ED857 /* new@3x.png in Resources */,
 				8F8DDBAD1CDBF78900F04D0C /* search_01@2x.png in Resources */,
@@ -4333,6 +4352,7 @@
 				8F8917E81D6CAFC600CC0D8F /* material@3x.png in Resources */,
 				8FD3C5931E0B504000AB40F2 /* @3x_68.png in Resources */,
 				8FD3C5A01E0B504000AB40F2 /* search_type@3x.png in Resources */,
+				8F94A7991E21688700BDBEF6 /* erweima@2x.png in Resources */,
 				8F0DBB0B1CDBA16D00C1DF2F /* logo@2x.png in Resources */,
 				8F66AA611DCBF44C007B7F91 /* myorders_select@3x.png in Resources */,
 				8F4A182E1CDAB0CA006ED857 /* Main.storyboard in Resources */,
@@ -4395,6 +4415,7 @@
 				8F90060A1DC8045A00023F93 /* shares@3x.png in Resources */,
 				8F8917D01D6CAFC600CC0D8F /* search_btn@2x.png in Resources */,
 				8FD3C5831E0B504000AB40F2 /* discover_sel@2x.png in Resources */,
+				8F94A7981E21688700BDBEF6 /* tiaoma@2x.png in Resources */,
 				8F9184421DDBF8D000FDD25F /* UMSCommentDetailController.xib in Resources */,
 				8F8917E51D6CAFC600CC0D8F /* search_btn@3x.png in Resources */,
 				8FD3C5851E0B504000AB40F2 /* no_select@2x.png in Resources */,
@@ -4739,6 +4760,7 @@
 				8F7CC1141E133A280033E7FB /* LBXScanWrapper.m in Sources */,
 				8F7CC1241E133A280033E7FB /* ZXAddressBookAUResultParser.m in Sources */,
 				8F7CC1471E133A280033E7FB /* ZXCapture.m in Sources */,
+				8F94A7951E215BBA00BDBEF6 /* YLCommnetDefine.m in Sources */,
 				8F7CC12D1E133A280033E7FB /* ZXExpandedProductParsedResult.m in Sources */,
 				8F5667F41CDCEF0400C39F75 /* GongYiCell.m in Sources */,
 				8F7CC1D31E133A280033E7FB /* ZXPDF417Common.m in Sources */,

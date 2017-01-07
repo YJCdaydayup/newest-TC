@@ -11,6 +11,7 @@
 #import "ScanHistoryContoller.h"
 #import "DetailViewController.h"
 #import "NetManager.h"
+#import "DBWorkerManager.h"
 
 @interface ScanViewController()
 
@@ -26,6 +27,8 @@
 @property (nonatomic,strong) UITextField * coder_tf;
 @property (nonatomic,strong) UIButton * confirmBtn;
 
+@property (nonatomic,strong) DBWorkerManager * dbManager;
+
 @end
 
 @implementation ScanViewController
@@ -37,6 +40,7 @@
 @synthesize inputBgView = _inputBgView;
 @synthesize coder_tf = _coder_tf;
 @synthesize confirmBtn = _confirmBtn;
+@synthesize dbManager = _dbManager;
 
 -(void)dealloc{
     
@@ -72,10 +76,14 @@
     
     [super viewDidLoad];
     
+    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShows:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHides:) name:UIKeyboardWillHideNotification object:nil];
     
+    _dbManager = [DBWorkerManager shareDBManager];
+    [_dbManager createScanDB];
     [self batar_setNavibar:@"二维码/条形码"];
+    
 }
 
 -(void)keyBoardWillShows:(NSNotification *)notification{
@@ -205,10 +213,48 @@
             return;
         }
         
-        DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
-        detailVc.index = result.strScanned;
-        [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+//        NSLog(@"%@",result.strBarCodeType);
+        
+        [NetManager judgeCoderWithCode:result.strScanned Type:^(CoderType type) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                switch (type) {
+                    case CoderTypeAccurateType:
+                    {
+                        DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
+                        detailVc.index = result.strScanned;
+                        detailVc.searchType = CodeTypeAccurary;
+                        if([result.strBarCodeType containsString:@"QRCode"]){
+                            detailVc.codeType = CodeTypeQRCode;
+                        }else{
+                            detailVc.codeType = CodeTypeBarCode;
+                        }
+                        [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+
+                    }
+                        break;
+                    case CoderTypeFailCoder:{
+                        [self showAlertViewWithTitle:@"找不到该产品!"];
+                        NSString * type;
+                        if([result.strBarCodeType containsString:@"QRCode"]){
+                            type = CodeTypeQRCode;
+                        }else{
+                            type = CodeTypeBarCode;
+                        }
+                        [_dbManager scan_insertInfo:[DetailModel new] withData:nil withNumber:result.strScanned date:[self getCurrentDate] type:type searchType:CodeTypeFail];
+                        [self.scanObj startScan];
+                    }
+                        break;
+                    default:
+                        break;
+                }
+                
+            });
+        }];
+        break;
     }
+    [self createViews];
 }
 
 -(void)clickBtn:(UIButton *)btn{
@@ -271,7 +317,7 @@
         self.coder_tf.font = [UIFont systemFontOfSize:14*S6];
         self.coder_tf.background = [UIImage imageNamed:@"scan_bg"];
         self.coder_tf.centerX = self.view.centerX;
-        self.coder_tf.keyboardType = UIKeyboardTypeNumberPad;
+        self.coder_tf.keyboardType = UIKeyboardTypeASCIICapable;
         self.coder_tf.backgroundColor = [UIColor whiteColor];
         [_inputBgView addSubview:self.coder_tf];
         
@@ -301,11 +347,37 @@
         [self showAlertViewWithTitle:@"请输入产品编号"];
         return;
     }
-    
-    BatarResultController * resultVc = [[BatarResultController alloc]initWithController:self];
-    resultVc.param = _coder_tf.text;
-    [self pushToViewControllerWithTransition:resultVc withDirection:@"left" type:NO];
-    _coder_tf.text = nil;
+    [NetManager judgeCoderWithCode:_coder_tf.text Type:^(CoderType type) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            switch (type) {
+                case CoderTypeAccurateType:
+                {
+                    DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
+                    detailVc.index = _coder_tf.text;
+                    detailVc.codeType = CodeTypeBarCode;
+                    detailVc.searchType = CodeTypeAccurary;
+                    [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+                }
+                    break;
+                case CoderTypeInaccurateType:
+                {
+                    BatarResultController * resultVc = [[BatarResultController alloc]initWithController:self];
+                    resultVc.param = _coder_tf.text;
+                    [self pushToViewControllerWithTransition:resultVc withDirection:@"left" type:NO];
+                    [_dbManager scan_insertInfo:[DetailModel new] withData:@"111" withNumber:_coder_tf.text date:[self getCurrentDate] type:CodeTypeBarCode searchType:CodeTypeInaccurary];
+                }
+                    break;
+                case CoderTypeFailCoder:
+                    //错误码
+                    [self showAlertViewWithTitle:@"找不到该产品，请确认后重新输入"];
+                    [_dbManager scan_insertInfo:[DetailModel new] withData:nil withNumber:_coder_tf.text date:[self getCurrentDate] type:CodeTypeFailCode searchType:CodeTypeFail];
+                    break;
+                default:
+                    break;
+            }
+            _coder_tf.text = nil;
+        });
+    }];
 }
 
 -(void)hideBoard{

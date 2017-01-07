@@ -190,6 +190,22 @@
     return dic;
 }
 
+-(NSString *)getCurrentDate{
+    
+    NSDate *  senddate = [NSDate date];
+    
+    NSDateFormatter  * dateformatter = [[NSDateFormatter alloc] init];
+    
+    [dateformatter setDateFormat:@"YYYY-MM-dd  HH:mm:ss"];
+    
+    NSString * locationString = [dateformatter stringFromDate:senddate];
+    
+    //    NSLog(@"%@",locationString);
+    
+    return locationString;
+}
+
+
 -(MBProgressHUD *)hud{
     
     if(_hud == nil){

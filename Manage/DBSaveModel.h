@@ -14,6 +14,8 @@
 @property (nonatomic,strong) id img;
 @property (nonatomic,copy) NSString * name;
 @property (nonatomic,copy) NSString * date;
+@property (nonatomic,copy) NSString * type;
+@property (nonatomic,copy) NSString * searchType;
 @property (nonatomic,assign) BOOL selected;
 
 @end

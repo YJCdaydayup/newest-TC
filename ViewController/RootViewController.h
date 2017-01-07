@@ -58,4 +58,7 @@
 //删除已经push过的某个界面
 -(void)removeNaviPushedController:(id)controller;
 
+//获取当前日期时间
+-(NSString *)getCurrentDate;
+
 @end

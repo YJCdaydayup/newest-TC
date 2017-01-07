@@ -47,7 +47,7 @@
     }else{
         self.result_Tf.hidden = YES;
         _layoutBtn.hidden = YES;
-        [self batar_setNavibar:@"扫描结果"];
+        [self batar_setNavibar:@"搜索结果"];
     }
 }
 
@@ -85,7 +85,6 @@
     //    [_tableView addHeaderWithTarget:self action:@selector(headerAction)];
     [_tableView addFooterWithTarget:self action:@selector(footerAction)];
     [self headerAction];
-    [self createData];
 }
 
 -(void)changeLayout{

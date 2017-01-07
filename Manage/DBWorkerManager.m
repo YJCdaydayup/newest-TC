@@ -96,7 +96,7 @@ static DBWorkerManager * manager = nil;
     }];
     
     //创建不同服务器下面的表
-    NSString * mult_sql = [NSString stringWithFormat:@"create table if not exists %@scanList(number text,img text,name text,date datetime)",[self getScanDBMD5]];
+    NSString * mult_sql = [NSString stringWithFormat:@"create table if not exists %@scanList(number text,img text,name text,date datetime,type text,searchType text)",[self getScanDBMD5]];
     
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
@@ -132,9 +132,7 @@ static DBWorkerManager * manager = nil;
 -(void)insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number{
     
     [_dataBaseQueue inDatabase:^(FMDatabase *db) {
-        
         //        [db executeUpdate:@"delete from saveList"];
-        
         NSString * selectSql = @"select * from saveList where number = ?";
         //查询sql语句
         FMResultSet * set = [db executeQuery:selectSql,number];
@@ -183,7 +181,7 @@ static DBWorkerManager * manager = nil;
     }];
 }
 
--(void)scan_insertInfo:(DetailModel *)model withData:(NSString *)imgUrl withNumber:(NSString *)number date:(NSString *)date{
+-(void)scan_insertInfo:(DetailModel *)model withData:(NSString *)imgUrl withNumber:(NSString *)number date:(NSString *)date type:(NSString *)codeType searchType:(NSString *)searchType{
     
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
@@ -208,24 +206,24 @@ static DBWorkerManager * manager = nil;
             }else{
 //                QFLog(@"%@",@"scan执行更新删除语句失败");
             }
-            NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date) values (?,?,?,?)",[self getScanDBMD5]];
+            NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date,type,searchType) values (?,?,?,?,?,?)",[self getScanDBMD5]];
             //执行插入
-            BOOL isSuccesss = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date];
+            BOOL isSuccesss = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date,codeType,searchType];
             if (isSuccesss) {
-//                QFLog(@"%@",@"scan执行插入语句成功");
+                QFLog(@"%@",@"scan执行插入语句成功");
             }else{
-//                QFLog(@"%@",@"scan执行插入语句失败");
+                QFLog(@"%@",@"scan执行插入语句失败");
             }
         }
         
-        NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date) values (?,?,?,?)",[self getScanDBMD5]];
+        NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date,type,searchType) values (?,?,?,?,?,?)",[self getScanDBMD5]];
         if(isExist == NO){
             //执行插入
-            BOOL isSuccess = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date];
+            BOOL isSuccess = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date,codeType,searchType];
             if (isSuccess) {
-                //                QFLog(@"%@",@"scan执行插入语句成功");
+                                QFLog(@"%@",@"scan执行插入语句成功");
             }else{
-                //                QFLog(@"%@",@"scan执行插入语句失败");
+                                QFLog(@"%@",@"scan执行插入语句失败");
             }
             //            NSLog(@"%@",imgData);
         }
@@ -268,6 +266,8 @@ static DBWorkerManager * manager = nil;
             model.name = [rs stringForColumn:@"name"];
             model.img = [rs stringForColumn:@"img"];
             model.date = [rs stringForColumn:@"date"];
+            model.type = [rs stringForColumn:@"type"];
+            model.searchType = [rs stringForColumn:@"searchType"];
             model.selected = NO;
             [array addObject:model];
         }

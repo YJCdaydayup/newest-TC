@@ -8,8 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum : NSInteger{
+    CoderTypeAccurateType,//精确的
+    CoderTypeInaccurateType,//条形码
+    CoderTypeFailCoder,//错误码
+}CoderType;
+
 typedef void(^NetBlock)(id responseObject,NSError * error);
 typedef void(^CheckIPBlock)(NSString * response, NSError * error);
+typedef void(^CoderTypeBlock)(CoderType type);
 
 @interface NetManager : NSObject
 
@@ -44,5 +51,6 @@ typedef void(^CheckIPBlock)(NSString * response, NSError * error);
 -(void)saveSearchText:(NSString *)text;
 -(NSMutableArray *)getSearchContent;
 -(void)cleanHistorySearch;
++(void)judgeCoderWithCode:(NSString *)code Type:(CoderTypeBlock)block;
 
 @end
