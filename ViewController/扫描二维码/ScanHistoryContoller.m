@@ -45,6 +45,8 @@ NSString * const CellID = @"cellID";
 
 -(void)createView{
     self.manager = [DBWorkerManager shareDBManager];
+    [self.manager createScanDB];
+    
     [self batar_setNavibar:@"扫描历史"];
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
     _cleanHistoryBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-65*S6, 33, 55*S6, 20*S6) textContent:@"清空" withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];

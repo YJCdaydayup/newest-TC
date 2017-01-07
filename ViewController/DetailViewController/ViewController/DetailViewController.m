@@ -230,11 +230,11 @@
     
     NSDateFormatter  * dateformatter = [[NSDateFormatter alloc] init];
     
-    [dateformatter setDateFormat:@"YYYY-MM-dd"];
+    [dateformatter setDateFormat:@"YYYY-MM-dd  HH:mm:ss"];
     
     NSString * locationString = [dateformatter stringFromDate:senddate];
     
-    NSLog(@"%@",locationString);
+//    NSLog(@"%@",locationString);
     
     return locationString;
 }

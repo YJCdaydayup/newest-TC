@@ -96,7 +96,7 @@ static DBWorkerManager * manager = nil;
     }];
     
     //创建不同服务器下面的表
-     NSString * mult_sql = [NSString stringWithFormat:@"create table if not exists %@scanList(number text,img text,name text,date text)",[self getScanDBMD5]];
+    NSString * mult_sql = [NSString stringWithFormat:@"create table if not exists %@scanList(number text,img text,name text,date datetime)",[self getScanDBMD5]];
     
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
@@ -175,9 +175,9 @@ static DBWorkerManager * manager = nil;
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name];
             if (isSuccess) {
-                QFLog(@"%@",@"执行插入语句成功");
+//                QFLog(@"%@",@"执行插入语句成功");
             }else{
-                QFLog(@"%@",@"执行插入语句失败");
+//                QFLog(@"%@",@"执行插入语句失败");
             }
         }
     }];
@@ -188,7 +188,7 @@ static DBWorkerManager * manager = nil;
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
         NSString * mult_sql = [NSString stringWithFormat:@"select * from %@scanList where number = ?",[self getScanDBMD5]];
-//        NSString * selectSql = @"select * from scanList where number = ?";
+        //        NSString * selectSql = @"select * from scanList where number = ?";
         //查询sql语句
         FMResultSet * set = [db executeQuery:mult_sql,number];
         BOOL isExist;
@@ -197,9 +197,29 @@ static DBWorkerManager * manager = nil;
             isExist = YES;
         }
         
+        NSString * updateSql = [NSString stringWithFormat:@"delete from %@scanList where number = ?",[self getScanDBMD5]];
+        
+        //数据存在就更新数据
+        if(isExist == YES){
+            
+            BOOL isSuccess = [db executeUpdate:updateSql,number];
+            if (isSuccess) {
+//                QFLog(@"%@",@"scan执行更新删除语句成功");
+            }else{
+//                QFLog(@"%@",@"scan执行更新删除语句失败");
+            }
+            NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date) values (?,?,?,?)",[self getScanDBMD5]];
+            //执行插入
+            BOOL isSuccesss = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date];
+            if (isSuccesss) {
+//                QFLog(@"%@",@"scan执行插入语句成功");
+            }else{
+//                QFLog(@"%@",@"scan执行插入语句失败");
+            }
+        }
+        
         NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date) values (?,?,?,?)",[self getScanDBMD5]];
         if(isExist == NO){
-//            NSString * insertSQL = @"insert into scanList(number,img,name,date) values (?,?,?,?)";
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date];
             if (isSuccess) {
@@ -236,9 +256,9 @@ static DBWorkerManager * manager = nil;
     
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
-        NSString * mult_sql = [NSString stringWithFormat:@"select * from %@scanList",[self getScanDBMD5]];
-        
-//        NSString * selectSql = @"select * from scanList";
+        //根据字段排序并查询
+        NSString * mult_sql = [NSString stringWithFormat:@"select * from %@scanList order by date DESC",[self getScanDBMD5]];
+        //        NSString * selectSql = @"select * from scanList";
         FMResultSet * rs = [db executeQuery:mult_sql];
         NSMutableArray * array = [NSMutableArray array];
         while([rs next]){
@@ -326,7 +346,7 @@ static DBWorkerManager * manager = nil;
     
     NSString * mult_sql = [NSString stringWithFormat:@"delete from %@scanList",[self getScanDBMD5]];
     
-//    NSString * deleteSql = @"delete from scanList";
+    //    NSString * deleteSql = @"delete from scanList";
     [_scanHistoryBaseQueue inDatabase:^(FMDatabase *db) {
         
         BOOL isDelete = [db executeUpdate:mult_sql];
