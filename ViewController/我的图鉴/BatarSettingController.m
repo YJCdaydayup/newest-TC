@@ -56,8 +56,8 @@
     [self.view addSubview:imgView];
     
     NSString * customerStr;
-    if([kUserDefaults objectForKey:CustomerID]){
-        customerStr = [NSString stringWithFormat:@"客户编号: %@",[kUserDefaults objectForKey:CustomerID]];
+    if(CUSTOMERID){
+        customerStr = [NSString stringWithFormat:@"客户编号: %@",CUSTOMERID];
     }else{
         customerStr = @"点击登录";
     }

@@ -79,7 +79,6 @@ singleM(SaveController)
     
     [self configUI];
     [self setVc];
-    
 }
 
 -(void)configUI{

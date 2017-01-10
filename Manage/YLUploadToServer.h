@@ -17,7 +17,9 @@ singleH(UploadToServer)
 
 @property (nonatomic,strong) NSTimer * uploadTimer;
 @property (nonatomic,copy) NSString * number;
--(void)batar_uploadOrdersToServer;
+@property (nonatomic,assign) NSInteger timer_count;
+@property (nonatomic,assign) BOOL isClosed;
+
 -(void)batar_start;
 -(void)batar_stop;
 

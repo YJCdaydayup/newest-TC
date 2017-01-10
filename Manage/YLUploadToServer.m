@@ -14,6 +14,8 @@
 @implementation YLUploadToServer
 singleM(UploadToServer)
 
+@synthesize timer_count = _timer_count;
+
 -(instancetype)init{
     
     if(self = [super init]){
@@ -23,20 +25,20 @@ singleM(UploadToServer)
             [self batar_uploadOrdersToServer];
         }];
         [self batar_stop];
+        self.isClosed = YES;
     }
     return self;
 }
 
 -(void)batar_uploadOrdersToServer{
     
+    NSLog(@"开始上传文字");
     DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
-    
     [db_manager order_getAllObject:^(NSMutableArray *dataArray) {
         for(DBSaveModel * model in dataArray){
             [kUserDefaults setObject:model.number forKey:RECORDPATH];
             @synchronized(self) {
-                [self addMyOrders:model];
-                NSLog(@"下一次了吗?");
+                [self addMyOrders:model array:dataArray];
             }
         }
     }];
@@ -45,11 +47,14 @@ singleM(UploadToServer)
 -(void)batar_start{
     
     [self.uploadTimer setFireDate:[NSDate distantPast]];
+    _timer_count = 0;
+    self.isClosed = NO;
 }
 
 -(void)batar_stop{
     
     [self.uploadTimer setFireDate:[NSDate distantFuture]];
+    self.isClosed = YES;
 }
 
 -(void)batar_deleteOrder:(NSString *)number{
@@ -61,12 +66,12 @@ singleM(UploadToServer)
 }
 
 //加入我的选购单
--(void)addMyOrders:(DBSaveModel *)model{
+-(void)addMyOrders:(DBSaveModel *)model array:(NSMutableArray *)dataArray{
     
     self.number = model.number;
-    
+    //获取所有的语音数组
     YLVoicemanagerView * recordManager = [[YLVoicemanagerView alloc]initWithFrame:CGRectZero withVc:[UIView new]];
-    NSMutableArray * reNameVoiceArray = [NSMutableArray array];//获取所有的语音数组
+    NSMutableArray * reNameVoiceArray = [NSMutableArray array];
     NSMutableArray * voiceArray = [recordManager getAllVoiceMessages];
     for(int i = 0;i<voiceArray.count;i++){
         
@@ -74,28 +79,38 @@ singleM(UploadToServer)
         NSString * key = [[dict allKeys]lastObject];
         NSData * data = dict[key];
         
-        NSString * newKey = [NSString stringWithFormat:@"%@@%@@%@.wav",[kUserDefaults objectForKey:CustomerID],key,model.number];
+        NSString * newKey = [NSString stringWithFormat:@"%@@%@@%@.wav",CUSTOMERID,key,model.number];
         NSDictionary * newDict = @{newKey:data};
         [reNameVoiceArray addObject:newDict];
     }
     
+    //获取所有的文字
     NetManager * netmanager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:UPLOADORDERCAR,[netmanager getIPAddress]];
     //    NSLog(@"%@",[recordManager getAllTextMessageStr]);
     NSDictionary * subDict;
     if([recordManager getAllTextMessageStr].count>0){
-        subDict = @{@"number":model.number,@"customerid":[kUserDefaults objectForKey:CustomerID],@"message":[self arrayToJson:[recordManager getAllTextMessageStr]]};
+        subDict = @{@"number":model.number,@"customerid":CUSTOMERID,@"message":[self arrayToJson:[recordManager getAllTextMessageStr]]};
     }else{
-        subDict = @{@"number":model.number,@"customerid":[kUserDefaults objectForKey:CustomerID],@"message":@""};
+        subDict = @{@"number":model.number,@"customerid":CUSTOMERID,@"message":@""};
     }
+    
     [netmanager downloadDataWithUrl:urlStr parm:subDict callback:^(id responseObject, NSError *error) {
-        
+        NSLog(@"上传文字:%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
         if(responseObject){
+            
+            _timer_count ++;
+            NSLog(@"文字上传第%zi次",_timer_count);
             if(reNameVoiceArray.count == 0){
-                NSLog(@"上传成功的model:%@,删除本地",model.number);
-                [self batar_deleteOrder:model.number];
+                //                NSLog(@"上传成功的model:%@,删除本地",model.number);
+                //                [self batar_deleteOrder:model.number];
             }else{
-                [self sendVoiceToServer:reNameVoiceArray];
+                
+                if(_timer_count == dataArray.count){
+                    NSLog(@"开始上传语音，并停止计时器");
+                    [self sendVoiceToServer:reNameVoiceArray];
+                    [self batar_stop];
+                }
             }
         }else{
             NSLog(@"%@",error.description);
@@ -123,10 +138,10 @@ singleM(UploadToServer)
     } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if(responseObject){
             
-            NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
+            NSLog(@"上传语音:%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
             if(responseObject){
                 NSLog(@"文字上传成功，删除本地");
-                [self batar_deleteOrder:self.number];
+                //                [self batar_deleteOrder:self.number];
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

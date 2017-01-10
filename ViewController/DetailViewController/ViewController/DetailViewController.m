@@ -570,11 +570,18 @@
             }
                 break;
             case 3:{
-                //加入选购单
                 DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-                [manager order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image)  withNumber:detailModel.number];
+                //加入选购单
+                if(LOGIN){
+                    //客户已登录，上传服务端
+                    [self addMyOrders];
+                }else{
+                    //客户未登录，存放本地
+                    [manager createOrderDB];
+                    [manager order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number date:[self getCurrentDate]];
+                }
                 [manager order_saveDatailCache:detailModel.number withData:obj];
-                //                [self addMyOrders];
+                [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
             }
                 break;
                 
@@ -638,8 +645,7 @@
         NSString * key = [[dict allKeys]lastObject];
         NSData * data = dict[key];
         
-        NSString * newKey = [NSString stringWithFormat:@"%@@%@@%@.wav",[kUserDefaults objectForKey:CustomerID],key,detailModel.number];
-        NSLog(@"%@",newKey);
+        NSString * newKey = [NSString stringWithFormat:@"%@@%@@%@.wav",CUSTOMERID,key,detailModel.number];
         NSDictionary * newDict = @{newKey:data};
         [reNameVoiceArray addObject:newDict];
     }
@@ -649,9 +655,9 @@
     //    NSLog(@"%@",[recordManager getAllTextMessageStr]);
     NSDictionary * subDict;
     if([_voiceManager getAllTextMessageStr].count>0){
-        subDict = @{@"number":detailModel.number,@"customerid":[kUserDefaults objectForKey:CustomerID],@"message":[self arrayToJson:[_voiceManager getAllTextMessageStr]]};
+        subDict = @{@"number":detailModel.number,@"customerid":CUSTOMERID,@"message":[self arrayToJson:[_voiceManager getAllTextMessageStr]]};
     }else{
-        subDict = @{@"number":detailModel.number,@"customerid":[kUserDefaults objectForKey:CustomerID],@"message":@""};
+        subDict = @{@"number":detailModel.number,@"customerid":CUSTOMERID,@"message":@""};
     }
     [netmanager downloadDataWithUrl:urlStr parm:subDict callback:^(id responseObject, NSError *error) {
         

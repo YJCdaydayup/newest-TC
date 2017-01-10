@@ -23,6 +23,17 @@ UIKIT_EXTERN NSString * const CodeTypeFailCode;   //错误码
 /*改变登录入口*/
 UIKIT_EXTERN NSString * const BatarEntrance;      //登录入口
 
+/*客户编号*/
+UIKIT_EXTERN NSString * const CustomerID;         //客户编号
+
+/*加入购物车即发出通知*/
+UIKIT_EXTERN NSString * const AddShoppingCar;     //加入购物车，通知刷新购物车界面
+
+/*开始上传订单的通知和收藏夹*/
+UIKIT_EXTERN NSString * const UploadOrders;       //上传订单
+
+/*切换服务器发出通知*/
+UIKIT_EXTERN NSString * const SwitchSerser;      //切换服务器发出通知
 
 
 

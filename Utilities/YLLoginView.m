@@ -159,7 +159,9 @@
         NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSString * state = [dict objectForKey:@"state"];
         if([state intValue] == 1){
+            //发出通知
             [kUserDefaults setObject:self.user_code_field.text forKey:CustomerID];
+            [[NSNotificationCenter defaultCenter]postNotificationName:UploadOrders object:nil];
             [UIView animateWithDuration:0.5 animations:^{
                 controlView.alpha = 0;
                 maskView.alpha = 0;

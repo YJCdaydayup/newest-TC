@@ -22,6 +22,7 @@
 
 @property (nonatomic,strong) YLServerAddView * serverView;
 
+
 @end
 
 @implementation BatarLoginController
@@ -115,6 +116,7 @@
 -(void)loginAction{
     
     if(userCode_tf.text.length == 0){
+        [kUserDefaults removeObjectForKey:CustomerID];
         [self setWindowTabbar];
     }else{
         [self checkUserCode];
@@ -148,6 +150,7 @@
                         //下次再说
                         [self setWindowTabbar];
                     }else{
+                        [kUserDefaults removeObjectForKey:CustomerID];
                         //再次填写客户编号
                         [UIView animateWithDuration:0.2 animations:^{
                             hud.alpha = 0;
@@ -168,6 +171,8 @@
     AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     BatarMainTabBarContoller * tabbar = [[BatarMainTabBarContoller alloc]init];
     app.window.rootViewController = tabbar;
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:SwitchSerser object:nil];
 }
 
 #pragma mark - 退出登录界面

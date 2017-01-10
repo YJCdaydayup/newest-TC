@@ -136,7 +136,7 @@
     }
     
     NetManager * manager = [NetManager shareManager];
-    NSDictionary * dict = @{@"customerid":[kUserDefaults objectForKey:CustomerID],@"shopcontext":[self myArrayToJson:self.selected_array]};
+    NSDictionary * dict = @{@"customerid":CUSTOMERID,@"shopcontext":[self myArrayToJson:self.selected_array]};
     NSString * urlStr = [NSString stringWithFormat:CONFRIMORDR,[manager getIPAddress]];
     
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
@@ -210,7 +210,7 @@
     }
     
     NetManager * manager = [NetManager shareManager];
-    NSDictionary * dict = @{@"order":[self myArrayToJson:self.selected_array],@"customerid":[kUserDefaults objectForKey:CustomerID]};
+    NSDictionary * dict = @{@"order":[self myArrayToJson:self.selected_array],@"customerid":CUSTOMERID};
     NSString * urlStr = [NSString stringWithFormat:REMOVECARORDER,[manager getIPAddress]];
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         if(responseObject){
@@ -227,7 +227,7 @@
     [self.hud show:YES];
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:MYORDERCAR,[manager getIPAddress]];
-    NSDictionary * dict = @{@"customerid":[kUserDefaults objectForKey:CustomerID]};
+    NSDictionary * dict = @{@"customerid":CUSTOMERID};
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         
         if(responseObject){

@@ -55,7 +55,9 @@
 //资源下载路径
 #define LIBPATH [NSString stringWithFormat:@"%@/",[NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]]
 
-#define CustomerID                @"customerid"                     //客户编号
+#define LOGIN  [kUserDefaults objectForKey:CustomerID]
+
+#define CUSTOMERID [kUserDefaults objectForKey:CustomerID]
 
 #define BANNERPLACEHOLDER @"banner_placeHolder@2x.jpg"
 #define PLACEHOLDER @"placeHolder.jpg"

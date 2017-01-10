@@ -10,7 +10,7 @@
 #import "NetManager.h"
 #import "YLServerAddView.h"
 
-@interface YLAddServer(){
+@interface YLAddServer()<UITextFieldDelegate>{
     
     UIWindow * parentVc;
     UIView * maskView;
@@ -104,12 +104,14 @@
     UIView * leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 12*S6, 32*S6)];
     self.user_code_field = [Tools createTextFieldFrame:CGRectMake(12.5*S6, 30*S6, 160*S6, 35*S6) placeholder:nil bgImageName:nil leftView:leftView rightView:nil isPassWord:NO];
     self.user_code_field.text = @"zbtj.batar.cn";
+    self.user_code_field.delegate = self;
     [self setTextfield:self.user_code_field];
     [controlView addSubview:self.user_code_field];
     
     UIView * leftViews = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 12*S6, 32*S6)];
     self.user_port_field = [Tools createTextFieldFrame:CGRectMake(CGRectGetMaxX(self.user_code_field.frame)+8*S6, 30*S6, 80*S6, 35*S6) placeholder:@"填写端口号" bgImageName:nil leftView:leftViews rightView:nil isPassWord:NO];
     [self setTextfield:self.user_port_field];
+    self.user_port_field.delegate = self;
     [controlView addSubview:self.user_port_field];
     
     wrongLabel = [Tools createLabelWithFrame:CGRectMake(24*S6, CGRectGetMaxY(self.user_code_field.frame)+5*S6, 232*S6, 14*S6) textContent:@"输入域名或端口号有误，请重新输入!" withFont:[UIFont systemFontOfSize:12*S6] textColor:[UIColor redColor] textAlignment:NSTextAlignmentLeft];
@@ -169,7 +171,7 @@
     
     NetManager * manager = [NetManager shareManager];
     [manager checkIPCompareWithIP:self.user_code_field.text port:self.user_port_field.text callback:^(NSString *response, NSError *error) {
-       
+        
         if(error == nil){
             [UIView animateWithDuration:0.5 animations:^{
                 controlView.alpha = 0;
@@ -213,6 +215,16 @@
     [self removeFromSuperview];
 }
 
-
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    if(textField == self.user_code_field){
+        [self.user_code_field resignFirstResponder];
+        [self.user_port_field becomeFirstResponder];
+    }else{
+        [self.user_code_field resignFirstResponder];
+        [self.user_port_field resignFirstResponder];
+    }
+    return YES;
+}
 
 @end

@@ -63,7 +63,7 @@
     
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:CHECKORDER,[manager getIPAddress]];
-    NSDictionary * dict = @{@"customerid":[kUserDefaults objectForKey:CustomerID],@"page":@(page),@"size":@"10"};
+    NSDictionary * dict = @{@"customerid":CUSTOMERID,@"page":@(page),@"size":@"10"};
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         
         if(!responseObject){

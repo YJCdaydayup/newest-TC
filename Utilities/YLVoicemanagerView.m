@@ -12,6 +12,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "NSTimer+Net.h"
 #import "AppDelegate.h"
+#import "NetManager.h"
 
 #define VOICECELLHEIGHT  35.0
 #define TIMERCOUNTER @"timerCount"
@@ -33,16 +34,20 @@
 @end
 
 @implementation YLVoicemanagerView
+
 @synthesize sendMessageTextfield = sendMessageTextfield;
+
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view{
     
     if(self = [super initWithFrame:frame]){
-        self.my_RecordPath = [NSString stringWithFormat:@"%@%@.plist",LIBPATH,[kUserDefaults objectForKey:RECORDPATH]];
+        self.my_RecordPath = [NSString stringWithFormat:@"%@%@%@.plist",LIBPATH,[kUserDefaults objectForKey:RECORDPATH],[self getScanDBMD5]];
         bgViews = bg_view;
         [self createView];
     }
     return self;
 }
+
+
 
 -(void)createView{
     
@@ -548,6 +553,20 @@
     [label sizeToFit];
 //    return ((int)label.height/14)>1?(label.height/14.0)*label.height:35*S6;
     return label.height;
+}
+
+-(NSString *)getScanDBMD5{
+    
+    NetManager * manager = [NetManager shareManager];
+    NSArray * array = [[manager getIPAddress]componentsSeparatedByString:@":"];
+    NSString * str = [NSString stringWithFormat:@"%@%@",array[0],array[1]];
+    NSArray * array2 = [str componentsSeparatedByString:@"."];
+    NSMutableString * muStr = [NSMutableString string];
+    [muStr appendString:@"YL"];
+    for(NSString * str1 in array2){
+        [muStr appendString:str1];
+    }
+    return muStr;
 }
 
 -(XHSoundRecorder *)audioRecorder{

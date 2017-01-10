@@ -13,6 +13,8 @@
 typedef void(^DBSaveBlock)(NSMutableArray * dataArray);
 typedef void(^DetailDataBlock)(id responseObject);
 typedef void(^HistoryClearBlock)(BOOL clear);
+typedef void(^BatarLocalOrderBlock)(BOOL local);
+
 
 @interface DBWorkerManager : NSObject
 /*
@@ -76,9 +78,13 @@ typedef void(^HistoryClearBlock)(BOOL clear);
  **/
 -(BOOL)judgeSaveFileExists;
 /*
+ 创建本地购物车表
+ **/
+-(void)createOrderDB;
+/*
  加入我的购物车
  **/
--(void)order_insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number;
+-(void)order_insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number date:(NSString *)date;
 /*
  获取我的购物车列表
  **/
@@ -103,6 +109,10 @@ typedef void(^HistoryClearBlock)(BOOL clear);
  加入购物车后，清除我的订购单数据库里面的数据
  **/
 -(void)order_cleanDBDataWithNumber:(NSString *)number;
+/*
+ 判断购物车本地是否还有数据
+ **/
++(void)order_judgeLocalOrder:(BatarLocalOrderBlock)block;
 
 /*******************扫码历史数据********************/
 -(void)createScanDB;

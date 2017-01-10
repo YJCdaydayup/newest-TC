@@ -15,40 +15,57 @@
 #import "BatarMainTabBarContoller.h"
 #import "BatarLoginController.h"
 #import "YLUploadToServer.h"
-//#import <IOKitFramework.h>
 
 @interface AppDelegate ()
+
+@property (nonatomic,strong) YLUploadToServer * uploadManager;
 
 @end
 
 @implementation AppDelegate
 
+@synthesize uploadManager = _uploadManager;
+
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UploadOrders object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:SwitchSerser object:nil];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-//    [kUserDefaults removeObjectForKey:CustomerID];
+    //    [kUserDefaults removeObjectForKey:CustomerID];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadDataToServer) name:CustomerID object:nil];
-    //SDImageCache默认是利用NSCache存储资源，也就是利用内存。设置不使用内存就行
-    //    [[SDImageCache sharedImageCache] setShouldCacheImagesInMemory:NO];
-    /**
-     * Decompressing images that are downloaded and cached can improve performance but can consume lot of memory.
-     * Defaults to YES. Set this to NO if you are experiencing a crash due to excessive memory consumption.
-     */
-    //    [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];
-    //    [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadDataToServer) name:UploadOrders object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(switchServer) name:SwitchSerser object:nil];
+    
+    //如果用户登录，就判断本地是否还有，有则上传，没有，则不管
+    if(CUSTOMERID){
+        [DBWorkerManager order_judgeLocalOrder:^(BOOL local) {
+            if(local){
+                _uploadManager = [YLUploadToServer shareUploadToServer];
+                [_uploadManager batar_start];
+            }
+        }];
+    }
+    
+    //改变缓存策略
+    [self changeCacheStyle];
     
     //检测版本更新
     [self checkUpdated];
+    
     //上传app版本
     NetManager * manager = [NetManager shareManager];
     [manager sendAppVersionToService];
+    
     // 启动图片延时: 1秒
     [NSThread sleepForTimeInterval:1];
     
-    [[UINavigationBar appearance]setFrame:CGRectMake(0, 20, self.window.width, 100)];
-    [[UINavigationBar appearance]setBarTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance]setTitleTextAttributes:@{NSForegroundColorAttributeName:TEXTCOLOR,NSFontAttributeName:[UIFont systemFontOfSize:17*S6]}];
+    //基础设置
+    [self setApperance];
     
+    //设置根视图
     self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     
@@ -64,6 +81,35 @@
     }
     
     return YES;
+}
+
+-(void)switchServer{
+    
+    NSLog(@"切换了服务器");
+    
+    [_uploadManager batar_stop];
+    if(CUSTOMERID){
+        [DBWorkerManager order_judgeLocalOrder:^(BOOL local) {
+            if(local){
+                _uploadManager = [YLUploadToServer shareUploadToServer];
+                [_uploadManager batar_start];
+            }
+        }];
+    }
+}
+
+-(void)setApperance{
+    
+    [[UINavigationBar appearance]setFrame:CGRectMake(0, 20, self.window.width, 100)];
+    [[UINavigationBar appearance]setBarTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance]setTitleTextAttributes:@{NSForegroundColorAttributeName:TEXTCOLOR,NSFontAttributeName:[UIFont systemFontOfSize:17*S6]}];
+}
+
+-(void)changeCacheStyle{
+    //SDImageCache默认是利用NSCache存储资源，也就是利用内存。设置不使用内存就行
+    [[SDImageCache sharedImageCache] setShouldCacheImagesInMemory:NO];
+    [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];
+    [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
 }
 
 -(void)checkUpdated{
@@ -98,9 +144,15 @@
 
 -(void)uploadDataToServer{
     
-    NSLog(@"开始上传");
-   YLUploadToServer * uploadManager = [YLUploadToServer shareUploadToServer];
-    [uploadManager batar_start];
+    _uploadManager = [YLUploadToServer shareUploadToServer];
+    [_uploadManager batar_start];
+}
+
+-(void)reStartUpload{
+    
+    if(_uploadManager.isClosed){
+        [_uploadManager batar_start];
+    }
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
@@ -109,38 +161,36 @@
     [[SDWebImageManager sharedManager]cancelAll];
     
     //2.清空缓存
-    //    [[SDWebImageManager sharedManager].imageCache clearDisk];
     [[SDWebImageManager sharedManager].imageCache cleanDisk];
-    //    [[SDImageCache sharedImageCache]cleanDisk];
-    //    [[SDImageCache sharedImageCache]clearMemory];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
+    //继续上传
+    //    [self reStartUpload];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    //继续上传
+    [self reStartUpload];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    //继续上传
+    //    [self reStartUpload];
     
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    //    NSURL *url = [NSURL URLWithString:@"prefs:root=General&path=ManagedConfigurationList"];
-    //    if ([[UIApplication sharedApplication] canOpenURL:url])
-    //    {
-    //        [[UIApplication sharedApplication] openURL:url];
-    //    }
+    //继续上传
+    //    [self reStartUpload];
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    
+    //停止上传
+    //    [self reStartUpload];
 }
 
 @end

@@ -8,8 +8,10 @@
 
 #import "DBWorkerManager.h"
 #import "NetManager.h"
+#import "YLVoicemanagerView.h"
 
 @interface DBWorkerManager(){
+    
     FMDatabaseQueue * _dataBaseQueue;
     FMDatabaseQueue * _orderDataBaseQueue;
     FMDatabaseQueue * _scanHistoryBaseQueue;
@@ -37,8 +39,8 @@ static DBWorkerManager * manager = nil;
     if(self = [super init]){
         
         //读取本地的plist文件
-        self.detailCachePath = [NSString stringWithFormat:@"%@detailCachePath.plist",LIBPATH];
-        self.orderCachePath = [NSString stringWithFormat:@"%@orderCachePath",LIBPATH];
+        self.detailCachePath = [NSString stringWithFormat:@"%@%@detailCachePath.plist",LIBPATH,[self getScanDBMD5]];
+        self.orderCachePath = [NSString stringWithFormat:@"%@%@orderCachePath",LIBPATH,[self getScanDBMD5]];
         [self createDB];
     }
     return self;
@@ -52,10 +54,10 @@ static DBWorkerManager * manager = nil;
     NSString * docPath = [docArray lastObject];
     //    QFLog(@"docPath:%@",docPath);
     NSString * dbPath = [docPath stringByAppendingPathComponent:@"save.db"];
-    NSString * dbPath1 = [docPath stringByAppendingPathComponent:@"order.db"];
+    //    NSString * dbPath1 = [docPath stringByAppendingPathComponent:@"order.db"];
     //    QFLog(@"dbPath:%@",dbPath);
     _dataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
-    _orderDataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath1];
+    //    _orderDataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath1];
     [self createTable];
 }
 
@@ -64,11 +66,20 @@ static DBWorkerManager * manager = nil;
     NSArray * docArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     //获取Document下面的目录地址
     NSString * docPath = [docArray lastObject];
-    NSString * dbPath2 = [docPath stringByAppendingPathComponent:@"scanHistory.db"];
-    _scanHistoryBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath2];
+    NSString * dbPath = [docPath stringByAppendingPathComponent:@"scanHistory.db"];
+    _scanHistoryBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
     [self createTable];
 }
 
+-(void)createOrderDB{
+    
+    NSArray * docArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    //获取Document下面的目录地址
+    NSString * docPath = [docArray lastObject];
+    NSString * dbPath = [docPath stringByAppendingPathComponent:@"order.db"];
+    _orderDataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
+    [self createTable];
+}
 
 -(void)createTable{
     
@@ -83,15 +94,16 @@ static DBWorkerManager * manager = nil;
         }
     }];
     
-    NSString * sql1 = @"create table if not exists orderList(number text,img blob,name text)";
+    NSString * sql1 = [NSString stringWithFormat:@"create table if not exists %@orderList(number text,img blob,name text,date datetime)",[self getScanDBMD5]];
+    //    NSString * sql1 = @"create table if not exists orderList(number text,img blob,name text)";
     
     [_orderDataBaseQueue inDatabase:^(FMDatabase *db) {
         
         BOOL isSu = [db executeUpdate:sql1];
         if(isSu){
-            //QFLog(@"%@",@"执行建表语句成功");
+            QFLog(@"%@",@"执行建购物车表语句成功");
         }else{
-            //QFLog(@"%@",@"执行建表语句失败");
+            QFLog(@"%@",@"执行建购物车表语句失败");
         }
     }];
     
@@ -155,11 +167,12 @@ static DBWorkerManager * manager = nil;
     }];
 }
 
--(void)order_insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number{
+-(void)order_insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number date:(NSString *)date{
     
     [_orderDataBaseQueue inDatabase:^(FMDatabase *db) {
         
-        NSString * selectSql = @"select * from orderList where number = ?";
+        //        NSString * selectSql = @"select * from orderList where number = ?";
+        NSString * selectSql = [NSString stringWithFormat:@"select * from %@orderList where number = ?",[self getScanDBMD5]];
         //查询sql语句
         FMResultSet * set = [db executeQuery:selectSql,number];
         BOOL isExist;
@@ -169,13 +182,14 @@ static DBWorkerManager * manager = nil;
         }
         
         if(isExist == NO){
-            NSString * insertSQL = @"insert into orderList(number,img,name) values (?,?,?)";
+            //            NSString * insertSQL = @"insert into orderList(number,img,name) values (?,?,?)";
+            NSString * insertSQL = [NSString stringWithFormat:@"insert into %@orderList(number,img,name,date) values (?,?,?,?)",[self getScanDBMD5]];
             //执行插入
-            BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name];
+            BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name,date];
             if (isSuccess) {
-//                QFLog(@"%@",@"执行插入语句成功");
+                QFLog(@"%@",@"执行插入语句成功");
             }else{
-//                QFLog(@"%@",@"执行插入语句失败");
+                QFLog(@"%@",@"执行插入语句失败");
             }
         }
     }];
@@ -202,9 +216,9 @@ static DBWorkerManager * manager = nil;
             
             BOOL isSuccess = [db executeUpdate:updateSql,number];
             if (isSuccess) {
-//                QFLog(@"%@",@"scan执行更新删除语句成功");
+                //                QFLog(@"%@",@"scan执行更新删除语句成功");
             }else{
-//                QFLog(@"%@",@"scan执行更新删除语句失败");
+                //                QFLog(@"%@",@"scan执行更新删除语句失败");
             }
             NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date,type,searchType) values (?,?,?,?,?,?)",[self getScanDBMD5]];
             //执行插入
@@ -221,9 +235,9 @@ static DBWorkerManager * manager = nil;
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date,codeType,searchType];
             if (isSuccess) {
-                                QFLog(@"%@",@"scan执行插入语句成功");
+                QFLog(@"%@",@"scan执行插入语句成功");
             }else{
-                                QFLog(@"%@",@"scan执行插入语句失败");
+                QFLog(@"%@",@"scan执行插入语句失败");
             }
             //            NSLog(@"%@",imgData);
         }
@@ -235,7 +249,8 @@ static DBWorkerManager * manager = nil;
     
     [_orderDataBaseQueue inDatabase:^(FMDatabase *db) {
         
-        NSString * selectSql = @"select * from orderList";
+        //        NSString * selectSql = @"select * from orderList";
+        NSString * selectSql = [NSString stringWithFormat:@"select * from %@orderList",[self getScanDBMD5]];
         FMResultSet * rs = [db executeQuery:selectSql];
         NSMutableArray * array = [NSMutableArray array];
         while([rs next]){
@@ -244,6 +259,7 @@ static DBWorkerManager * manager = nil;
             model.number = [rs stringForColumn:@"number"];
             model.name = [rs stringForColumn:@"name"];
             model.img = [rs dataForColumn:@"img"];
+            model.date = [rs stringForColumn:@"date"];
             model.selected = NO;
             [array addObject:model];
         }
@@ -313,7 +329,8 @@ static DBWorkerManager * manager = nil;
 
 -(void)order_cleanDBDataWithNumber:(NSString *)number{
     
-    NSString * deleteSql = @"delete from orderList where number = ?";
+    //    NSString * deleteSql = @"delete from orderList where number = ?";
+    NSString * deleteSql = [NSString stringWithFormat:@"delete from %@orderList where number = ?",[self getScanDBMD5]];
     [_orderDataBaseQueue inDatabase:^(FMDatabase *db) {
         
         BOOL isDelete = [db executeUpdate:deleteSql,number];
@@ -363,7 +380,8 @@ static DBWorkerManager * manager = nil;
 
 -(void)order_cleanAllDBData{
     
-    NSString * deleteSql = @"delete from orderList";
+    //    NSString * deleteSql = @"delete from orderList";
+    NSString * deleteSql = [NSString stringWithFormat:@"delete from %@orderList",[self getScanDBMD5]];
     [_orderDataBaseQueue inDatabase:^(FMDatabase *db) {
         
         BOOL isDelete = [db executeUpdate:deleteSql];
@@ -558,6 +576,19 @@ static DBWorkerManager * manager = nil;
         }
     }];
     return array.count>0?YES:NO;
+}
+
++(void)order_judgeLocalOrder:(BatarLocalOrderBlock)block{
+    
+    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+    [manager createOrderDB];
+    [manager order_getAllObject:^(NSMutableArray *dataArray) {
+        if(dataArray.count>0){
+            block(YES);
+        }else{
+            block(NO);
+        }
+    }];
 }
 
 @end

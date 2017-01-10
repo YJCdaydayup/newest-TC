@@ -31,11 +31,15 @@
 @synthesize carBottom = _carBottom;
 @synthesize loginView = _loginView;
 
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:AddShoppingCar object:nil];
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
     [self createBottom];
-    [self getData];
 }
 
 -(void)viewDidLoad{
@@ -43,6 +47,13 @@
     [super viewDidLoad];
     
     [self batar_setNavibar:@"购物车"];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateList) name:AddShoppingCar object:nil];
+}
+
+-(void)updateList{
+    
+    [self getData];
 }
 
 -(void)createView{
@@ -83,16 +94,27 @@
                 return ;
             }
             //删除
-            if([kUserDefaults objectForKey:CustomerID]){
-                [self removeOrders:YES];
-            }else{
-                [self removeOrders:NO];
-            }
+            UIAlertController * controller = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            }];
+            UIAlertAction * delete = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                if(CUSTOMERID){
+                    [self removeOrders:YES];
+                }else{
+                    [self removeOrders:NO];
+                }
+            }];
+            //修改按钮
+            [delete setValue:[UIColor redColor] forKey:@"titleTextColor"];
+            [controller addAction:cancel];
+            [controller addAction:delete];
+            [self presentViewController:controller animated:YES completion:nil];
         }else{
             //确认选购
-            if([kUserDefaults objectForKey:CustomerID]){
-                //直接传入服务器
-                [[NSNotificationCenter defaultCenter]postNotificationName:CustomerID object:nil];
+            if(CUSTOMERID){
+                //直接上传到服务器
+            
             }else{
                 YLLoginView * loginView = [[YLLoginView alloc]initWithVC:self.app.window withVc:self];
                 [self.app.window addSubview:loginView];
@@ -127,6 +149,7 @@
     
     [self.selectedArray removeAllObjects];
     WEAKSELF(WEAKSS);
+    [self.manager createOrderDB];
     [self.manager order_getAllObject:^(NSMutableArray *dataArray) {
         WEAKSS.dataArray = dataArray;
         [WEAKSS.tableView reloadData];
