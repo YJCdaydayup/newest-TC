@@ -57,12 +57,14 @@ singleM(UploadToServer)
     self.isClosed = YES;
 }
 
--(void)batar_deleteOrder:(NSString *)number{
+-(void)batar_deleteOrder{
     
     DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
+    [db_manager order_cleanAllDBData];
     YLVoicemanagerView * voice_manager = [[YLVoicemanagerView alloc]initWithFrame:CGRectZero withVc:[UIView new]];
-    [db_manager order_cleanDBDataWithNumber:number];
     [voice_manager cleanAllVoiceData];
+    //发出通知刷新购物车界面
+    [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
 }
 
 //加入我的选购单
@@ -96,14 +98,13 @@ singleM(UploadToServer)
     }
     
     [netmanager downloadDataWithUrl:urlStr parm:subDict callback:^(id responseObject, NSError *error) {
-        NSLog(@"上传文字:%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
         if(responseObject){
             
             _timer_count ++;
             NSLog(@"文字上传第%zi次",_timer_count);
             if(reNameVoiceArray.count == 0){
                 //                NSLog(@"上传成功的model:%@,删除本地",model.number);
-                //                [self batar_deleteOrder:model.number];
+                [self batar_deleteOrder];
             }else{
                 
                 if(_timer_count == dataArray.count){
@@ -138,10 +139,9 @@ singleM(UploadToServer)
     } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if(responseObject){
             
-            NSLog(@"上传语音:%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
             if(responseObject){
-                NSLog(@"文字上传成功，删除本地");
-                //                [self batar_deleteOrder:self.number];
+                NSLog(@"文字语音成功，删除本地");
+                [self batar_deleteOrder];
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

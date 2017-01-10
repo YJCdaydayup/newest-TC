@@ -34,20 +34,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    //    [kUserDefaults removeObjectForKey:CustomerID];
-    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadDataToServer) name:UploadOrders object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(switchServer) name:SwitchSerser object:nil];
     
     //如果用户登录，就判断本地是否还有，有则上传，没有，则不管
-    if(CUSTOMERID){
-        [DBWorkerManager order_judgeLocalOrder:^(BOOL local) {
-            if(local){
-                _uploadManager = [YLUploadToServer shareUploadToServer];
-                [_uploadManager batar_start];
-            }
-        }];
-    }
+    [self uploadToServer];
     
     //改变缓存策略
     [self changeCacheStyle];
@@ -85,9 +76,13 @@
 
 -(void)switchServer{
     
-    NSLog(@"切换了服务器");
-    
+    //    NSLog(@"切换了服务器");
     [_uploadManager batar_stop];
+    [self uploadToServer];
+}
+
+-(void)uploadToServer{
+    
     if(CUSTOMERID){
         [DBWorkerManager order_judgeLocalOrder:^(BOOL local) {
             if(local){

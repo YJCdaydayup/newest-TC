@@ -216,7 +216,7 @@
                 
                 break;
             case AVAudioSessionRecordPermissionGranted:
-                NSLog(@"已经允许麦克风弹框");
+//                NSLog(@"已经允许麦克风弹框");
                 // mic access ok...
                 break;
             default:

@@ -101,9 +101,9 @@ static DBWorkerManager * manager = nil;
         
         BOOL isSu = [db executeUpdate:sql1];
         if(isSu){
-            QFLog(@"%@",@"执行建购物车表语句成功");
+//            QFLog(@"%@",@"执行建购物车表语句成功");
         }else{
-            QFLog(@"%@",@"执行建购物车表语句失败");
+//            QFLog(@"%@",@"执行建购物车表语句失败");
         }
     }];
     
