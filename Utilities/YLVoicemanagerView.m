@@ -19,7 +19,6 @@
 
 @interface YLVoicemanagerView(){
     
- 
     UIButton * recordBtn;
     BOOL keyboardState;
     UIView * bgViews;
@@ -30,6 +29,7 @@
 @property (nonatomic,copy) NSString * my_RecordPath;
 @property (nonatomic,copy) NSString * systemVoicePath;
 @property (nonatomic,assign) NSInteger count;
+@property (nonatomic,copy) NSString * pathNameFile;
 
 @end
 
@@ -41,13 +41,15 @@
     
     if(self = [super initWithFrame:frame]){
         self.my_RecordPath = [NSString stringWithFormat:@"%@%@%@.plist",LIBPATH,[kUserDefaults objectForKey:RECORDPATH],[self getScanDBMD5]];
+        
+        //保存所有含有语音或者文件的路径名
+        self.pathNameFile = [NSString  stringWithFormat:@"%@%@",LIBPATH,[self getScanDBMD5]];
+        
         bgViews = bg_view;
         [self createView];
     }
     return self;
 }
-
-
 
 -(void)createView{
     
@@ -103,6 +105,16 @@
 }
 
 -(void)saveDateToPlistFile:(id)data{
+    
+    //将文件名字保存下来
+    NSMutableArray * array = [[NSMutableArray alloc]initWithContentsOfFile:self.pathNameFile];
+    if(array == nil){
+        array = [NSMutableArray array];
+    }
+    if(![array containsObject:self.my_RecordPath]){
+        [array addObject:self.my_RecordPath];
+        [array writeToFile:self.pathNameFile atomically:YES];
+    }
     
     NSMutableArray * dataArrays = [[NSMutableArray alloc]initWithContentsOfFile:self.my_RecordPath];
     if(dataArrays == nil){
@@ -530,13 +542,21 @@
     [dataArrays writeToFile:self.my_RecordPath atomically:YES];
 }
 
+-(void)cleanAllVoiceAndTextData{
+    
+    NSFileManager * manager = [NSFileManager defaultManager];
+    for(NSString * path in [[NSMutableArray alloc]initWithContentsOfFile:self.pathNameFile]){
+        [manager removeItemAtPath:path error:nil];
+    }
+}
+
 -(void)cleanAllVoiceData{
     
     NSFileManager * fileManager = [NSFileManager defaultManager];
     NSError * error;
     BOOL isDeleted = [fileManager removeItemAtPath:self.my_RecordPath error:&error];
     if(isDeleted){
-        //        NSLog(@"清除成功");
+                NSLog(@"清除成功");
     }else{
         //        NSLog(@"%@",error.description);
     }

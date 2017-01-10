@@ -24,6 +24,7 @@ singleM(UploadToServer)
             
             [self batar_uploadOrdersToServer];
         }];
+        [[NSRunLoop currentRunLoop]addTimer:self.uploadTimer forMode:NSRunLoopCommonModes];
         [self batar_stop];
         self.isClosed = YES;
     }
@@ -36,7 +37,9 @@ singleM(UploadToServer)
     DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
     [db_manager order_getAllObject:^(NSMutableArray *dataArray) {
         for(DBSaveModel * model in dataArray){
+            
             [kUserDefaults setObject:model.number forKey:RECORDPATH];
+            _timer_count ++;
             @synchronized(self) {
                 [self addMyOrders:model array:dataArray];
             }
@@ -46,9 +49,13 @@ singleM(UploadToServer)
 
 -(void)batar_start{
     
-    [self.uploadTimer setFireDate:[NSDate distantPast]];
-    _timer_count = 0;
-    self.isClosed = NO;
+    DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
+    [db_manager order_getAllObject:^(NSMutableArray *dataArray) {
+        self.initialDataArray = dataArray;
+        [self.uploadTimer setFireDate:[NSDate distantPast]];
+        _timer_count = 0;
+        self.isClosed = NO;
+    }];
 }
 
 -(void)batar_stop{
@@ -61,8 +68,9 @@ singleM(UploadToServer)
     
     DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
     [db_manager order_cleanAllDBData];
+    
     YLVoicemanagerView * voice_manager = [[YLVoicemanagerView alloc]initWithFrame:CGRectZero withVc:[UIView new]];
-    [voice_manager cleanAllVoiceData];
+    [voice_manager cleanAllVoiceAndTextData];
     //发出通知刷新购物车界面
     [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
 }
@@ -99,18 +107,17 @@ singleM(UploadToServer)
     
     [netmanager downloadDataWithUrl:urlStr parm:subDict callback:^(id responseObject, NSError *error) {
         if(responseObject){
-            
-            _timer_count ++;
-            NSLog(@"文字上传第%zi次",_timer_count);
             if(reNameVoiceArray.count == 0){
                 //                NSLog(@"上传成功的model:%@,删除本地",model.number);
                 [self batar_deleteOrder];
             }else{
-                
-                if(_timer_count == dataArray.count){
+//                NSLog(@"%zi---%zi",_timer_count,self.initialDataArray.count);
+                if(_timer_count == self.initialDataArray.count){
                     NSLog(@"开始上传语音，并停止计时器");
-                    [self sendVoiceToServer:reNameVoiceArray];
-                    [self batar_stop];
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+                        [self sendVoiceToServer:reNameVoiceArray];
+                        [self batar_stop];
+                    });
                 }
             }
         }else{

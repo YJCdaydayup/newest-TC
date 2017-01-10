@@ -86,8 +86,10 @@
     if(CUSTOMERID){
         [DBWorkerManager order_judgeLocalOrder:^(BOOL local) {
             if(local){
-                _uploadManager = [YLUploadToServer shareUploadToServer];
-                [_uploadManager batar_start];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _uploadManager = [YLUploadToServer shareUploadToServer];
+                    [_uploadManager batar_start];
+                });
             }
         }];
     }

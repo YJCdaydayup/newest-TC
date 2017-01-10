@@ -19,6 +19,7 @@ singleH(UploadToServer)
 @property (nonatomic,copy) NSString * number;
 @property (nonatomic,assign) NSInteger timer_count;
 @property (nonatomic,assign) BOOL isClosed;
+@property (nonatomic,strong) NSMutableArray * initialDataArray;
 
 -(void)batar_start;
 -(void)batar_stop;

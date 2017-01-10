@@ -21,7 +21,8 @@
 
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view;
 -(void)playWithData:(NSData *)data;
--(void)cleanAllVoiceData;//移除对应缓存
+-(void)cleanAllVoiceData;
+-(void)cleanAllVoiceAndTextData;//移除对应缓存
 -(NSMutableArray *)getAllVoiceMessages;//获取所有语音数据
 -(NSMutableArray *)getAllTextMessageStr;//获取所有文字数据
 -(void)stopWhenPushAway;//页面跳转就不播放了
