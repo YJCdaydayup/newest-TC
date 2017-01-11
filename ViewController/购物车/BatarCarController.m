@@ -34,6 +34,8 @@
 -(void)dealloc{
     
     [[NSNotificationCenter defaultCenter]removeObserver:self name:AddShoppingCar object:nil];
+        [[NSNotificationCenter defaultCenter]removeObserver:self name:DeleteServer object:nil];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -49,10 +51,14 @@
     [self batar_setNavibar:@"购物车"];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateList) name:AddShoppingCar object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateView) name:DeleteServer object:nil];
+}
+
+-(void)updateView{
+    [self getData];
 }
 
 -(void)updateList{
-    
     [self getData];
 }
 

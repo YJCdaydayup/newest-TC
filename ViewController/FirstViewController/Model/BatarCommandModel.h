@@ -12,6 +12,7 @@
 @interface BatarCommandModel : JSONModel
 
 //{
+//id = 5858e19134bec01341e48785;
 //products =         (
 //                    {
 //                        image = "161108150641668_4ebc0d4af0259834378a82faefd0999b.jpg";
@@ -39,6 +40,7 @@
 
 @property (nonatomic,strong) NSMutableArray<BatarCommandSubModel*> * products;
 @property (nonatomic,copy) NSString * themename;
+@property (nonatomic,copy) NSString * kid;
 
 
 

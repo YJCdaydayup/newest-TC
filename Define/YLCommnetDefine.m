@@ -32,7 +32,11 @@ NSString * const RECORDPATH = @"recordPath";            //根据产品ID保存�
 
 NSString * const SaveOrNotSave = @"SaveOrNotSave";      //收藏或者取消收藏发出通知
 
-NSString * const DeleteAllServer = @"DeleteAllServer";  //删除所有服务器
+NSString * const DeleteServer = @"DeleteAllServer";  //删除所有服务器
+
+NSString * const ServerEditNotification = @"ServerEditNotification"; //开始编辑发出通知
+
+NSString * const ServerEditCancelNotification = @"ServerEditCancelNotification";
 
 
 

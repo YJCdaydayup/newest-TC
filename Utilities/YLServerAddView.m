@@ -104,54 +104,57 @@
     
     if(tap.state == UIGestureRecognizerStateBegan){
         
-        if(1){
-            NSLog(@"长按进行编辑");
-            [self updateServerView];
-            for(int i = 0;i<_btnArray.count-1;i++){
-                UIButton * btn = _btnArray[i];
-                btn.layer.borderColor = [BOARDCOLOR CGColor];
-                btn.layer.borderWidth = 0.6*S6;
-                btn.titleLabel.numberOfLines = 0;
-                btn.layer.masksToBounds = NO;
-                
-                for(UIView * subView in btn.subviews){
-                    if(![subView isKindOfClass:[UILabel class]]){
-                        [subView removeFromSuperview];
-                    }
-                }
-                
-                UIView * view = [self getShakeView];
-                view.tag = btn.tag+10;
-                [btn addSubview:view];
-                [btn bringSubviewToFront:view];
-                //                [btn shakeWithOptions:SCShakeOptionsAtEndRestart force:0.005 duration:MAXFLOAT iterationDuration:0.007 completionHandler:^{
-                //                }];
-                [btn shake];
-                
-                UIView * maskView = [[UIView alloc]initWithFrame:CGRectMake(btn.x-6.5*S6, btn.y-6.5*S6, 20*S6,20*S6)];
-                maskView.tag = btn.tag+11;
-                [self addSubview:maskView];
-                
-                UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(deleteServer:)];
-                [maskView addGestureRecognizer:tap];
-                
-                UIView * spaceView = [[UIView alloc]initWithFrame:CGRectMake(btn.x+12*S6, btn.y+7*S6, btn.width-12*S6, btn.height-7*S6)];
-                [self addSubview:spaceView];
-                
-                UITapGestureRecognizer * cancelTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelEdit)];
-                [spaceView addGestureRecognizer:cancelTap];
+        [self startEdit];
+    }
+}
+
+-(void)startEdit{
+    //            NSLog(@"长按进行编辑");
+    [self updateServerView];
+    for(int i = 0;i<_btnArray.count-1;i++){
+        UIButton * btn = _btnArray[i];
+        btn.layer.borderColor = [BOARDCOLOR CGColor];
+        btn.layer.borderWidth = 0.6*S6;
+        btn.titleLabel.numberOfLines = 0;
+        btn.layer.masksToBounds = NO;
+        
+        for(UIView * subView in btn.subviews){
+            if(![subView isKindOfClass:[UILabel class]]){
+                [subView removeFromSuperview];
             }
-        }else{
-            
         }
+        
+        UIView * view = [self getShakeView];
+        view.tag = btn.tag+10;
+        [btn addSubview:view];
+        [btn bringSubviewToFront:view];
+        //                [btn shakeWithOptions:SCShakeOptionsAtEndRestart force:0.005 duration:MAXFLOAT iterationDuration:0.007 completionHandler:^{
+        //                }];
+        [btn shake];
+        
+        UIView * maskView = [[UIView alloc]initWithFrame:CGRectMake(btn.x-6.5*S6, btn.y-6.5*S6, 20*S6,20*S6)];
+        maskView.tag = btn.tag+11;
+        [self addSubview:maskView];
+        
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(deleteServer:)];
+        [maskView addGestureRecognizer:tap];
+        
+        UIView * spaceView = [[UIView alloc]initWithFrame:CGRectMake(btn.x+12*S6, btn.y+7*S6, btn.width-12*S6, btn.height-7*S6)];
+        [self addSubview:spaceView];
+        
+        UITapGestureRecognizer * cancelTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelEdit)];
+        [spaceView addGestureRecognizer:cancelTap];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:ServerEditNotification object:nil];
     }
 }
 
 -(void)cancelEdit{
     
-    NSLog(@"取消编辑");
+//    NSLog(@"取消编辑");
     [self updateServerView];
     [self getSelectedBtn];
+    [[NSNotificationCenter defaultCenter]postNotificationName:ServerEditCancelNotification object:nil];
 }
 
 -(void)deleteServer:(UITapGestureRecognizer *)tap{
@@ -182,8 +185,9 @@
         [kUserDefaults setObject:[self getIpWithPort:lastServer][0] forKey:IPSTRING];
         [kUserDefaults setObject:[self getIpWithPort:lastServer][1] forKey:PORTSTRING];
     }
-    [self getSelectedBtn];
-    [[NSNotificationCenter defaultCenter]postNotificationName:DeleteAllServer object:nil];
+//    [self getSelectedBtn];
+    [self startEdit];
+    [[NSNotificationCenter defaultCenter]postNotificationName:DeleteServer object:nil];
 }
 
 -(UIView *)getShakeView{
@@ -244,7 +248,7 @@
     selectIp_port = self.serverArray[btn.tag];
     [kUserDefaults setObject:[self getIpWithPort:selectIp_port][0] forKey:IPSTRING];
     [kUserDefaults setObject:[self getIpWithPort:selectIp_port][1] forKey:PORTSTRING];
-    NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
+//    NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
 }
 
 -(NSArray *)getIpWithPort:(NSString *)str{
@@ -265,9 +269,9 @@
         selectIp_port = [self.serverArray lastObject];
         [kUserDefaults setObject:[self getIpWithPort:selectIp_port][0] forKey:IPSTRING];
         [kUserDefaults setObject:[self getIpWithPort:selectIp_port][1] forKey:PORTSTRING];
-        [[NSNotificationCenter defaultCenter]postNotificationName:DeleteAllServer object:nil];
+        [[NSNotificationCenter defaultCenter]postNotificationName:DeleteServer object:nil];
         [self getSelectedBtn];
-        NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
+//        NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
     }];
 }
 
@@ -313,7 +317,7 @@
         btn.layer.borderColor = [BOARDCOLOR CGColor];
     }
     
-    NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
+//    NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
 }
 
 -(UIImage *)btnSelectedImg:(NSString *)currentImg{

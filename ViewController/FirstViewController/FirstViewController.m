@@ -68,6 +68,11 @@
 
 @synthesize manager = manager;
 
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:DeleteServer object:nil];
+}
+
 //界面即将消失时
 -(void)viewWillDisappear:(BOOL)animated{
     
@@ -88,6 +93,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateView) name:DeleteServer object:nil];
+    
     manager = [NetManager shareManager];
     
     //隐藏系统的“返回导航按钮”
@@ -98,6 +105,12 @@
     
     //设置表格frame
     [self setTableView];
+}
+
+//刷新界面
+-(void)updateView{
+    
+    [self.tableView headerBeginRefreshing];
 }
 
 //设置表格frame
@@ -169,6 +182,7 @@
                     [array2 addObject:subModel];
                 }
                 BatarCommandModel * model = [[BatarCommandModel alloc]init];
+                model.kid = dict[@"id"];
                 model.products = array2;
                 model.themename = dict[@"themename"];
                 [self.dataArray addObject:model];
@@ -412,17 +426,18 @@
     UILabel * label = [Tools createLabelWithFrame:CGRectMake(0, 0, view.width, view.height) textContent:[NSString stringWithFormat:@"———— %@ ————",self.dataArray[section-1].themename] withFont:[UIFont systemFontOfSize:15*S6] textColor:TABBARTEXTCOLOR textAlignment:NSTextAlignmentCenter];
     [view addSubview:label];
     
-    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btns" selectedImage:nil tag:0 addTarget:self action:@selector(moreAction)];
+    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btns" selectedImage:nil tag:section-1 addTarget:self action:@selector(moreAction:)];
     moreBtn.frame = CGRectMake(Wscreen-93/2.0*S6, 15*S6, 40*S6, 18*S6);
     [view addSubview:moreBtn];
     return view;
 }
 
 #pragma mark - “more”按钮事件
--(void)moreAction{
+-(void)moreAction:(UIButton *)btn{
     
-    SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
-    singleVc.vc_flag = 1;
+    SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
+    singleVc.vc_flag = 3;
+    singleVc.catagoryItem = self.dataArray[btn.tag].kid;
     [self pushToViewControllerWithTransition:singleVc withDirection:@"left" type:NO];
 }
 

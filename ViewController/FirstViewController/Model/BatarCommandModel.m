@@ -15,4 +15,8 @@
     return YES;
 }
 
++(JSONKeyMapper *)keyMapper{
+    return [[JSONKeyMapper alloc]initWithDictionary:@{@"kid":@"id"}];
+}
+
 @end

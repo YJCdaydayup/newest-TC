@@ -42,7 +42,13 @@ UIKIT_EXTERN NSString * const RECORDPATH;        //根据产品ID保存发送消
 UIKIT_EXTERN NSString * const SaveOrNotSave;      //收藏或者取消收藏发出通知
 
 /*当没有服务器时，发出通知*/
-UIKIT_EXTERN NSString * const DeleteAllServer;    //删除所有服务器
+UIKIT_EXTERN NSString * const DeleteServer;    //删除所有服务器
+
+/*进入编辑状态的通知*/
+UIKIT_EXTERN NSString * const ServerEditNotification;
+
+/*取消编辑模式*/
+UIKIT_EXTERN NSString * const ServerEditCancelNotification;
 
 
 @end

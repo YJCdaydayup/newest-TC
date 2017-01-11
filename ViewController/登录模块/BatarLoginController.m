@@ -35,7 +35,9 @@
 
 -(void)dealloc{
     
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:DeleteAllServer object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:DeleteServer object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:ServerEditNotification name:ServerEditNotification object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:ServerEditCancelNotification object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -53,7 +55,9 @@
 -(void)viewDidLoad{
     
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteAllServer) name:DeleteAllServer object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteServer) name:DeleteServer object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(editServer) name:ServerEditNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(cancelServerEdit) name:ServerEditCancelNotification object:nil];
     self.view.backgroundColor = [UIColor whiteColor];
     _manager = [NetManager shareManager];
     //进来之前就判断是否服务器清空
@@ -62,7 +66,21 @@
     }
 }
 
--(void)deleteAllServer{
+-(void)editServer{
+    
+    _loginBtn.enabled = NO;
+    userCode_tf.enabled = NO;
+    _closeBtn.enabled = NO;
+}
+
+-(void)cancelServerEdit{
+    
+    _loginBtn.enabled = YES;
+    userCode_tf.enabled = YES;
+    _closeBtn.enabled = YES;
+}
+
+-(void)deleteServer{
     
     NSMutableArray * serverArray = [NetManager batar_getAllServers];
     if(serverArray.count>0){
@@ -227,6 +245,7 @@
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];
+    [_serverView cancelEdit];
 }
 
 @end

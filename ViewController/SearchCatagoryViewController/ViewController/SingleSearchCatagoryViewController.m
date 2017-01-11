@@ -114,16 +114,25 @@
         {
             //拼接ip和port
             NSString * URLstring = [NSString stringWithFormat:CATAGORYPUSHURL,[manager getIPAddress]];
-            NSString * str = [NSString stringWithFormat:@"%@%@?",URLstring,self.catagoryIndex];
+            NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
             NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
             parmDict = nil;
             urlStr = [NSString stringWithFormat:@"%@page=%@&itemperpage=%@",str,pageStr,@"10"];
         }
             break;
+        case 3:
+        {
+            //拼接ip和port
+            NSString * URLstring = [NSString stringWithFormat:CLICKMORE,[manager getIPAddress]];
+            NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
+            NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+            parmDict = nil;
+            urlStr = [NSString stringWithFormat:@"%@&page=%@&size=%@",str,pageStr,@"10"];
+        }
+            break;
         default:
             break;
     }
-    
     [manager downloadDataWithUrl:urlStr parm:parmDict callback:^(id responseObject, NSError *error) {
         
         if(error == nil){
@@ -137,15 +146,16 @@
             NSMutableArray * downArray = [NSMutableArray array];
             if([obj isKindOfClass:[NSDictionary class]]){
                 
-                NSDictionary * muDict = obj;
-                NSMutableArray * muArray = muDict[@"page"];
-                for(NSDictionary * dict in muArray){
-                    
-                    RecommandImageModel * model = [[RecommandImageModel alloc]init];
-                    model.number = dict[@"number"];
-                    model.name = dict[@"name"];
-                    model.img = dict[@"image"];
-                    [downArray addObject:model];
+                if([obj[@"page"]isKindOfClass:[NSArray class]]){
+                    NSMutableArray * muArray = obj[@"page"];
+                    for(NSDictionary * dict in muArray){
+                        
+                        RecommandImageModel * model = [[RecommandImageModel alloc]init];
+                        model.number = dict[@"number"];
+                        model.name = dict[@"name"];
+                        model.img = dict[@"image"];
+                        [downArray addObject:model];
+                    }
                 }
             }else{
                 NSMutableArray * muArray = obj;
@@ -192,7 +202,11 @@
     NSString * titleStr;
     
     if(self.catagoryItem){
-        titleStr = self.catagoryItem;
+        if(self.vc_flag==3){
+            titleStr = @"更多";
+        }else{
+            titleStr = self.catagoryItem;
+        }
     }else{
         if([[kUserDefaults objectForKey:@"temp"] isEqualToString:@"1"]){
             titleStr = @"新款产品";

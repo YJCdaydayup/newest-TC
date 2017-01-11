@@ -109,6 +109,9 @@ UIKIT_EXTERN NSString *const RECOMMANDCLICK;
 /*判断码的类型：精确，模糊，错误码*/
 UIKIT_EXTERN NSString * const CODETYPE;
 
+/*首页更多按钮*/
+UIKIT_EXTERN NSString * const CLICKMORE;
+
 /*iOS和安卓APP下载地址*/
 UIKIT_EXTERN NSString *const ANDARIOD_APPURL;
 UIKIT_EXTERN NSString *const IOS_APPURL;

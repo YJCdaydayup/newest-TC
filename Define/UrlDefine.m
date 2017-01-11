@@ -96,6 +96,9 @@ NSString * const RECOMMANDCLICK = @"http://%@/photo-album/product/get_series_pro
 /*判断码的类型：精确，模糊，错误码*/
 NSString * const CODETYPE = @"http://%@/photo-album/index/_autocomplete";
 
+/*首页更多按钮*/
+NSString * const CLICKMORE = @"http://%@/photo-album/index/getmore";
+
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";
 NSString * const IOS_APPURL = @"http://fir.im/enterpriseUrl";
