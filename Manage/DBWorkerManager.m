@@ -41,13 +41,12 @@ static DBWorkerManager * manager = nil;
         //读取本地的plist文件
         self.detailCachePath = [NSString stringWithFormat:@"%@%@detailCachePath.plist",LIBPATH,[self getScanDBMD5]];
         self.orderCachePath = [NSString stringWithFormat:@"%@%@orderCachePath",LIBPATH,[self getScanDBMD5]];
-        [self createDB];
     }
     return self;
 }
 
 #pragma mark -创建数据库
--(void)createDB{
+-(void)createSaveDB{
     
     NSArray * docArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     //获取Document下面的目录地址
@@ -83,7 +82,10 @@ static DBWorkerManager * manager = nil;
 
 -(void)createTable{
     
-    NSString * sql = @"create table if not exists saveList(number text,img blob,name text)";
+//    NSString * sql = @"create table if not exists saveList(number text,img blob,name text)";
+    
+    NSString * sql = [NSString stringWithFormat:@"create table if not exists %@saveList(number text,img blob,name text)",[self getScanDBMD5]];
+    
     [_dataBaseQueue inDatabase:^(FMDatabase *db) {
         
         BOOL isSu = [db executeUpdate:sql];
@@ -145,7 +147,8 @@ static DBWorkerManager * manager = nil;
     
     [_dataBaseQueue inDatabase:^(FMDatabase *db) {
         //        [db executeUpdate:@"delete from saveList"];
-        NSString * selectSql = @"select * from saveList where number = ?";
+//        NSString * selectSql = @"select * from saveList where number = ?";
+        NSString * selectSql = [NSString stringWithFormat:@"select * from %@saveList where number = ?",[self getScanDBMD5]];
         //查询sql语句
         FMResultSet * set = [db executeQuery:selectSql,number];
         BOOL isExist;
@@ -155,7 +158,8 @@ static DBWorkerManager * manager = nil;
         }
         
         if(isExist == NO){
-            NSString * insertSQL = @"insert into saveList(number,img,name) values (?,?,?)";
+//            NSString * insertSQL = @"insert into saveList(number,img,name) values (?,?,?)";
+            NSString * insertSQL = [NSString stringWithFormat:@"insert into %@saveList(number,img,name) values (?,?,?)",[self getScanDBMD5]];
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name];
             if (isSuccess) {
@@ -296,7 +300,8 @@ static DBWorkerManager * manager = nil;
     
     [_dataBaseQueue inDatabase:^(FMDatabase *db) {
         
-        NSString * selectSql = @"select * from saveList";
+//        NSString * selectSql = @"select * from saveList";
+        NSString * selectSql = [NSString stringWithFormat:@"select * from %@saveList",[self getScanDBMD5]];
         FMResultSet * rs = [db executeQuery:selectSql];
         NSMutableArray * array = [NSMutableArray array];
         while([rs next]){
@@ -314,7 +319,8 @@ static DBWorkerManager * manager = nil;
 
 -(void)cleanDBDataWithNumber:(NSString *)number{
     
-    NSString * deleteSql = @"delete from saveList where number = ?";
+//    NSString * deleteSql = @"delete from saveList where number = ?";
+    NSString * deleteSql = [NSString stringWithFormat:@"delete from %@saveList where number = ?",[self getScanDBMD5]];
     [_dataBaseQueue inDatabase:^(FMDatabase *db) {
         
         BOOL isDelete = [db executeUpdate:deleteSql,number];
@@ -346,7 +352,8 @@ static DBWorkerManager * manager = nil;
 
 -(void)cleanAllDBData{
     
-    NSString * deleteSql = @"delete from saveList";
+//    NSString * deleteSql = @"delete from saveList";
+    NSString * deleteSql = [NSString stringWithFormat:@"delete from %@saveList",[self getScanDBMD5]];
     [_dataBaseQueue inDatabase:^(FMDatabase *db) {
         
         BOOL isDelete = [db executeUpdate:deleteSql];
@@ -544,7 +551,7 @@ static DBWorkerManager * manager = nil;
         
         for(DBSaveModel * model in dataArray){
             
-            //            NSLog(@"bbbb:%@",model.number);
+                        NSLog(@"bbbb:%@",model.number);
             
             if([model.number isEqualToString:number]){
                 isSaved = YES;
@@ -562,7 +569,8 @@ static DBWorkerManager * manager = nil;
     NSMutableArray * array = [NSMutableArray array];
     [_dataBaseQueue inDatabase:^(FMDatabase *db) {
         
-        NSString * selectSql = @"select * from saveList";
+//        NSString * selectSql = @"select * from saveList";
+        NSString * selectSql = [NSString stringWithFormat:@"select * from %@saveList",[self getScanDBMD5]];
         FMResultSet * rs = [db executeQuery:selectSql];
         
         while([rs next]){

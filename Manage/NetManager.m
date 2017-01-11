@@ -239,6 +239,14 @@
     return muArray;
 }
 
++(void)batar_deleteServerWithIndex:(NSInteger)index{
+    
+    NetManager * manager = [NetManager shareManager];
+    NSMutableArray * array = [NSMutableArray arrayWithContentsOfFile:manager.ip_PortPath];
+    [array removeObjectAtIndex:index];
+    [array writeToFile:manager.ip_PortPath atomically:YES];
+}
+
 +(NSMutableArray *)batar_getAllServers{
     
     NetManager * manager = [NetManager shareManager];

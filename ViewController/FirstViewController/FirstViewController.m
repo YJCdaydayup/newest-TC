@@ -410,26 +410,19 @@
     view.backgroundColor = [UIColor whiteColor];
     
     UILabel * label = [Tools createLabelWithFrame:CGRectMake(0, 0, view.width, view.height) textContent:[NSString stringWithFormat:@"———— %@ ————",self.dataArray[section-1].themename] withFont:[UIFont systemFontOfSize:15*S6] textColor:TABBARTEXTCOLOR textAlignment:NSTextAlignmentCenter];
-//    label.font = [UIFont boldSystemFontOfSize:12*S6];
     [view addSubview:label];
     
-    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btns" selectedImage:nil tag:0 addTarget:self action:@selector(moreAction1)];
+    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btns" selectedImage:nil tag:0 addTarget:self action:@selector(moreAction)];
     moreBtn.frame = CGRectMake(Wscreen-93/2.0*S6, 15*S6, 40*S6, 18*S6);
     [view addSubview:moreBtn];
     return view;
 }
 
--(void)action1{
+#pragma mark - “more”按钮事件
+-(void)moreAction{
+    
     SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
     singleVc.vc_flag = 1;
-    [kUserDefaults setObject:@"1" forKey:@"temp"];
-    [self pushToViewControllerWithTransition:singleVc withDirection:@"left" type:NO];
-}
-
--(void)action2{
-    SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
-    singleVc.vc_flag = 1;
-    [kUserDefaults setObject:@"2" forKey:@"temp"];
     [self pushToViewControllerWithTransition:singleVc withDirection:@"left" type:NO];
 }
 
@@ -443,14 +436,6 @@
     moreLabel.userInteractionEnabled = YES;
     [view addSubview:moreLabel];
     return moreLabel;
-}
-
-#pragma mark - “more”按钮事件
--(void)moreAction1{
-    
-    SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
-    singleVc.vc_flag = 1;
-    [self pushToViewControllerWithTransition:singleVc withDirection:@"left" type:NO];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{

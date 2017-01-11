@@ -10,6 +10,7 @@
 #import "YLAddServer.h"
 #import "NetManager.h"
 #import "AppDelegate.h"
+#import "UIView+Shake.h"
 
 #define FrameY  265.0
 #define FrameW  135.0
@@ -21,6 +22,7 @@
     NSMutableArray * _btnArray;
     NSString * selectIp_port;
     YLAddServer * addServer;
+    BOOL isEdited;
 }
 
 @property (nonatomic,strong) UIImageView * selectImgView;
@@ -89,7 +91,108 @@
         }
         [self addSubview:btn];
         [_btnArray addObject:btn];
+        if(i != count - 1){
+            UILongPressGestureRecognizer * longTap = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(editBtns:)];
+            longTap.minimumPressDuration = 1.0f;
+            [btn addGestureRecognizer:longTap];
+        }
     }
+}
+
+#pragma mark - 长按进行编辑
+-(void)editBtns:(UILongPressGestureRecognizer *)tap{
+    
+    if(tap.state == UIGestureRecognizerStateBegan){
+        
+        if(1){
+            NSLog(@"长按进行编辑");
+            [self updateServerView];
+            for(int i = 0;i<_btnArray.count-1;i++){
+                UIButton * btn = _btnArray[i];
+                btn.layer.borderColor = [BOARDCOLOR CGColor];
+                btn.layer.borderWidth = 0.6*S6;
+                btn.titleLabel.numberOfLines = 0;
+                btn.layer.masksToBounds = NO;
+                
+                for(UIView * subView in btn.subviews){
+                    if(![subView isKindOfClass:[UILabel class]]){
+                        [subView removeFromSuperview];
+                    }
+                }
+                
+                UIView * view = [self getShakeView];
+                view.tag = btn.tag+10;
+                [btn addSubview:view];
+                [btn bringSubviewToFront:view];
+                //                [btn shakeWithOptions:SCShakeOptionsAtEndRestart force:0.005 duration:MAXFLOAT iterationDuration:0.007 completionHandler:^{
+                //                }];
+                [btn shake];
+                
+                UIView * maskView = [[UIView alloc]initWithFrame:CGRectMake(btn.x-6.5*S6, btn.y-6.5*S6, 20*S6,20*S6)];
+                maskView.tag = btn.tag+11;
+                [self addSubview:maskView];
+                
+                UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(deleteServer:)];
+                [maskView addGestureRecognizer:tap];
+                
+                UIView * spaceView = [[UIView alloc]initWithFrame:CGRectMake(btn.x+12*S6, btn.y+7*S6, btn.width-12*S6, btn.height-7*S6)];
+                [self addSubview:spaceView];
+                
+                UITapGestureRecognizer * cancelTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cancelEdit)];
+                [spaceView addGestureRecognizer:cancelTap];
+            }
+        }else{
+            
+        }
+    }
+}
+
+-(void)cancelEdit{
+    
+    NSLog(@"取消编辑");
+    [self updateServerView];
+    [self getSelectedBtn];
+}
+
+-(void)deleteServer:(UITapGestureRecognizer *)tap{
+    
+    //在这里清除
+    NSInteger btnTag = tap.view.tag - 11;
+    [NetManager batar_deleteServerWithIndex:btnTag];
+    
+    for(int i=0;i<_btnArray.count;i++){
+        UIButton * btn = _btnArray[i];
+        [btn endShake];
+        
+        for(UIView * subView in btn.subviews){
+            if(subView.tag == btn.tag+10||subView.tag == btn.tag+11){
+                [subView removeFromSuperview];
+            }
+        }
+    }
+    [self updateServerView];
+    
+    if(self.serverArray.count==0){
+        //没有服务器了
+        [kUserDefaults removeObjectForKey:IPSTRING];
+        [kUserDefaults removeObjectForKey:PORTSTRING];
+    }else{
+        //选择最后面的那个服务器
+        NSString * lastServer = [self.serverArray lastObject];
+        [kUserDefaults setObject:[self getIpWithPort:lastServer][0] forKey:IPSTRING];
+        [kUserDefaults setObject:[self getIpWithPort:lastServer][1] forKey:PORTSTRING];
+    }
+    [self getSelectedBtn];
+    [[NSNotificationCenter defaultCenter]postNotificationName:DeleteAllServer object:nil];
+}
+
+-(UIView *)getShakeView{
+    
+    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(-6.5*S6, -6.5*S6, 17*S6, 17*S6)];
+    UIImageView * imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"delete_remark"]];
+    imgView.frame = CGRectMake(0, 0, 17*S6, 17*S6);
+    [bgView addSubview:imgView];
+    return bgView;
 }
 
 -(void)configAddBtn:(UIButton *)btn{
@@ -102,6 +205,13 @@
     
     UILabel * title = [Tools createLabelWithFrame:CGRectMake(CGRectGetMaxX(addImg.frame)+8*S6, 10*S6, 100*S6, 22*S6) textContent:@"添加服务地址" withFont:[UIFont systemFontOfSize:14*S6] textColor:BatarPlaceTextCol textAlignment:NSTextAlignmentLeft];
     [btn addSubview:title];
+}
+
+//获取当前选中的服务器的index
+-(NSInteger)getSelectedServer{
+    
+    NSString * str = [NSString stringWithFormat:@"%@:%@",IPSTRING,PORTSTRING];
+    return [self.serverArray indexOfObject:str];
 }
 
 -(void)chooseServer:(UIButton *)btn{
@@ -130,7 +240,7 @@
         btn.layer.borderWidth = 0.5*S6;
         btn.layer.borderColor = [BOARDCOLOR CGColor];
     }
-    //取货当前ip，port
+    //取当前ip，port
     selectIp_port = self.serverArray[btn.tag];
     [kUserDefaults setObject:[self getIpWithPort:selectIp_port][0] forKey:IPSTRING];
     [kUserDefaults setObject:[self getIpWithPort:selectIp_port][1] forKey:PORTSTRING];
@@ -155,7 +265,7 @@
         selectIp_port = [self.serverArray lastObject];
         [kUserDefaults setObject:[self getIpWithPort:selectIp_port][0] forKey:IPSTRING];
         [kUserDefaults setObject:[self getIpWithPort:selectIp_port][1] forKey:PORTSTRING];
-        
+        [[NSNotificationCenter defaultCenter]postNotificationName:DeleteAllServer object:nil];
         [self getSelectedBtn];
         NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
     }];
@@ -181,7 +291,14 @@
     for(UIButton * btn in _btnArray){
         btn.selected = NO;
     }
-    NSInteger index = [self.serverArray indexOfObject:temp];
+    
+    NSInteger index;
+    if(temp==nil){
+        index = 0;
+    }else{
+        index = [self.serverArray indexOfObject:temp];
+    }
+    
     UIButton * btn = [_btnArray objectAtIndex:index];
     btn.selected = YES;
     
@@ -195,6 +312,8 @@
         btn.layer.borderWidth = 0.5*S6;
         btn.layer.borderColor = [BOARDCOLOR CGColor];
     }
+    
+    NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
 }
 
 -(UIImage *)btnSelectedImg:(NSString *)currentImg{

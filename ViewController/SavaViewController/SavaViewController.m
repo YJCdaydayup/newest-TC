@@ -16,8 +16,8 @@
 #import "MyViewController.h"
 #import "FinalOrderViewController.h"
 
-//单个分类搜索Cell
-#define saveCell @"saveCell"
+//Cell
+NSString * const saveCell = @"saveCell";
 
 @interface SavaViewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>{
     
@@ -32,7 +32,7 @@
 @property (nonatomic,strong) UILabel * titlelabel;
 
 //表格属性
-@property (nonatomic,strong) UICollectionView * collectionView;
+@property (nonatomic,strong) UICollectionView * collectionViews;
 @property (nonatomic,strong) NSMutableArray * dataArray;
 
 //适配工具
@@ -50,19 +50,24 @@
 //全选数组
 @property (nonatomic,assign) BOOL isSelectedAll;
 
+@property (nonatomic,strong) DBWorkerManager * manager;
+
 @end
 
 @implementation SavaViewController
-singleM(SaveController)
+
+@synthesize manager = _manager;
+@synthesize collectionViews = _collectionViews;
+
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:SaveOrNotSave object:nil];
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
     [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
-    
-    for(UIView * subView in self.view.subviews){
-        [subView removeFromSuperview];
-    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -72,16 +77,28 @@ singleM(SaveController)
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(dateChanged) name:SaveOrNotSave object:nil];
+    
+    _manager = [DBWorkerManager shareDBManager];
+    [_manager createSaveDB];
+    
+    [self createView];
+    //设置表格
+    [self configCollectionView];
+}
+
+-(void)dateChanged{
+    
+    [self createData];
 }
 
 -(void)createView{
     
-    [self configUI];
-    [self setVc];
-}
-
--(void)configUI{
+    //隐藏系统“back”左导航按钮
+    self.navigationItem.hidesBackButton = YES;
     
     //导航条设置
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(backAct) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
@@ -89,23 +106,18 @@ singleM(SaveController)
     //导航条标题
     NSString * titleStr = @"我的收藏";
     
-    self.titlelabel = [Tools createLabelWithFrame:CGRectMake(10, 10, 100*S6, 20*S6) textContent:titleStr
-                                         withFont:[UIFont systemFontOfSize:17*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];
+    self.titlelabel = [Tools createLabelWithFrame:CGRectMake(10, 10, 100*S6, 20*S6) textContent:titleStr withFont:[UIFont systemFontOfSize:17*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];
     self.navigationItem.titleView = self.titlelabel;
     editBtn = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 40*S6, 35*S6) textContent:@"编辑" withFont:[UIFont systemFontOfSize:17*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
     [editBtn addTarget:self action:@selector(editSaveAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem * editbarBtn = [[UIBarButtonItem alloc]initWithCustomView:editBtn];
     self.navigationItem.rightBarButtonItem = editbarBtn;
+    
+    //底部控制栏
+    [self setBottomVc];
 }
 
--(void)setVc{
-    
-    //    隐藏系统“back”左导航按钮
-    self.navigationItem.hidesBackButton = YES;
-    
-    //设置表格
-    [self configCollectionView];
-    
+-(void)setBottomVc{
     //添加底部控制栏
     controlView = [[SaveContolView alloc]init];
     [self.view addSubview:controlView];
@@ -152,119 +164,6 @@ singleM(SaveController)
             [alertController1 addAction:action];
         });
     }];
-    
-}
-
--(void)selectAllCell{
-    
-    self.isSelectedAll = !self.isSelectedAll;
-    for(int i=0;i<self.cellArray.count;i++){
-        
-        SaveCollectionCell * cell = self.cellArray[i];
-        NSIndexPath * indexPath = self.indexPathArray[i];
-        DBSaveModel * model = self.dataArray[indexPath.row];
-        if(self.isSelectedAll){
-            cell.seletedBtn.selected = YES;
-            [self.numberIDArray addObject:model.number];
-            cell.maskView.hidden = NO;
-            controlView.deleteBtn.selected = YES;
-        }else{
-            cell.seletedBtn.selected = NO;
-            [self.numberIDArray removeObject:model.number];
-            cell.layer.borderWidth = 0;
-            cell.layer.borderColor = [[UIColor redColor]CGColor];
-            cell.maskView.hidden = YES;
-            controlView.deleteBtn.selected = NO;
-        }
-    }
-}
-
--(void)finalizeDeleteSaveList{
-    
-    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-    for(NSString * number in self.numberIDArray){
-        [manager cleanDataCacheWithNumber:number];
-        [manager cleanDBDataWithNumber:number];
-    }
-    editBtn.selected = NO;
-    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-    [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
-    [self.numberIDArray removeAllObjects];
-    controlView.hidden = YES;
-    
-    [self createData];
-    [self resetView];
-}
-
--(void)resetView{
-    
-    for(SaveCollectionCell * cell in self.cellArray){
-        cell.seletedBtn.hidden = YES;
-        cell.maskView.hidden = YES;
-    }
-    
-    editBtn.selected = NO;
-    [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
-    [self.numberIDArray removeAllObjects];
-    controlView.hidden = YES;
-    
-    if(self.dataArray.count>0){
-        [self.collectionView reloadItemsAtIndexPaths:self.indexPathArray];
-    }else{
-        [self.collectionView removeFromSuperview];
-        [self showIndicator];
-    }
-}
-
--(void)showIndicator{
-    
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 35)];
-    label.text = @"您的收藏夹空空如也!";
-    label.font = [UIFont fontWithName:@"Arial" size:16*S6];
-    label.center = self.view.center;
-    label.font = [UIFont systemFontOfSize:19*S6];
-    label.textColor = RGB_COLOR(29, 29, 29, 0.5);
-    label.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:label];
-}
-
--(void)createData{
-    
-    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-    [manager getAllObject:^(NSMutableArray *dataArray) {
-        
-        self.dataArray = dataArray;
-        if(self.dataArray.count > 0){
-            [self.collectionView reloadData];
-        }
-    }];
-}
-
-#pragma mark -编辑cell
--(void)editSaveAction{
-    
-    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-    if(![manager judgeSaveFileExists]){
-        return;
-    }
-    
-    editBtn.selected = !editBtn.selected;
-    if(!editBtn.selected){
-        [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
-        [self resetView];
-    }else{
-        [kUserDefaults setObject:SHOWSAVEBUTTON forKey:SHOWSAVEBUTTON];
-        controlView.hidden = NO;
-        [self.numberIDArray removeAllObjects];
-        [self.collectionView reloadItemsAtIndexPaths:self.indexPathArray];
-        editBtn.selected = YES;
-        for(SaveCollectionCell * cell in self.cellArray){
-            cell.seletedBtn.hidden = NO;
-        }
-        [editBtn setTitle:@"取消" forState:UIControlStateNormal];
-        self.isSelectedAll = NO;
-        controlView.deleteBtn.selected = NO;
-    }
 }
 
 //设置表格
@@ -272,29 +171,45 @@ singleM(SaveController)
     
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc]init];
     [flowLayOut setScrollDirection:UICollectionViewScrollDirectionVertical];
+    //    flowLayOut.itemSize = CGSizeMake(50, 50);
+    //    flowLayOut.minimumInteritemSpacing = 2;
+    //    flowLayOut.minimumLineSpacing = 10;
     
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0,10*S6, Wscreen, Hscreen) collectionViewLayout:flowLayOut];
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    self.collectionView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.collectionView];
-    //注册Cell
-    [self.collectionView registerClass:[SaveCollectionCell class] forCellWithReuseIdentifier:saveCell];
+    _collectionViews = [[UICollectionView alloc]initWithFrame:CGRectMake(0,10*S6+NAV_BAR_HEIGHT,Wscreen, Hscreen-50*S6) collectionViewLayout:flowLayOut];
+    //Cell
+    [_collectionViews registerClass:[SaveCollectionCell class] forCellWithReuseIdentifier:saveCell];
+    _collectionViews.delegate = self;
+    _collectionViews.dataSource = self;
+    _collectionViews.userInteractionEnabled = YES;
+    _collectionViews.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:_collectionViews];
+    [self.view bringSubviewToFront:controlView];
     
-    
-    //请求数据
+    //数据
+    [self createData];
+}
 
-    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-    [manager getAllObject:^(NSMutableArray *dataArray) {
+-(void)createData{
+    
+    [_manager getAllObject:^(NSMutableArray *dataArray) {
         
         if(dataArray.count==0){
+            for(UIView * subView in self.view.subviews){
+                [subView removeFromSuperview];
+            }
             [self showIndicator];
         }else{
-            [self.dataArray removeAllObjects];
-            [self.dataArray addObjectsFromArray:dataArray];
-            [self.collectionView reloadData];
+            self.dataArray = dataArray;
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [_collectionViews reloadData];
+        });
     }];
+}
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+    return 1;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -313,10 +228,10 @@ singleM(SaveController)
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     
     SaveCollectionCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:saveCell forIndexPath:indexPath];
+    
     if(cell == nil){
         cell = [[SaveCollectionCell alloc]initWithFrame:CGRectMake(0,0, 10*S6, 165/2.0*S6)];
     }
-    
     cell.seletedBtn.selected = NO;
     [self.indexPathArray addObject:indexPath];
     [cell configCellWithModel:self.dataArray[indexPath.row]];
@@ -388,17 +303,114 @@ singleM(SaveController)
     UICollectionViewCell * cell = (UICollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.backgroundColor = [UIColor whiteColor];
     
-    DetailViewController * detailVc = [[DetailViewController alloc]init];
-    detailVc.fromSaveVc = 1;
+    DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
     DBSaveModel * model = [self.dataArray objectAtIndex:indexPath.row];
-    detailVc.number = model.number;
-    detailVc.isFromSaveVc = YES;//等于YES表示从收藏界面push过去的
-    [self pushToViewControllerWithTransition:detailVc withDirection:@"left" type:NO];
+    detailVc.index = model.number;
+    [self.navigationController pushViewController:detailVc animated:NO];
 }
+
 //返回这个UICollectionView是否可以被选择
 -(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return YES;
+}
+
+-(void)selectAllCell{
+    
+    self.isSelectedAll = !self.isSelectedAll;
+    for(int i=0;i<self.cellArray.count;i++){
+        
+        SaveCollectionCell * cell = self.cellArray[i];
+        NSIndexPath * indexPath = self.indexPathArray[i];
+        DBSaveModel * model = self.dataArray[indexPath.row];
+        if(self.isSelectedAll){
+            cell.seletedBtn.selected = YES;
+            [self.numberIDArray addObject:model.number];
+            cell.maskView.hidden = NO;
+            controlView.deleteBtn.selected = YES;
+        }else{
+            cell.seletedBtn.selected = NO;
+            [self.numberIDArray removeObject:model.number];
+            cell.layer.borderWidth = 0;
+            cell.layer.borderColor = [[UIColor redColor]CGColor];
+            cell.maskView.hidden = YES;
+            controlView.deleteBtn.selected = NO;
+        }
+    }
+}
+
+-(void)finalizeDeleteSaveList{
+    
+    for(NSString * number in self.numberIDArray){
+        [_manager cleanDataCacheWithNumber:number];
+        [_manager cleanDBDataWithNumber:number];
+    }
+    editBtn.selected = NO;
+    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
+    [self.numberIDArray removeAllObjects];
+    controlView.hidden = YES;
+    
+    [self createData];
+    [self resetView];
+}
+
+-(void)resetView{
+    
+    for(SaveCollectionCell * cell in self.cellArray){
+        cell.seletedBtn.hidden = YES;
+        cell.maskView.hidden = YES;
+    }
+    
+    editBtn.selected = NO;
+    [kUserDefaults removeObjectForKey:SHOWSAVEBUTTON];
+    [self.numberIDArray removeAllObjects];
+    controlView.hidden = YES;
+    
+    if(self.dataArray.count>0){
+        [_collectionViews reloadItemsAtIndexPaths:self.indexPathArray];
+    }else{
+        [_collectionViews removeFromSuperview];
+        [self showIndicator];
+    }
+}
+
+-(void)showIndicator{
+    
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 35)];
+    label.text = @"您的收藏夹空空如也!";
+    label.font = [UIFont fontWithName:@"Arial" size:16*S6];
+    label.center = self.view.center;
+    label.font = [UIFont systemFontOfSize:19*S6];
+    label.textColor = RGB_COLOR(29, 29, 29, 0.5);
+    label.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:label];
+}
+
+#pragma mark -编辑cell
+-(void)editSaveAction{
+    
+    if(![_manager judgeSaveFileExists]){
+        return;
+    }
+    
+    editBtn.selected = !editBtn.selected;
+    if(!editBtn.selected){
+        [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        [self resetView];
+    }else{
+        [kUserDefaults setObject:SHOWSAVEBUTTON forKey:SHOWSAVEBUTTON];
+        controlView.hidden = NO;
+        [self.numberIDArray removeAllObjects];
+        [_collectionViews reloadItemsAtIndexPaths:self.indexPathArray];
+        editBtn.selected = YES;
+        for(SaveCollectionCell * cell in self.cellArray){
+            cell.seletedBtn.hidden = NO;
+        }
+        [editBtn setTitle:@"取消" forState:UIControlStateNormal];
+        self.isSelectedAll = NO;
+        controlView.deleteBtn.selected = NO;
+    }
 }
 
 //返回到上一个界面

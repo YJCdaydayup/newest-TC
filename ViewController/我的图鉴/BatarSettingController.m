@@ -32,7 +32,14 @@
     
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(hasLogined) name:UploadOrders object:nil];
+    
     [self getBottomData];
+}
+
+-(void)hasLogined{
+    
+    self.userName.text = [NSString stringWithFormat:@"客户编号: %@",CUSTOMERID];
 }
 
 -(void)getBottomData{
@@ -149,7 +156,7 @@
     switch (button.tag) {
         case 0:
         {
-            SavaViewController * saveVc = [SavaViewController shareSaveController];
+            SavaViewController * saveVc = [[SavaViewController alloc]initWithController:self];
             saveVc.hidesBottomBarWhenPushed = YES;
             [self pushToViewControllerWithTransition:saveVc withDirection:@"right" type:NO];
         }

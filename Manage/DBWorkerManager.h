@@ -22,6 +22,10 @@ typedef void(^BatarLocalOrderBlock)(BOOL local);
  **/
 +(instancetype)shareDBManager;
 /*
+ 创建收藏表
+ **/
+-(void)createSaveDB;
+/*
  向数据库插入数据
  **/
 -(void)insertInfo:(DetailModel *)model withData:(id)imgData withNumber:(NSString *)number;

@@ -36,6 +36,11 @@ singleM(UploadToServer)
     NSLog(@"开始上传文字");
     DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
     [db_manager order_getAllObject:^(NSMutableArray *dataArray) {
+        
+        if(dataArray.count==0){
+            [self batar_stop];
+        }
+        
         for(DBSaveModel * model in dataArray){
             
             [kUserDefaults setObject:model.number forKey:RECORDPATH];
@@ -106,13 +111,15 @@ singleM(UploadToServer)
     }
     
     [netmanager downloadDataWithUrl:urlStr parm:subDict callback:^(id responseObject, NSError *error) {
+        
+//        NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
         if(responseObject){
-            if(reNameVoiceArray.count == 0){
-                //                NSLog(@"上传成功的model:%@,删除本地",model.number);
-                [self batar_deleteOrder];
-            }else{
-//                NSLog(@"%zi---%zi",_timer_count,self.initialDataArray.count);
-                if(_timer_count == self.initialDataArray.count){
+            if(_timer_count == self.initialDataArray.count){
+                if(reNameVoiceArray.count == 0){
+                    [self batar_deleteOrder];
+                    [self batar_stop];
+                    NSLog(@"没有语音，删除本地，停止计时器");
+                }else{
                     NSLog(@"开始上传语音，并停止计时器");
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
                         [self sendVoiceToServer:reNameVoiceArray];

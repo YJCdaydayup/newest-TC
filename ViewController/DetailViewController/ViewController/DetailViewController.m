@@ -77,12 +77,14 @@
 @property (nonatomic,assign) BOOL isUpload;
 
 @property (nonatomic,strong) YLVoicemanagerView * voiceManager;
+@property (nonatomic,strong) DBWorkerManager * db_managaer;
 
 @end
 
 @implementation DetailViewController
 
 @synthesize voiceManager = _voiceManager;
+@synthesize db_managaer = _db_managaer;
 
 +(instancetype)shareDetailController{
     
@@ -109,6 +111,12 @@
     self.tabBarController.tabBar.hidden = YES;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+    _db_managaer = manager;
+    [_db_managaer createSaveDB];
+    [_db_managaer createScanDB];
+    [_db_managaer createOrderDB];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -174,6 +182,7 @@
 }
 
 -(void)createView{
+    
     self.navigationItem.hidesBackButton = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self createBgView];
@@ -230,9 +239,7 @@
 
 -(void)addHistoryScan:(NSString *)imageUrl{
     
-    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-    [manager createScanDB];
-    [manager scan_insertInfo:detailModel withData:imageUrl withNumber:detailModel.number date:[self getCurrentDate] type:self.codeType searchType:self.searchType];
+    [_db_managaer scan_insertInfo:detailModel withData:imageUrl withNumber:detailModel.number date:[self getCurrentDate] type:self.codeType searchType:self.searchType];
 }
 
 #pragma mark -点击图片放大效果
@@ -313,31 +320,16 @@
     
     [self.ylScrollerView clearSubViews];
     
-    if(self.fromSaveVc == 0||self.fromSaveVc == 3){
-        [kUserDefaults setObject:self.index forKey:LONG_PRODUCT_ID];
-        NetManager * manager = [NetManager shareManager];
-        NSDictionary * dict = @{@"number":self.index};
-        //拼接ip和port
-        NSString * URLstring = [NSString stringWithFormat:BANNERCLICKURL,[manager getIPAddress]];
-        [self.hud show:YES];
-        [manager downloadDataWithUrl:URLstring parm:dict callback:^(id responseObject, NSError *error) {
-            obj = responseObject;
-            [self captureData:responseObject];
-        }];
-    }else if (self.fromSaveVc == 1){
-        DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-        [manager getAllDetailCache:self.number completion:^(id responseObject) {
-            obj = responseObject;
-            [self captureData:responseObject];
-        }];
-    }else if(self.fromSaveVc == 2){
-        DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-        [manager order_getAllDetailCache:self.number completion:^(id responseObject) {
-            obj = responseObject;
-            [self captureData:responseObject];
-            //                NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
-        }];
-    }
+    [kUserDefaults setObject:self.index forKey:LONG_PRODUCT_ID];
+    NetManager * manager = [NetManager shareManager];
+    NSDictionary * dict = @{@"number":self.index};
+    //拼接ip和port
+    NSString * URLstring = [NSString stringWithFormat:BANNERCLICKURL,[manager getIPAddress]];
+    [self.hud show:YES];
+    [manager downloadDataWithUrl:URLstring parm:dict callback:^(id responseObject, NSError *error) {
+        obj = responseObject;
+        [self captureData:responseObject];
+    }];
 }
 
 -(void)captureData:(id)responseObject{
@@ -347,8 +339,7 @@
         NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         detailModel = [[DetailModel alloc]initWithDictionary:dict error:nil];
         //判断是否已经收藏过
-        DBWorkerManager * manager = [DBWorkerManager shareDBManager];
-        save_Button.selected = [manager bt_productIsBeenSaveWithNumberID:detailModel.number];
+        save_Button.selected = [_db_managaer bt_productIsBeenSaveWithNumberID:detailModel.number];
         //将产品ID改成消息路径
         [kUserDefaults setObject:detailModel.number forKey:RECORDPATH];
         [self setValueToView];
@@ -560,8 +551,8 @@
                 break;
             case 1:
             {
-                SavaViewController * saveVc = [[SavaViewController alloc]init];
-                [self pushToViewControllerWithTransition:saveVc withDirection:@"left" type:NO];
+                SavaViewController * saveVc = [[SavaViewController alloc]initWithController:self];
+                [self pushToViewControllerWithTransition:saveVc withDirection:@"right" type:NO];
             }
                 break;
             case 2:{
@@ -570,17 +561,16 @@
             }
                 break;
             case 3:{
-                DBWorkerManager * manager = [DBWorkerManager shareDBManager];
                 //加入选购单
                 if(LOGIN){
                     //客户已登录，上传服务端
                     [self addMyOrders];
                 }else{
+                    
                     //客户未登录，存放本地
-                    [manager createOrderDB];
-                    [manager order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number date:[self getCurrentDate]];
+                    [_db_managaer createOrderDB];
+                    [_db_managaer order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number date:[self getCurrentDate]];
                 }
-                [manager order_saveDatailCache:detailModel.number withData:obj];
                 [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
             }
                 break;
@@ -600,14 +590,15 @@
         return;
     }
     btn.selected = !btn.selected;
-    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
     if(btn.selected){
-        [manager insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number];
-        [manager saveDatailCache:detailModel.number withData:obj];
+        [_db_managaer insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number];
+        [_db_managaer saveDatailCache:detailModel.number withData:obj];
     }else{
-        [manager cleanDBDataWithNumber:detailModel.number];
-        [manager cleanDataCacheWithNumber:detailModel.number];
+        [_db_managaer cleanDBDataWithNumber:detailModel.number];
+        [_db_managaer cleanDataCacheWithNumber:detailModel.number];
     }
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:SaveOrNotSave object:nil];
 }
 
 -(void)showSuceedAlert{
@@ -773,7 +764,7 @@
     
     if(_ylScrollerView == nil){
         
-        _ylScrollerView = [YLScrollerView shareImageManager];
+        _ylScrollerView = [[YLScrollerView alloc]init];
         _ylScrollerView.delegate = self;
         ylsubScrollView = _ylScrollerView.scollerView;
         [self.bgView addSubview:_ylScrollerView];

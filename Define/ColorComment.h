@@ -59,6 +59,8 @@
 
 #define CUSTOMERID [kUserDefaults objectForKey:CustomerID]
 
+#define HasLogined [kUserDefaults objectForKey:BatarEntrance]
+
 #define BANNERPLACEHOLDER @"banner_placeHolder@2x.jpg"
 #define PLACEHOLDER @"placeHolder.jpg"
 #define PLACETYPE @"jpg"                                            //图片的默认填充
@@ -76,8 +78,6 @@
 #define SAVEFILEEXIST @"SAVEFILEEXIST"                              //判断收藏夹是否有数据
 #define THUMBNAILRATE 10                                             //缩略图清晰度比例
 #define GETSTRING(parma) [NSString stringWithFormat:@"%zi",parma]   //将数字转化成字符串
-#define IFLY_KEY @"580d9fea"                                        //讯飞语音APPKEY
-#define RECORDPATH @"recordPath"                           //根据产品ID保存发送消息
 #define FROMORDERVC @"fromOrderVc"                         //从订购单界面跳转过来
 #define PRODUCTNUMBER @"productNumber"                     //全程的产品名
 #define SAVE_PUSH_FLAG  @"save_push_flag"                  //解决收藏与详情页的混乱的跳转逻辑

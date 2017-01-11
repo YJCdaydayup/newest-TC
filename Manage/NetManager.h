@@ -46,6 +46,8 @@ typedef void(^CoderTypeBlock)(CoderType type);
 -(void)sendAppVersionToService;
 //获取所有的正确的ip
 +(NSMutableArray *)batar_getAllServers;
+//删除某个服务器
++(void)batar_deleteServerWithIndex:(NSInteger)index;
 
 /*******************搜索历史数据********************/
 -(void)saveSearchText:(NSString *)text;

@@ -18,14 +18,25 @@
 {
     UIButton * _closeBtn;
     UITextField * userCode_tf;
+    BOOL clear_server;
 }
 
 @property (nonatomic,strong) YLServerAddView * serverView;
+@property (nonatomic,strong) UIButton * loginBtn;
+@property (nonatomic,strong) NetManager * manager;
 
 
 @end
 
 @implementation BatarLoginController
+
+@synthesize manager = _manager;
+@synthesize loginBtn = _loginBtn;
+
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:DeleteAllServer object:nil];
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -40,8 +51,35 @@
 }
 
 -(void)viewDidLoad{
+    
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteAllServer) name:DeleteAllServer object:nil];
     self.view.backgroundColor = [UIColor whiteColor];
+    _manager = [NetManager shareManager];
+    //进来之前就判断是否服务器清空
+    if([NetManager batar_getAllServers].count==0){
+        clear_server = YES;
+    }
+}
+
+-(void)deleteAllServer{
+    
+    NSMutableArray * serverArray = [NetManager batar_getAllServers];
+    if(serverArray.count>0){
+        
+        //只有当从其他界面push来的时候，才显示_closeBtn
+        if(self.fatherVc){
+            _closeBtn.hidden = NO;
+            _closeBtn.enabled = YES;
+        }
+        clear_server = NO;
+        
+    }else{
+        
+        _closeBtn.hidden = YES;
+        _closeBtn.enabled = NO;
+        clear_server= YES;
+    }
 }
 
 -(void)createView{
@@ -76,6 +114,7 @@
     [self.serverView getSelectedBtn];
     
     UIButton * loginBtn = [Tools createNormalButtonWithFrame:CGRectMake(10, Hscreen-50*S6-NAV_BAR_HEIGHT, 300*S6, 40*S6) textContent:@"登录" withFont:[UIFont systemFontOfSize:18*S6] textColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
+    _loginBtn = loginBtn;
     [loginBtn setTitleColor:RGB_COLOR(29, 29, 29, 0.5) forState:UIControlStateHighlighted];
     loginBtn.centerX = self.view.centerX;
     loginBtn.layer.cornerRadius = 20*S6;
@@ -115,6 +154,12 @@
 #pragma mark - 登录
 -(void)loginAction{
     
+    if(clear_server){
+        
+        [self showAlertViewWithTitle:@"服务器已清空，请添加服务器再登录!"];
+        return;
+    }
+    
     if(userCode_tf.text.length == 0){
         [kUserDefaults removeObjectForKey:CustomerID];
         [self setWindowTabbar];
@@ -130,10 +175,9 @@
     [self.view addSubview:self.hud];
     self.hud.labelText = @"正在检验客户编号...";
     [self.hud show:YES];
-    NetManager * manager = [NetManager shareManager];
-    NSString * urlStr = [NSString stringWithFormat:LOGIN_URL,[manager getIPAddress]];
+    NSString * urlStr = [NSString stringWithFormat:LOGIN_URL,[_manager getIPAddress]];
     NSDictionary * dict = @{@"number":userCode_tf.text};
-    [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+    [_manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.hud hide:YES];
             NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];

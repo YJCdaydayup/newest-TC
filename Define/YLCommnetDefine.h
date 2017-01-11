@@ -35,6 +35,14 @@ UIKIT_EXTERN NSString * const UploadOrders;       //上传订单
 /*切换服务器发出通知*/
 UIKIT_EXTERN NSString * const SwitchSerser;      //切换服务器发出通知
 
+/*根据产品ID保存发送消息*/
+UIKIT_EXTERN NSString * const RECORDPATH;        //根据产品ID保存发送消息
+
+/*收藏或者取消收藏发出通知*/
+UIKIT_EXTERN NSString * const SaveOrNotSave;      //收藏或者取消收藏发出通知
+
+/*当没有服务器时，发出通知*/
+UIKIT_EXTERN NSString * const DeleteAllServer;    //删除所有服务器
 
 
 @end
