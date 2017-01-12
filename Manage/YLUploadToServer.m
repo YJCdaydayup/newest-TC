@@ -21,14 +21,87 @@ singleM(UploadToServer)
     if(self = [super init]){
         
         self.uploadTimer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES callback:^{
-            
             [self batar_uploadOrdersToServer];
         }];
+        
+        self.save_uploadTimer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES callback:^{
+           
+            [self batar_uploadSaveToServer];
+        }];
+        
         [[NSRunLoop currentRunLoop]addTimer:self.uploadTimer forMode:NSRunLoopCommonModes];
+        [[NSRunLoop currentRunLoop]addTimer:self.save_uploadTimer forMode:NSRunLoopCommonModes];
         [self batar_stop];
+        [self batar_saveStop];
         self.isClosed = YES;
+        self.save_isClosed = YES;
     }
     return self;
+}
+
+-(void)batar_uploadSaveToServer{
+    
+    DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
+    [db_manager getAllObject:^(NSMutableArray *dataArray) {
+        
+        if(dataArray.count == 0){
+            
+            [self batar_saveStop];
+            return ;
+        }
+        for(DBSaveModel * model in dataArray){
+            @synchronized(self) {
+                 _save_timer_count ++;
+                [self addSave:model array:dataArray];
+            }
+        }
+    }];
+}
+
+//停止上传收藏夹
+-(void)batar_saveStop{
+    
+    [self.save_uploadTimer setFireDate:[NSDate distantFuture]];
+    self.save_isClosed = YES;
+}
+
+//开始上传收藏夹
+-(void)batar_saveStart{
+    
+    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+    [manager getAllObject:^(NSMutableArray *dataArray) {
+       
+        self.save_initialDataArray = dataArray;
+        [self.save_uploadTimer setFireDate:[NSDate distantPast]];
+        _save_timer_count = 0;
+        self.save_isClosed = NO;
+    }];
+}
+
+//执行上传收藏夹
+-(void)addSave:(DBSaveModel *)model array:(NSMutableArray *)dataArray{
+    
+    NetManager * netmanager = [NetManager shareManager];
+    NSString * urlStr = [NSString stringWithFormat:AddSaveURL,[netmanager getIPAddress]];
+    NSDictionary * dict = @{@"user":CUSTOMERID,@"number":model.number};
+    [netmanager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+        if(responseObject){
+            if(_save_timer_count == self.save_initialDataArray.count){
+                //收藏夹上传完毕，停止计时器
+                [self batar_saveStop];
+                NSLog(@"收藏夹上传完毕，停止计时器---%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
+            }
+        }else{
+            NSLog(@"%@",error.description);
+        }
+    }];
+}
+
+//清空本地收藏夹
+-(void)batar_cleanLocalSaveFile{
+    
+    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+    [manager cleanAllDBData];
 }
 
 -(void)batar_uploadOrdersToServer{
@@ -39,6 +112,7 @@ singleM(UploadToServer)
         
         if(dataArray.count==0){
             [self batar_stop];
+            return ;
         }
         
         for(DBSaveModel * model in dataArray){

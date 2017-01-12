@@ -157,6 +157,11 @@
     addServerBtn.userInteractionEnabled = YES;
     [self updateServerView];
     [self getSelectedBtn];
+    
+    for(UIButton * btn in _btnArray){
+        [btn endShake];
+    }
+    
     [[NSNotificationCenter defaultCenter]postNotificationName:ServerEditCancelNotification object:nil];
 }
 

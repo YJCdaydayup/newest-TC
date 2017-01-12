@@ -15,8 +15,12 @@
 @property (nonatomic,strong) NSArray * serverArray;
 
 -(instancetype)initWithView:(BatarLoginController *)motherVc;
+//更新界面
 -(void)updateServerView;
+//打开选择状态
 -(void)getSelectedBtn;
+//取消编辑
 -(void)cancelEdit;
+//开始编辑
 -(void)startEdit;
 @end

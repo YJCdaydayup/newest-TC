@@ -14,7 +14,7 @@
 #import <UIKit/UIKit.h>
 #define kDefaultShakeOptions (SCShakeOptionsDirectionHorizontal | SCShakeOptionsForceInterpolationExpDown | SCShakeOptionsAtEndComplete)
 #define kDefaultShakeForce (0.075)
-#define kDefaultShakeDuration (0.5)
+#define kDefaultShakeDuration (1)
 #define kDefaultShakeIterationDuration (0.03)
 
 typedef enum : NSUInteger {

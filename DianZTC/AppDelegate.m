@@ -76,6 +76,7 @@
     
     //    NSLog(@"切换了服务器");
     [_uploadManager batar_stop];
+    [_uploadManager batar_saveStop];
     [self uploadToServer];
 }
 
@@ -87,6 +88,15 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     _uploadManager = [YLUploadToServer shareUploadToServer];
                     [_uploadManager batar_start];
+                });
+            }
+        }];
+        
+        [DBWorkerManager save_judgeLocalOrder:^(BOOL local) {
+            if(local){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    _uploadManager = [YLUploadToServer shareUploadToServer];
+                    [_uploadManager batar_saveStart];
                 });
             }
         }];
@@ -140,13 +150,18 @@
 -(void)uploadDataToServer{
     
     _uploadManager = [YLUploadToServer shareUploadToServer];
-    [_uploadManager batar_start];
+    [_uploadManager batar_start];//上传本地购物车
+    [_uploadManager batar_saveStart];//上传本地收藏夹
 }
 
 -(void)reStartUpload{
     
     if(_uploadManager.isClosed){
         [_uploadManager batar_start];
+    }
+    
+    if(_uploadManager.save_isClosed){
+        [_uploadManager batar_saveStart];
     }
 }
 

@@ -99,6 +99,9 @@ NSString * const CODETYPE = @"http://%@/photo-album/index/_autocomplete";
 /*首页更多按钮*/
 NSString * const CLICKMORE = @"http://%@/photo-album/index/getmore";
 
+/*上传收藏夹*/
+NSString * const AddSaveURL = @"http://%@/photo-album/favorite/add";
+
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";
 NSString * const IOS_APPURL = @"http://fir.im/enterpriseUrl";

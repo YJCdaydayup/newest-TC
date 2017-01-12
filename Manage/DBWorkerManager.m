@@ -599,4 +599,17 @@ static DBWorkerManager * manager = nil;
     }];
 }
 
++(void)save_judgeLocalOrder:(BatarLocalOrderBlock)block{
+    
+    DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+    [manager createSaveDB];
+    [manager getAllObject:^(NSMutableArray *dataArray) {
+        if(dataArray.count>0){
+            block(YES);
+        }else{
+            block(NO);
+        }
+    }];
+}
+
 @end

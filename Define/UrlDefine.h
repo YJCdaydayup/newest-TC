@@ -112,6 +112,9 @@ UIKIT_EXTERN NSString * const CODETYPE;
 /*首页更多按钮*/
 UIKIT_EXTERN NSString * const CLICKMORE;
 
+/*上传收藏夹*/
+UIKIT_EXTERN NSString * const AddSaveURL;
+
 /*iOS和安卓APP下载地址*/
 UIKIT_EXTERN NSString *const ANDARIOD_APPURL;
 UIKIT_EXTERN NSString *const IOS_APPURL;

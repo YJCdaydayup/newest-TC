@@ -98,6 +98,10 @@ typedef void(^BatarLocalOrderBlock)(BOOL local);
  **/
 -(void)order_cleanAllDBData;
 /*
+ 判断本地购物车是否还有数据
+ **/
++(void)save_judgeLocalOrder:(BatarLocalOrderBlock)block;
+/*
  加入后，缓存到该id下的所有缓存二进制数据
  **/
 -(void)order_saveDatailCache:(NSString *)number withData:(id)responseObject;
