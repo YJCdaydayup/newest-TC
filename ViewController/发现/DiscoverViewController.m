@@ -33,10 +33,6 @@
 
 @synthesize layoutBtn = _layoutBtn;
 
--(void)dealloc{
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:DeleteServer object:nil];
-}
-
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
@@ -53,7 +49,6 @@
     
     [super viewDidLoad];
     [self batar_setNavibar:@"发现"];
-      [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateView) name:DeleteServer object:nil];
 }
 
 -(void)updateView{

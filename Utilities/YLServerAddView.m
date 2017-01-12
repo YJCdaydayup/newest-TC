@@ -23,6 +23,7 @@
     NSString * selectIp_port;
     YLAddServer * addServer;
     BOOL isEdited;
+    UIButton * addServerBtn;
 }
 
 @property (nonatomic,strong) UIImageView * selectImgView;
@@ -84,6 +85,7 @@
         [btn setImage:[self btnSelectedImg:currentImg] forState:UIControlStateSelected];
         if(i == count-1){
             //增加服务器按钮
+            addServerBtn = btn;
             [self configAddBtn:btn];
         }
         if(i == 0){
@@ -103,7 +105,6 @@
 -(void)editBtns:(UILongPressGestureRecognizer *)tap{
     
     if(tap.state == UIGestureRecognizerStateBegan){
-        
         [self startEdit];
     }
 }
@@ -147,11 +148,13 @@
         
         [[NSNotificationCenter defaultCenter]postNotificationName:ServerEditNotification object:nil];
     }
+    addServerBtn.userInteractionEnabled = NO;
 }
 
 -(void)cancelEdit{
     
 //    NSLog(@"取消编辑");
+    addServerBtn.userInteractionEnabled = YES;
     [self updateServerView];
     [self getSelectedBtn];
     [[NSNotificationCenter defaultCenter]postNotificationName:ServerEditCancelNotification object:nil];
@@ -336,7 +339,7 @@
 -(NSString *)getCompareServer:(NSString *)currentServer{
     
     //尚金缘，和合，金百泰,百泰集团
-    NSArray * localServers = @[@"zbtj.batar.cn:9999",@"zbtj.batar.cn:8888",@"zbtj.batar.cn:7777",@"zbtj.batar.cn:6660000"];
+    NSArray * localServers = @[@"zbtj.batar.cn:9999",@"zbtj.batar.cn:8888",@"zbtj.batar.cn:7777",@"zbtj.batar.cn:6666"];
     NSArray * localImgNames = @[@"showking",@"batar_jew",@"king_batar",@"batar_group"];
     NSString * imgName = currentServer;
     for(int i=0;i<localServers.count;i++){

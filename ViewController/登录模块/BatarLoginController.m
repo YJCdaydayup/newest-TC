@@ -24,7 +24,7 @@
 @property (nonatomic,strong) YLServerAddView * serverView;
 @property (nonatomic,strong) UIButton * loginBtn;
 @property (nonatomic,strong) NetManager * manager;
-
+@property (nonatomic,copy) NSString * tempIP_Port;
 
 @end
 
@@ -58,12 +58,16 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(deleteServer) name:DeleteServer object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(editServer) name:ServerEditNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(cancelServerEdit) name:ServerEditCancelNotification object:nil];
+    
     self.view.backgroundColor = [UIColor whiteColor];
     _manager = [NetManager shareManager];
     //进来之前就判断是否服务器清空
     if([NetManager batar_getAllServers].count==0){
         clear_server = YES;
     }
+    
+    //获取当前ip和端口
+    self.tempIP_Port = [_manager getIPAddress];
 }
 
 -(void)editServer{
@@ -82,20 +86,12 @@
 
 -(void)deleteServer{
     
+    _closeBtn.hidden = YES;
+    _closeBtn.enabled = NO;
     NSMutableArray * serverArray = [NetManager batar_getAllServers];
     if(serverArray.count>0){
-        
-        //只有当从其他界面push来的时候，才显示_closeBtn
-        if(self.fatherVc){
-            _closeBtn.hidden = NO;
-            _closeBtn.enabled = YES;
-        }
         clear_server = NO;
-        
     }else{
-        
-        _closeBtn.hidden = YES;
-        _closeBtn.enabled = NO;
         clear_server= YES;
     }
 }
@@ -240,7 +236,15 @@
 #pragma mark - 退出登录界面
 -(void)closeLogin{
     
+    [self repairIP_Port];
     [self popToViewControllerWithDirection:@"left" type:YES];
+}
+
+-(void)repairIP_Port{
+    
+    NSArray * array = [_tempIP_Port componentsSeparatedByString:@":"];
+    [kUserDefaults setObject:array[0] forKey:IPSTRING];
+    [kUserDefaults setObject:array[1] forKey:PORTSTRING];
 }
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

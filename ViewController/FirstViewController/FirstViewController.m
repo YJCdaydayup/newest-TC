@@ -68,11 +68,6 @@
 
 @synthesize manager = manager;
 
--(void)dealloc{
-    
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:DeleteServer object:nil];
-}
-
 //界面即将消失时
 -(void)viewWillDisappear:(BOOL)animated{
     
@@ -93,8 +88,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateView) name:DeleteServer object:nil];
-    
     manager = [NetManager shareManager];
     
     //隐藏系统的“返回导航按钮”
@@ -110,7 +103,7 @@
 //刷新界面
 -(void)updateView{
     
-    [self.tableView headerBeginRefreshing];
+    [self viewDidLoad];
 }
 
 //设置表格frame
