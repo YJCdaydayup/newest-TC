@@ -115,6 +115,15 @@ UIKIT_EXTERN NSString * const CLICKMORE;
 /*上传收藏夹*/
 UIKIT_EXTERN NSString * const AddSaveURL;
 
+/*收藏:获取收藏夹数据*/
+UIKIT_EXTERN NSString * const GetSaveURL;
+
+/*收藏:删除收藏夹*/
+UIKIT_EXTERN NSString * const DeleteSaveURL;
+
+/*收藏:判断产品是否收藏*/
+UIKIT_EXTERN NSString * const WhetherSavedURl;
+
 /*iOS和安卓APP下载地址*/
 UIKIT_EXTERN NSString *const ANDARIOD_APPURL;
 UIKIT_EXTERN NSString *const IOS_APPURL;

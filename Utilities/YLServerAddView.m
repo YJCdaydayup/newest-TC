@@ -11,6 +11,7 @@
 #import "NetManager.h"
 #import "AppDelegate.h"
 #import "UIView+Shake.h"
+#import "UIButton+Shake.h"
 
 #define FrameY  265.0
 #define FrameW  135.0
@@ -129,9 +130,8 @@
         view.tag = btn.tag+10;
         [btn addSubview:view];
         [btn bringSubviewToFront:view];
-        //                [btn shakeWithOptions:SCShakeOptionsAtEndRestart force:0.005 duration:MAXFLOAT iterationDuration:0.007 completionHandler:^{
-        //                }];
-        [btn shake];
+//        [btn shake];
+        [btn btn_rightShake];
         
         UIView * maskView = [[UIView alloc]initWithFrame:CGRectMake(btn.x-6.5*S6, btn.y-6.5*S6, 20*S6,20*S6)];
         maskView.tag = btn.tag+11;
@@ -158,9 +158,9 @@
     [self updateServerView];
     [self getSelectedBtn];
     
-    for(UIButton * btn in _btnArray){
-        [btn endShake];
-    }
+//    for(UIButton * btn in _btnArray){
+//        [btn endShake];
+//    }
     
     [[NSNotificationCenter defaultCenter]postNotificationName:ServerEditCancelNotification object:nil];
 }

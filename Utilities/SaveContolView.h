@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^ControlSelectAllBlock)();
 typedef void(^ControlDeleteBlock)();
-typedef void(^ControlCancelBlock)();
 @interface SaveContolView : UIView
 
+@property (nonatomic,copy) ControlSelectAllBlock selectAllBlock;
 @property (nonatomic,copy) ControlDeleteBlock deleteBlock;
-@property (nonatomic,copy) ControlCancelBlock cancelBlock;
+@property (nonatomic,strong) UIButton * selectAllBtn;
 @property (nonatomic,strong) UIButton * deleteBtn;
-@property (nonatomic,strong) UIButton * cancelBtn;
 
+-(void)clickSelectAll:(ControlSelectAllBlock)block;
 -(void)clickDeleteBtn:(ControlDeleteBlock)block;
--(void)clickCancelBtn:(ControlCancelBlock)block;
 
 @end

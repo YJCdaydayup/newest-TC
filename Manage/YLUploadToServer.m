@@ -89,6 +89,7 @@ singleM(UploadToServer)
             if(_save_timer_count == self.save_initialDataArray.count){
                 //收藏夹上传完毕，停止计时器
                 [self batar_saveStop];
+                [self batar_cleanLocalSaveFile];
                 NSLog(@"收藏夹上传完毕，停止计时器---%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
             }
         }else{

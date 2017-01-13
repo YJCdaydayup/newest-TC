@@ -18,6 +18,7 @@
 #import "MyOrdersController.h"
 #import "YLShareView.h"
 #import "YLLoginView.h"
+#import "BatarCarController.h"
 #import "ScanViewController.h"
 
 @interface DetailViewController ()<YLScrollerViewDelegate,STPhotoBrowserDelegate>{
@@ -79,12 +80,18 @@
 @property (nonatomic,strong) YLVoicemanagerView * voiceManager;
 @property (nonatomic,strong) DBWorkerManager * db_managaer;
 
+
 @end
 
 @implementation DetailViewController
 
 @synthesize voiceManager = _voiceManager;
 @synthesize db_managaer = _db_managaer;
+
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:SaveCellDeleteNotification object:nil];
+}
 
 +(instancetype)shareDetailController{
     
@@ -111,12 +118,34 @@
     self.tabBarController.tabBar.hidden = YES;
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeSaveBtn) name:SaveCellDeleteNotification object:nil];
     
     DBWorkerManager * manager = [DBWorkerManager shareDBManager];
     _db_managaer = manager;
     [_db_managaer createSaveDB];
     [_db_managaer createScanDB];
     [_db_managaer createOrderDB];
+}
+
+-(void)changeSaveBtn{
+    //判断是否已经收藏过
+    if(CUSTOMERID){
+        //服务端是否收藏
+        NetManager * manager = [NetManager shareManager];
+        NSString * urlStr = [NSString stringWithFormat:WhetherSavedURl,[manager getIPAddress]];
+        NSDictionary * dict = @{@"user":CUSTOMERID,@"number":detailModel.number};
+        [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+            NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+            if([[dict objectForKey:@"state"]integerValue]){
+                save_Button.selected = YES;
+            }else{
+                save_Button.selected = NO;
+            }
+        }];
+    }else{
+        //本地是否收藏
+        save_Button.selected = [_db_managaer bt_productIsBeenSaveWithNumberID:detailModel.number];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -131,7 +160,8 @@
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
-    [[NSNotificationCenter defaultCenter]removeObserver:self];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillShowNotification object:nil];
 }
 
 - (void)viewDidLoad {
@@ -335,11 +365,29 @@
 -(void)captureData:(id)responseObject{
     
     if(responseObject){
-        [self.hud hide:YES];
         NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         detailModel = [[DetailModel alloc]initWithDictionary:dict error:nil];
         //判断是否已经收藏过
-        save_Button.selected = [_db_managaer bt_productIsBeenSaveWithNumberID:detailModel.number];
+        if(CUSTOMERID){
+            //服务端是否收藏
+            NetManager * manager = [NetManager shareManager];
+            NSString * urlStr = [NSString stringWithFormat:WhetherSavedURl,[manager getIPAddress]];
+            NSDictionary * dict = @{@"user":CUSTOMERID,@"number":detailModel.number};
+            [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+                [self.hud hide:YES];
+                NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+                if([[dict objectForKey:@"state"]integerValue]){
+                    save_Button.selected = YES;
+                }else{
+                    save_Button.selected = NO;
+                }
+            }];
+        }else{
+            //本地是否收藏
+            [self.hud hide:YES];
+            save_Button.selected = [_db_managaer bt_productIsBeenSaveWithNumberID:detailModel.number];
+        }
+        
         //将产品ID改成消息路径
         [kUserDefaults setObject:detailModel.number forKey:RECORDPATH];
         [self setValueToView];
@@ -489,7 +537,6 @@
                 default:
                     break;
             }
-            
         }];
     }else{
         [self showAlertViewWithTitle:@"部分产品信息未获取到，请稍后再试!"];
@@ -557,7 +604,8 @@
                 break;
             case 2:{
                 //进入购物车
-                
+                BatarCarController * carVc = [[BatarCarController alloc]initWithController:self];
+                [self pushToViewControllerWithTransition:carVc withDirection:@"right" type:NO];
             }
                 break;
             case 3:{
@@ -590,12 +638,70 @@
         return;
     }
     btn.selected = !btn.selected;
+    NetManager * manager = [NetManager shareManager];
     if(btn.selected){
-        [_db_managaer insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number];
-        [_db_managaer saveDatailCache:detailModel.number withData:obj];
+        
+        if(CUSTOMERID){
+            //添加到服务器的收藏
+            self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.hud.labelText = @"正在收藏...";
+            [self.hud show:YES];
+            
+            NSString * urlStr = [NSString stringWithFormat:AddSaveURL,[manager getIPAddress]];
+            NSDictionary * dict = @{@"user":CUSTOMERID,@"number":detailModel.number};
+            [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+                
+                NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+                if([[dict objectForKey:@"state"]integerValue]){
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.hud.labelText = @"收藏成功";
+                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self.hud hide:YES];
+                    });
+                }
+            }];
+        }else{
+            [_db_managaer insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number];
+            [_db_managaer saveDatailCache:detailModel.number withData:obj];
+        }
     }else{
-        [_db_managaer cleanDBDataWithNumber:detailModel.number];
-        [_db_managaer cleanDataCacheWithNumber:detailModel.number];
+        if(CUSTOMERID){
+            //删除服务器收藏
+            //添加到服务器的收藏
+            self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.hud.labelText = @"正在取消收藏...";
+            [self.hud show:YES];
+            
+            NSString * urlStr = [NSString stringWithFormat:DeleteSaveURL,[manager getIPAddress]];
+            NSMutableArray * numberArray = [NSMutableArray arrayWithObject:detailModel.number];
+            NSDictionary * dict = @{@"user":CUSTOMERID,@"numberlist":[self myArrayToJson:numberArray]};
+            [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+                
+                NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+                if([[dict objectForKey:@"state"]integerValue]){
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.hud.labelText = @"取消成功";
+                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self.hud hide:YES];
+                    });
+                }else{
+                    save_Button.selected = YES;
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        self.hud.labelText = @"取消收藏失败";
+                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [self.hud hide:YES];
+                        
+                    });
+                    
+                }
+            }];
+        }else{
+            [_db_managaer cleanDBDataWithNumber:detailModel.number];
+            [_db_managaer cleanDataCacheWithNumber:detailModel.number];
+        }
     }
     
     [[NSNotificationCenter defaultCenter]postNotificationName:SaveOrNotSave object:nil];
@@ -728,12 +834,10 @@
 
 //返回到上一个界面
 -(void)backOut{
-    
     [self popToViewControllerWithDirection:@"right" type:NO];
 }
 
 -(NSMutableArray *)sortItemsArray{
-    
     if(_sortItemsArray == nil){
         _sortItemsArray = [NSMutableArray array];
     }
@@ -741,9 +845,7 @@
 }
 
 -(STShareTool *)shareTool{
-    
     if(_shareTool == nil){
-        
         _shareTool = [STShareTool toolWithViewController:self];
     }
     return _shareTool;

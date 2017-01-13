@@ -16,6 +16,7 @@
 @property (nonatomic,copy) NSString * date;
 @property (nonatomic,copy) NSString * type;
 @property (nonatomic,copy) NSString * searchType;
+@property (nonatomic,copy) NSString * image;
 @property (nonatomic,assign) BOOL selected;
 
 @end

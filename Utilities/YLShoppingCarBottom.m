@@ -46,6 +46,7 @@
     [self addSubview:title];
     
     UIButton * delete = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-180*S6, 0, 90*S6, 40.5*S6) textContent:@"删除" withFont:[UIFont systemFontOfSize:12*S6] textColor:RGB_COLOR(153, 37, 42, 1) textAlignment:NSTextAlignmentCenter];
+    self.deleteBtn = delete;
     delete.tag = 1;
     delete.layer.borderWidth = 0.1*S6;
     delete.layer.borderColor = [BOARDCOLOR CGColor];
@@ -55,6 +56,7 @@
     [delete addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton * confirm = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-90*S6, 0, 90*S6, 40.5*S6) textContent:@"确认选购" withFont:[UIFont systemFontOfSize:12*S6] textColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
+    self.confirmBtn = confirm;
     confirm.tag = 2;
     [confirm setTitleColor:RGB_COLOR(29, 29, 29, .5) forState:UIControlStateHighlighted];
     confirm.backgroundColor = TABBARTEXTCOLOR;

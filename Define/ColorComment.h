@@ -74,7 +74,6 @@
 #define LOGINFAILED @"loginfailed"                                  //登录失败
 #define SHOWMENUE @"showmenue"                            //判断是否显示系列界面的“系列”和“分类”
 #define ALLDETAILCACHE @"allDetailCache"                  //所有的详情界面数据缓存文件夹
-#define SHOWSAVEBUTTON @"showsaveselectedbutton"          //收藏界面判断是否显示出编辑按钮
 #define SAVEFILEEXIST @"SAVEFILEEXIST"                              //判断收藏夹是否有数据
 #define THUMBNAILRATE 10                                             //缩略图清晰度比例
 #define GETSTRING(parma) [NSString stringWithFormat:@"%zi",parma]   //将数字转化成字符串

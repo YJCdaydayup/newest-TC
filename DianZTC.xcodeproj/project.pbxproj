@@ -28,6 +28,7 @@
 		8F1E242C1DDC0667007C2033 /* UMS_tumblr_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F1E24111DDC0667007C2033 /* UMS_tumblr_icon@2x.png */; };
 		8F1E242F1DDC0667007C2033 /* UMS_wechat_session_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F1E24141DDC0667007C2033 /* UMS_wechat_session_icon.png */; };
 		8F1E24301DDC0667007C2033 /* UMS_wechat_timeline_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F1E24151DDC0667007C2033 /* UMS_wechat_timeline_icon.png */; };
+		8F2CB8101E28516200B0E0C5 /* UIButton+Shake.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2CB80F1E28516200B0E0C5 /* UIButton+Shake.m */; };
 		8F2D1AAA1DCA4B7F00D40BEA /* my_order_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2D1AA81DCA4B7F00D40BEA /* my_order_select@2x.png */; };
 		8F2D1AAB1DCA4B7F00D40BEA /* my_saved_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2D1AA91DCA4B7F00D40BEA /* my_saved_select@2x.png */; };
 		8F2D1AAD1DCA4B8200D40BEA /* first_page_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F2D1AAC1DCA4B8200D40BEA /* first_page_select@2x.png */; };
@@ -750,6 +751,8 @@
 		8F1E24111DDC0667007C2033 /* UMS_tumblr_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UMS_tumblr_icon@2x.png"; sourceTree = "<group>"; };
 		8F1E24141DDC0667007C2033 /* UMS_wechat_session_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UMS_wechat_session_icon.png; sourceTree = "<group>"; };
 		8F1E24151DDC0667007C2033 /* UMS_wechat_timeline_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UMS_wechat_timeline_icon.png; sourceTree = "<group>"; };
+		8F2CB80E1E28516200B0E0C5 /* UIButton+Shake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Shake.h"; sourceTree = "<group>"; };
+		8F2CB80F1E28516200B0E0C5 /* UIButton+Shake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Shake.m"; sourceTree = "<group>"; };
 		8F2D1AA81DCA4B7F00D40BEA /* my_order_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_order_select@2x.png"; sourceTree = "<group>"; };
 		8F2D1AA91DCA4B7F00D40BEA /* my_saved_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_saved_select@2x.png"; sourceTree = "<group>"; };
 		8F2D1AAC1DCA4B8200D40BEA /* first_page_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first_page_select@2x.png"; sourceTree = "<group>"; };
@@ -2324,6 +2327,8 @@
 				8FB9CD501E0CBDC200DA6E11 /* YLServerAddView.m */,
 				8F7D096D1E119CA800E94955 /* YLShoppingCarBottom.h */,
 				8F7D096E1E119CA800E94955 /* YLShoppingCarBottom.m */,
+				8F2CB80E1E28516200B0E0C5 /* UIButton+Shake.h */,
+				8F2CB80F1E28516200B0E0C5 /* UIButton+Shake.m */,
 			);
 			path = Utilities;
 			sourceTree = SOURCE_ROOT;
@@ -4644,6 +4649,7 @@
 				8F4A19441CDAB580006ED857 /* SDCollectionViewCell.m in Sources */,
 				8F7CC1191E133A280033E7FB /* ZXAztecBinaryShiftToken.m in Sources */,
 				8F7CC1911E133A280033E7FB /* ZXAnyAIDecoder.m in Sources */,
+				8F2CB8101E28516200B0E0C5 /* UIButton+Shake.m in Sources */,
 				8F7CC1C41E133A280033E7FB /* ZXPDF417Codeword.m in Sources */,
 				8F7CC1B91E133A280033E7FB /* ZXUPCEANExtension5Support.m in Sources */,
 				8F7CC1271E133A280033E7FB /* ZXBizcardResultParser.m in Sources */,

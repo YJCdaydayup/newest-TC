@@ -111,6 +111,7 @@
 }
 
 -(void)changeCacheStyle{
+    
     //SDImageCache默认是利用NSCache存储资源，也就是利用内存。设置不使用内存就行
     [[SDImageCache sharedImageCache] setShouldCacheImagesInMemory:NO];
     [[SDImageCache sharedImageCache] setShouldDecompressImages:NO];

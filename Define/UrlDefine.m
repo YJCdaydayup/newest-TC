@@ -102,6 +102,15 @@ NSString * const CLICKMORE = @"http://%@/photo-album/index/getmore";
 /*上传收藏夹*/
 NSString * const AddSaveURL = @"http://%@/photo-album/favorite/add";
 
+/*收藏:获取收藏夹数据*/
+NSString * const GetSaveURL = @"http://%@/photo-album/favorite/getall";
+
+/*收藏:删除收藏夹*/
+NSString * const DeleteSaveURL = @"http://%@/photo-album/favorite/del";
+
+/*收藏:判断产品是否收藏*/
+NSString * const WhetherSavedURl = @"http://%@/photo-album/favorite/isfavorite";
+
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";
 NSString * const IOS_APPURL = @"http://fir.im/enterpriseUrl";

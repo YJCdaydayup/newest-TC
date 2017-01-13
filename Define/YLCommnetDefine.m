@@ -38,6 +38,11 @@ NSString * const ServerEditNotification = @"ServerEditNotification"; //开始编
 
 NSString * const ServerEditCancelNotification = @"ServerEditCancelNotification";
 
+NSString * const SaveCellEditNotification = @"SaveCellEditNotification";
+
+NSString * const SaveCellCancelEditNotification = @"SaveCellCancelEditNotification";
+
+NSString * const SaveCellDeleteNotification = @"SaveCellDeleteNotification";
 
 
 @end

@@ -31,7 +31,6 @@
 -(void)viewDidLoad{
     
     [super viewDidLoad];
-    
     self.app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [self createView];
 }

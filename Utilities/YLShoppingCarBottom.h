@@ -14,6 +14,8 @@ typedef void(^ShoppingCarBlock)(NSInteger index);
 @interface YLShoppingCarBottom : UIView
 
 @property (nonatomic,strong) UIButton * selectAllBtn;
+@property (nonatomic,strong) UIButton * deleteBtn;
+@property (nonatomic,strong) UIButton * confirmBtn;
 @property (nonatomic,copy) ShoppingCarBlock block;
 
 +(instancetype)shareCarBottom;
