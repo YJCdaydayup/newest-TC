@@ -205,6 +205,7 @@
 		8F614AA71D5D41B9004EEECA /* xiala@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F614AA61D5D41B9004EEECA /* xiala@3x.png */; };
 		8F61A7E21D42BBFD00D2B18C /* BannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F61A7E11D42BBFD00D2B18C /* BannerModel.m */; };
 		8F61A7E51D42C84500D2B18C /* DetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F61A7E41D42C84500D2B18C /* DetailModel.m */; };
+		8F662D261E2ACBF70076B566 /* UIView+Tap.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F662D251E2ACBF70076B566 /* UIView+Tap.m */; };
 		8F66AA5D1DCBF353007B7F91 /* YLOrdersController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F66AA5C1DCBF353007B7F91 /* YLOrdersController.m */; };
 		8F66AA5F1DCBF433007B7F91 /* myorders_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F66AA5E1DCBF433007B7F91 /* myorders_select@2x.png */; };
 		8F66AA611DCBF44C007B7F91 /* myorders_select@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F66AA601DCBF44C007B7F91 /* myorders_select@3x.png */; };
@@ -1030,6 +1031,8 @@
 		8F61A7E11D42BBFD00D2B18C /* BannerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BannerModel.m; sourceTree = "<group>"; };
 		8F61A7E31D42C84500D2B18C /* DetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailModel.h; sourceTree = "<group>"; };
 		8F61A7E41D42C84500D2B18C /* DetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailModel.m; sourceTree = "<group>"; };
+		8F662D241E2ACBF70076B566 /* UIView+Tap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Tap.h"; sourceTree = "<group>"; };
+		8F662D251E2ACBF70076B566 /* UIView+Tap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Tap.m"; sourceTree = "<group>"; };
 		8F66AA5B1DCBF353007B7F91 /* YLOrdersController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLOrdersController.h; sourceTree = "<group>"; };
 		8F66AA5C1DCBF353007B7F91 /* YLOrdersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLOrdersController.m; sourceTree = "<group>"; };
 		8F66AA5E1DCBF433007B7F91 /* myorders_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "myorders_select@2x.png"; sourceTree = "<group>"; };
@@ -2329,6 +2332,8 @@
 				8F7D096E1E119CA800E94955 /* YLShoppingCarBottom.m */,
 				8F2CB80E1E28516200B0E0C5 /* UIButton+Shake.h */,
 				8F2CB80F1E28516200B0E0C5 /* UIButton+Shake.m */,
+				8F662D241E2ACBF70076B566 /* UIView+Tap.h */,
+				8F662D251E2ACBF70076B566 /* UIView+Tap.m */,
 			);
 			path = Utilities;
 			sourceTree = SOURCE_ROOT;
@@ -4584,6 +4589,7 @@
 				8F7CC1661E133A280033E7FB /* ZXErrors.m in Sources */,
 				8F7CC1711E133A280033E7FB /* ZXDataMatrixVersion.m in Sources */,
 				8F4A193B1CDAB580006ED857 /* MJRefreshFooterView.m in Sources */,
+				8F662D261E2ACBF70076B566 /* UIView+Tap.m in Sources */,
 				8F7CC16B1E133A280033E7FB /* ZXResultPoint.m in Sources */,
 				8F7CC1281E133A280033E7FB /* ZXBookmarkDoCoMoResultParser.m in Sources */,
 				8F7CC15A1E133A280033E7FB /* ZXGlobalHistogramBinarizer.m in Sources */,

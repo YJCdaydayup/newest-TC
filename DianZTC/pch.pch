@@ -35,6 +35,7 @@
 #import "STShareTool.h"
 #import "Single.h"
 #import "YLCommnetDefine.h"
+#import "UIView+Tap.h"//添加手势的分类
 
 //界面及代理类
 #import "AppDelegate.h"

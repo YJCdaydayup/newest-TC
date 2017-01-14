@@ -321,6 +321,16 @@
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
+    DBSaveModel * model = self.dataArray[indexPath.row];
+    detailVc.index = model.number;
+    [self pushToViewControllerWithTransition:detailVc withDirection:@"right" type:NO];
+}
+
 -(void)addOrderModel:(DBSaveModel *)model{
     
     if(![self.selectedArray containsObject:model]){
@@ -343,11 +353,6 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     return 102.5*S6;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    
 }
 
 -(DBWorkerManager *)manager{

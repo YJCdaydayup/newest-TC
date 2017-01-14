@@ -13,6 +13,6 @@ typedef void(^TimerBlock)();
 @interface NSTimer (Net)
 
 +(instancetype)scheduledTimerWithTimeInterval:(float)time repeats:(BOOL)repeat callback:(TimerBlock)block;
-+(void)timerAction:(NSTimer *)timer;
+//+(void)timerAction:(NSTimer *)timer;
 
 @end

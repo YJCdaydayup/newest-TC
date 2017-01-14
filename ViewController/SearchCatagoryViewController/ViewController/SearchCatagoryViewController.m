@@ -196,8 +196,6 @@
 //返回到上一个界面
 -(void)backToFirstViewController{
     
-//    FirstViewController * firstVc = [[FirstViewController alloc]init];
-    
     CATransition * animation = [CATransition animation];
     animation.type = kCATransitionReveal;
     animation.duration = 0.5f;
