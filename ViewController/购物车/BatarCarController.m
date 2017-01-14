@@ -12,10 +12,8 @@
 #import "YLShoppingCarBottom.h"
 #import "DetailViewController.h"
 #import "YLLoginView.h"
+#import "NetManager.h"
 #import "YLOrdersController.h"
-
-
-
 
 #define CELL @"CARCell"
 
@@ -37,7 +35,6 @@
 @synthesize loginView = _loginView;
 
 -(void)dealloc{
-    
     [[NSNotificationCenter defaultCenter]removeObserver:self name:AddShoppingCar object:nil];
 }
 
@@ -51,6 +48,7 @@
         self.tabBarController.tabBar.hidden = NO;
     }
     [self createBottom];
+    
 }
 
 -(void)viewDidLoad{
@@ -110,7 +108,7 @@
         [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
     }
     
-    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, Hscreen-40.5*S6-TABBAR_HEIGHT)];
+    self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-40.5*S6-TABBAR_HEIGHT-NAV_BAR_HEIGHT)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -206,31 +204,83 @@
 
 -(void)removeOrders:(BOOL)islogged{
     
+    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.hud.labelText = @"正在删除中...";
+    self.hud.animationType = MBProgressHUDAnimationZoomOut;
+    
     DBWorkerManager * dbManager = [DBWorkerManager shareDBManager];
     if(islogged){
         //删除服务端订单
-        
-        
-        
+        NSMutableArray * selectArray = [NSMutableArray array];
+        for(DBSaveModel * model in self.selectedArray){
+            [selectArray addObject:model.number];
+        }
+        NetManager * manager = [NetManager shareManager];
+        NSDictionary * dict = @{@"order":[self myArrayToJson:selectArray],@"customerid":CUSTOMERID};
+        NSString * urlStr = [NSString stringWithFormat:REMOVECARORDER,[manager getIPAddress]];
+        [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+            NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+            if([[dict objectForKey:@"state"]integerValue]){
+                self.hud.labelText = @"删除成功!";
+                _carBottom.selectAllBtn.selected = NO;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.hud hide:YES];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self getData];
+                    });
+                });
+            }
+        }];
     }else{
         //删除本地订单
         [self.dataArray removeObjectsInArray:self.selectedArray];
         for(DBSaveModel * model in self.selectedArray){
             [dbManager order_cleanDBDataWithNumber:model.number];
         }
+        _carBottom.selectAllBtn.selected = NO;
+        [self.tableView reloadData];
     }
-    _carBottom.selectAllBtn.selected = NO;
-    [self.tableView reloadData];
 }
 
 -(void)getData{
     
     [self.selectedArray removeAllObjects];
+    [self.dataArray removeAllObjects];
     WEAKSELF(WEAKSS);
     if(CUSTOMERID){
-        
         //服务器获取数据
-        
+        [self.hud show:YES];
+        NetManager * manager = [NetManager shareManager];
+        NSString * urlStr = [NSString stringWithFormat:MYORDERCAR,[manager getIPAddress]];
+        NSDictionary * dict = @{@"customerid":CUSTOMERID};
+        [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+            if(responseObject){
+                
+                [self.hud hide:YES];
+                NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+                id objs = dict[@"products"];
+                if([dict isKindOfClass:[NSArray class]]){
+                    return ;
+                }
+                if([objs isKindOfClass:[NSNull class]]){
+                    [self.dataArray removeAllObjects];
+                }else{
+                    NSMutableArray * modelArray = dict[@"products"];
+                    NSMutableArray * tempArray = [[NSMutableArray alloc]init];
+                    for(NSDictionary * dict in modelArray){
+                        DBSaveModel * model = [[DBSaveModel alloc]init];
+                        model.name = dict[@"name"];
+                        model.number = dict[@"number"];
+                        model.image = dict[@"image"];
+                        [tempArray addObject:model];
+                    }
+                    [self.dataArray addObjectsFromArray:tempArray];
+                }
+                [WEAKSS.tableView reloadData];
+            }else{
+                NSLog(@"%@",error.description);
+            }
+        }];
     }else
     {
         //本地购物车获取数据
@@ -239,9 +289,8 @@
             WEAKSS.dataArray = dataArray;
             [WEAKSS.tableView reloadData];
         }];
-
+        
     }
-    
 }
 
 #pragma mark -表格代理方法
@@ -315,6 +364,13 @@
         _selectedArray = [NSMutableArray array];
     }
     return _selectedArray;
+}
+
+-(NSMutableArray *)dataArray{
+    if(!_dataArray){
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
 }
 
 @end

@@ -74,7 +74,7 @@
 
 -(void)switchServer{
     
-    //    NSLog(@"切换了服务器");
+    // NSLog(@"切换了服务器");
     [_uploadManager batar_stop];
     [_uploadManager batar_saveStop];
     [self uploadToServer];

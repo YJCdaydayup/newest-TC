@@ -98,8 +98,15 @@
 //    
 //    NSInteger width = 110*THUMBNAILRATE;
 //    NSInteger height = 165/2.0*THUMBNAILRATE;
-    
-    imgView.image = [UIImage imageWithData:model.img];
+    NetManager * manager = [NetManager shareManager];
+    NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
+    URLstring = [NSString stringWithFormat:@"%@%@",URLstring,model.image];
+    if(CUSTOMERID){
+        //        [self.saveImgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:URLstring width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:[UIImage imageNamed:PLACEHOLDER]];
+        [imgView sd_setImageWithURL:[NSURL URLWithString:URLstring] placeholderImage:[UIImage imageNamed:PLACEHOLDER]];
+    }else{
+        imgView.image = [UIImage imageWithData:model.img];
+    }
 }
 -(void)configResultCellWithModel:(BatarResultModel *)model{
     

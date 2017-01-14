@@ -28,9 +28,6 @@
 
 -(void)createView;
 
-//收藏取消收藏的通知
--(void)changeSaveBtn;
-
 //导航条
 -(void)batar_setNavibar:(NSString *)title;
 

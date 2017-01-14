@@ -87,7 +87,7 @@ singleM(UploadToServer)
     [netmanager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         if(responseObject){
             if(_save_timer_count == self.save_initialDataArray.count){
-                //收藏夹上传完毕，停止计时器
+                //收藏夹上传完毕，停止计时器,清空本地收藏夹
                 [self batar_saveStop];
                 [self batar_cleanLocalSaveFile];
                 NSLog(@"收藏夹上传完毕，停止计时器---%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
@@ -149,8 +149,8 @@ singleM(UploadToServer)
     DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
     [db_manager order_cleanAllDBData];
     
-    YLVoicemanagerView * voice_manager = [[YLVoicemanagerView alloc]initWithFrame:CGRectZero withVc:[UIView new]];
-    [voice_manager cleanAllVoiceAndTextData];
+//    YLVoicemanagerView * voice_manager = [[YLVoicemanagerView alloc]initWithFrame:CGRectZero withVc:[UIView new]];
+//    [voice_manager cleanAllVoiceAndTextData];
     //发出通知刷新购物车界面
     [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
 }

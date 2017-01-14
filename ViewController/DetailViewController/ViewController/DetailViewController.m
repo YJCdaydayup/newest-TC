@@ -590,10 +590,11 @@
     
     [bottomControlView clickBottomBtn:^(NSInteger tag) {
         
-        //        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
         switch (tag) {
             case 0:{
-                [self popToViewControllerWithDirection:@"left" type:NO];
+                FirstViewController * firstVc = [[FirstViewController alloc]initWithController:self];
+                [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
+                [self removeNaviPushedController:self];
             }
                 break;
             case 1:
@@ -622,7 +623,6 @@
                 [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
             }
                 break;
-                
             default:
                 break;
         }
