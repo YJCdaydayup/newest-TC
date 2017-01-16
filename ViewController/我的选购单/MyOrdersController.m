@@ -18,6 +18,7 @@
 #import "FirstViewController.h"
 #import "FinalOrderViewController.h"
 #import "YLVoicemanagerView.h"
+#import "BatarMainTabBarContoller.h"
 
 #define SELECTEDCELL  @"selectCell"
 
@@ -97,6 +98,11 @@
             {
                 FirstViewController * firstVc = [[FirstViewController alloc]init];
                 [self pushToViewControllerWithTransition:firstVc withDirection:@"left" type:NO];
+                [self removeNaviPushedController:self];
+                
+                BatarMainTabBarContoller * tabbarVc = [BatarMainTabBarContoller sharetabbarController];
+                self.delegate = tabbarVc;
+                [self.delegate changeRootController];
             }
                 break;
             case 1://我的订单

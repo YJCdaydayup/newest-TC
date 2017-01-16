@@ -7,7 +7,16 @@
 //
 
 #import "RootViewController.h"
+#import "BatarMainTabBarContoller.h"
+
+@protocol BatarCarDelegate <NSObject>
+
+-(void)changeRootController;
+
+@end
 
 @interface BatarCarController : RootViewController
+
+@property (nonatomic,assign) id<BatarCarDelegate>delegate;
 
 @end

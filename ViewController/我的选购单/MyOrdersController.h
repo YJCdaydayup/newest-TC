@@ -8,8 +8,15 @@
 
 #import "RootViewController.h"
 
+@protocol MyOrdersDelegate <NSObject>
+
+-(void)changeRootController;
+
+@end
+
 @interface MyOrdersController : RootViewController
 
+@property (nonatomic,assign) id<MyOrdersDelegate>delegate;
 @property (nonatomic,copy) NSString * productNumber;
 
 @end

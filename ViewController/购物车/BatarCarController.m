@@ -81,6 +81,10 @@
             {
                 FirstViewController * firstVc = [[FirstViewController alloc]initWithController:self];
                 [self pushToViewControllerWithTransition:firstVc withDirection:@"left" type:NO];
+                [self removeNaviPushedController:self];
+                BatarMainTabBarContoller * tabbar = [BatarMainTabBarContoller sharetabbarController];
+                self.delegate = tabbar;
+                [self.delegate changeRootController];
             }
                 break;
             case 1://我的订单

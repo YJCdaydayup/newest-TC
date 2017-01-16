@@ -12,8 +12,9 @@
 #import "BatarSettingController.h"
 #import "BatarCarController.h"
 #import "DetailViewController.h"
+#import "MyOrdersController.h"
 
-@interface BatarMainTabBarContoller()<BatarChangeRootController>
+@interface BatarMainTabBarContoller()<DetailChangeDelegate,MyOrdersDelegate>
 
 @end
 

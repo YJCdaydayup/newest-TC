@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BatarMainTabBarContoller.h"
 
-@protocol BatarChangeRootController <NSObject>
+@protocol DetailChangeDelegate <NSObject>
 
 -(void)changeRootController;
 
@@ -19,7 +19,7 @@
 
 +(instancetype)shareDetailController;
 
-@property (nonatomic,assign) id<BatarChangeRootController>delegate;
+@property (nonatomic,assign) id<DetailChangeDelegate>delegate;
 
 @property (nonatomic,copy) NSString * index;
 @property (nonatomic,copy) NSString * number;
