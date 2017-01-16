@@ -11,8 +11,15 @@
 #import "DiscoverViewController.h"
 #import "BatarSettingController.h"
 #import "BatarCarController.h"
+#import "DetailViewController.h"
+
+@interface BatarMainTabBarContoller()<BatarChangeRootController>
+
+@end
 
 @implementation BatarMainTabBarContoller
+
+singleM(tabbarController)
 
 -(void)viewDidLoad{
     
@@ -21,6 +28,10 @@
     [self createViewController];
     
     [self createTabBarItem];
+}
+-(void)changeRootController{
+    
+    self.selectedIndex = 0;
 }
 
 #pragma mark - 创建tabbar的属性

@@ -20,6 +20,7 @@
 #import "YLLoginView.h"
 #import "BatarCarController.h"
 #import "ScanViewController.h"
+#import "BatarMainTabBarContoller.h"
 
 @interface DetailViewController ()<YLScrollerViewDelegate,STPhotoBrowserDelegate>{
     
@@ -595,6 +596,10 @@
                 FirstViewController * firstVc = [[FirstViewController alloc]initWithController:self];
                 [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
                 [self removeNaviPushedController:self];
+                //回到主页时，tabbar选中主页的根视图
+                BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
+                self.delegate = mainVc;
+                [self.delegate changeRootController];
             }
                 break;
             case 1:
@@ -695,7 +700,6 @@
                         [self.hud hide:YES];
                         
                     });
-                    
                 }
             }];
         }else{

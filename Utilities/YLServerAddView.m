@@ -40,12 +40,29 @@
     return self;
 }
 
+-(NSMutableArray *)resetServerFormat:(NSMutableArray *)array{
+    
+//    8083:192.168.21.61
+    NSMutableArray * newArray = [NSMutableArray array];
+    for(NSString * serverStr in array){
+     
+        NSArray * tempArray = [serverStr componentsSeparatedByString:@":"];
+        NSString * port = tempArray[0];
+        if(port.length==4){
+            [newArray addObject:[NSString stringWithFormat:@"%@:%@",tempArray[1],tempArray[0]]];
+        }else{
+            [newArray addObject:serverStr];
+        }
+    }
+    return newArray;
+}
+
 -(void)updateServerView{
     
     for(UIView * subView in self.subviews){
         [subView removeFromSuperview];
     }
-    self.serverArray = [NetManager batar_getAllServers];
+    self.serverArray = [self resetServerFormat:[NetManager batar_getAllServers]];
     _btnArray = [NSMutableArray array];
     NSMutableArray * totalArr = [NSMutableArray arrayWithArray:self.serverArray];
     [totalArr addObject:@"temp"];

@@ -38,6 +38,7 @@
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = NO;
     _layoutBtn.hidden = NO;
 }
 
@@ -146,29 +147,29 @@
     }];
 }
 /*
--(void)createData{
-    
-    NetManager * manager = [NetManager shareManager];
-    NSString * URLstring = [NSString stringWithFormat:SEARCHURL,[manager getIPAddress]];
-    self.param = [self.param stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSString * str = [NSString stringWithFormat:@"%@?key=%@&",URLstring,self.param];
-    NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-    NSString * urlStr = [NSString stringWithFormat:@"%@page=%@&size=%@",str,pageStr,@"100"];
-    [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
-        NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        NSArray * array = dict[@"page"];
-        if(page == 0){
-            [self.dataArray removeAllObjects];
-        }
-        for(NSDictionary * dict in array){
-            BatarResultModel * model = [[BatarResultModel alloc]initWithDictionary:dict error:nil];
-            [self.dataArray addObject:model];
-        }
-        [_tableView reloadData];
-        [_tableView headerEndRefreshing];
-        [_tableView footerEndRefreshing];
-    }];
-}
+ -(void)createData{
+ 
+ NetManager * manager = [NetManager shareManager];
+ NSString * URLstring = [NSString stringWithFormat:SEARCHURL,[manager getIPAddress]];
+ self.param = [self.param stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+ NSString * str = [NSString stringWithFormat:@"%@?key=%@&",URLstring,self.param];
+ NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+ NSString * urlStr = [NSString stringWithFormat:@"%@page=%@&size=%@",str,pageStr,@"100"];
+ [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
+ NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+ NSArray * array = dict[@"page"];
+ if(page == 0){
+ [self.dataArray removeAllObjects];
+ }
+ for(NSDictionary * dict in array){
+ BatarResultModel * model = [[BatarResultModel alloc]initWithDictionary:dict error:nil];
+ [self.dataArray addObject:model];
+ }
+ [_tableView reloadData];
+ [_tableView headerEndRefreshing];
+ [_tableView footerEndRefreshing];
+ }];
+ }
  */
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -223,12 +224,12 @@
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
-//    if(self.currentIndexPath.row%2){
-//        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+6 inSection:self.currentIndexPath.section];
-//    }else{
-//        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row/2 inSection:self.currentIndexPath.section];
-//    }
-//    [_tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    //    if(self.currentIndexPath.row%2){
+    //        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+6 inSection:self.currentIndexPath.section];
+    //    }else{
+    //        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row/2 inSection:self.currentIndexPath.section];
+    //    }
+    //    [_tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{

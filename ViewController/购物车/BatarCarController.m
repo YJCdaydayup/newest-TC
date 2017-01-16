@@ -48,7 +48,6 @@
         self.tabBarController.tabBar.hidden = NO;
     }
     [self createBottom];
-    
 }
 
 -(void)viewDidLoad{

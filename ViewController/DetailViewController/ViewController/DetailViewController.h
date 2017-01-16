@@ -7,10 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BatarMainTabBarContoller.h"
+
+@protocol BatarChangeRootController <NSObject>
+
+-(void)changeRootController;
+
+@end
 
 @interface DetailViewController : RootViewController
 
 +(instancetype)shareDetailController;
+
+@property (nonatomic,assign) id<BatarChangeRootController>delegate;
+
 @property (nonatomic,copy) NSString * index;
 @property (nonatomic,copy) NSString * number;
 

@@ -61,7 +61,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     if([NetManager batar_getAllServers].count>0&&HasLogined){
-        BatarMainTabBarContoller * mainVc = [[BatarMainTabBarContoller alloc]init];
+        BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
         self.window.rootViewController = mainVc;
         [self.window makeKeyAndVisible];
     }else{
@@ -203,5 +203,6 @@
     //停止上传
     //    [self reStartUpload];
 }
+
 
 @end
