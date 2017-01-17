@@ -653,7 +653,8 @@
             [self.hud show:YES];
             
             NSString * urlStr = [NSString stringWithFormat:AddSaveURL,[manager getIPAddress]];
-            NSDictionary * dict = @{@"user":CUSTOMERID,@"number":detailModel.number};
+            NSMutableArray * array = [NSMutableArray arrayWithObject:detailModel.number];
+            NSDictionary * dict = @{@"user":CUSTOMERID,@"numberlist":[self myArrayToJson:array]};
             [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
                 
                 NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
@@ -664,6 +665,8 @@
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self.hud hide:YES];
                     });
+                }else{
+                    NSLog(@"%@",error.description);
                 }
             }];
         }else{

@@ -25,7 +25,7 @@ singleM(UploadToServer)
         }];
         
         self.save_uploadTimer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES callback:^{
-           
+            
             [self batar_uploadSaveToServer];
         }];
         
@@ -49,12 +49,7 @@ singleM(UploadToServer)
             [self batar_saveStop];
             return ;
         }
-        for(DBSaveModel * model in dataArray){
-            @synchronized(self) {
-                 _save_timer_count ++;
-                [self addSave:model array:dataArray];
-            }
-        }
+        [self addSaveArray:dataArray];
     }];
 }
 
@@ -70,7 +65,7 @@ singleM(UploadToServer)
     
     DBWorkerManager * manager = [DBWorkerManager shareDBManager];
     [manager getAllObject:^(NSMutableArray *dataArray) {
-       
+        
         self.save_initialDataArray = dataArray;
         [self.save_uploadTimer setFireDate:[NSDate distantPast]];
         _save_timer_count = 0;
@@ -79,23 +74,33 @@ singleM(UploadToServer)
 }
 
 //执行上传收藏夹
--(void)addSave:(DBSaveModel *)model array:(NSMutableArray *)dataArray{
+-(void)addSaveArray:(NSMutableArray *)dataArray{
     
     NetManager * netmanager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:AddSaveURL,[netmanager getIPAddress]];
-    NSDictionary * dict = @{@"user":CUSTOMERID,@"number":model.number};
+    NSMutableArray * array = [NSMutableArray array];
+    for(DBSaveModel * model in dataArray){
+        [array addObject:model.number];
+    }
+    NSDictionary * dict = @{@"user":CUSTOMERID,@"numberlist":[self myArrayToJson:array]};
     [netmanager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
-        if(responseObject){
-            if(_save_timer_count == self.save_initialDataArray.count){
+        
+        NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        if([[dict objectForKey:@"state"]integerValue]){
                 //收藏夹上传完毕，停止计时器,清空本地收藏夹
-                [self batar_saveStop];
                 [self batar_cleanLocalSaveFile];
                 NSLog(@"收藏夹上传完毕，停止计时器---%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
-            }
         }else{
             NSLog(@"%@",error.description);
         }
+        [self batar_saveStop];
     }];
+}
+
+- (NSString*)myArrayToJson:(NSMutableArray *)array{
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:NSJSONWritingPrettyPrinted error:&parseError];
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
 //清空本地收藏夹
@@ -149,8 +154,8 @@ singleM(UploadToServer)
     DBWorkerManager * db_manager = [DBWorkerManager shareDBManager];
     [db_manager order_cleanAllDBData];
     
-//    YLVoicemanagerView * voice_manager = [[YLVoicemanagerView alloc]initWithFrame:CGRectZero withVc:[UIView new]];
-//    [voice_manager cleanAllVoiceAndTextData];
+    //    YLVoicemanagerView * voice_manager = [[YLVoicemanagerView alloc]initWithFrame:CGRectZero withVc:[UIView new]];
+    //    [voice_manager cleanAllVoiceAndTextData];
     //发出通知刷新购物车界面
     [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
 }
@@ -187,7 +192,7 @@ singleM(UploadToServer)
     
     [netmanager downloadDataWithUrl:urlStr parm:subDict callback:^(id responseObject, NSError *error) {
         
-//        NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
+        //        NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
         if(responseObject){
             if(_timer_count == self.initialDataArray.count){
                 if(reNameVoiceArray.count == 0){
@@ -262,12 +267,6 @@ singleM(UploadToServer)
 {
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
-    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-}
-
-- (NSString*)myArrayToJson:(NSMutableArray *)array{
-    NSError *parseError = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:array options:NSJSONWritingPrettyPrinted error:&parseError];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 

@@ -307,7 +307,16 @@
 
 -(void)createData{
     
-    dataArray = [self getAllRecordDataArray];
+    dataArray = [[NSMutableArray alloc]init];
+    [dataArray addObjectsFromArray:[self getAllRecordDataArray]];
+    NSDictionary * dict = @{@"1":@(1)};
+    if(![dataArray containsObject:dict]){
+        [dataArray addObject:dict];
+    }else{
+        NSInteger index = [dataArray indexOfObject:dict];
+        [dataArray exchangeObjectAtIndex:index withObjectAtIndex:dataArray.count-1];
+    }
+    
     [voiceTableView reloadData];
     if(dataArray.count>1){
         [voiceTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[dataArray count]- 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -316,13 +325,6 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    NSDictionary * dict = @{@"1":@(1)};
-    if(![dataArray containsObject:dict]){
-        [dataArray addObject:dict];
-    }else{
-        NSInteger index = [dataArray indexOfObject:dict];
-        [dataArray exchangeObjectAtIndex:index withObjectAtIndex:dataArray.count-1];
-    }
     return dataArray.count;
 }
 
@@ -412,7 +414,7 @@
         label.layer.borderWidth = 0.5*S6;
         label.userInteractionEnabled = YES;
         [cell.contentView addSubview:label];
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(activeTextfield)];
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(activeTextfield:)];
         [label addGestureRecognizer:tap];
     }
     
@@ -441,8 +443,8 @@
     return cell;
 }
 
--(void)activeTextfield{
-    
+-(void)activeTextfield:(UITapGestureRecognizer *)tap{
+
     keyboardState = NO;
     [self changeVoice];
     [sendMessageTextfield becomeFirstResponder];
@@ -518,7 +520,7 @@
     NSString * currentPath = [NSString stringWithFormat:@"%@/llll.wav", strUrl];
     [data writeToFile:currentPath atomically:YES];
     [self.audioRecorder playsound:currentPath withFinishPlaying:^{
-        NSLog(@"播放完成");
+//        NSLog(@"播放完成");
     }];
 }
 
@@ -596,6 +598,11 @@
         _audioRecorder = [XHSoundRecorder sharedSoundRecorder];
     }
     return _audioRecorder;
+}
+
+-(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    [self endEditing:YES];
 }
 
 @end
