@@ -15,8 +15,9 @@
 #import "BatarMainTabBarContoller.h"
 #import "BatarLoginController.h"
 #import "YLUploadToServer.h"
+#import "YLNetObseverManager.h"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<YLNetObseverDelegate>
 
 @property (nonatomic,strong) YLUploadToServer * uploadManager;
 
@@ -32,7 +33,30 @@
     [[NSNotificationCenter defaultCenter]removeObserver:self name:SwitchSerser object:nil];
 }
 
+-(void)batarNetChange:(BatarNetChangeType)type{
+    
+    switch (type) {
+        case BatarNetNotFound:
+            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"无网络"];
+            break;
+        case BatarNetChangedUnknow:
+            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"未知网络"];
+            break;
+        case BatarNetChangeWifi:
+            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"当前网络是Wifi状态"];
+            break;
+        case BatarNetChangeWWAN:
+            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"当前网络是流量状态"];
+            break;
+        default:
+            break;
+    }
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    //网络变化的代理设置
+    [YLNetObseverManager shareInstanceWithDelegate:self];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(uploadDataToServer) name:UploadOrders object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(switchServer) name:SwitchSerser object:nil];
