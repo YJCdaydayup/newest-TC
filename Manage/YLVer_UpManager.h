@@ -8,7 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
 typedef void(^Picker_CheckUpdatedBlock)(BOOL isupdated);
+
 @interface YLVer_UpManager : NSObject
+
 -(void)compareVersionWithPlist:(Picker_CheckUpdatedBlock)block;
+
 @end

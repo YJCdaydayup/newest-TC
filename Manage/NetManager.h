@@ -55,4 +55,9 @@ typedef void(^CoderTypeBlock)(CoderType type);
 -(void)cleanHistorySearch;
 +(void)judgeCoderWithCode:(NSString *)code Type:(CoderTypeBlock)block;
 
+/*******************启动页广告********************/
+-(void)bt_saveAdvertiseInfo;
+-(NSData *)bt_getAdvertiseInfo;
+-(NSDictionary *)bt_getAdvertiseControlInfo;
+
 @end

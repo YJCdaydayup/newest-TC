@@ -111,6 +111,12 @@ NSString * const DeleteSaveURL = @"http://%@/photo-album/favorite/del";
 /*收藏:判断产品是否收藏*/
 NSString * const WhetherSavedURl = @"http://%@/photo-album/favorite/isfavorite";
 
+/*启动广告页参数*/
+NSString * const AdvertiseUrl = @"http://%@/photo-album/startup/get_startup";
+
+/*启动广告页图片*/
+NSString * const startImg = @"http://%@/photo-album/startup/image/%@";
+
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";
 NSString * const IOS_APPURL = @"http://fir.im/enterpriseUrl";

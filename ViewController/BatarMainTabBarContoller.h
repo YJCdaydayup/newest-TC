@@ -12,5 +12,5 @@
 @interface BatarMainTabBarContoller : UITabBarController
 
 singleH(tabbarController)
-
+-(void)changeRootController;
 @end

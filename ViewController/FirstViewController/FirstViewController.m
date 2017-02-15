@@ -221,7 +221,7 @@
             self.cycleScrollView.imageURLStringsGroup = imagesURLStrings
             ;
             self.cycleScrollView.delegate = self;
-            self.cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
+            self.cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
             self.cycleScrollView.currentPageDotColor = RGB_COLOR(215, 185, 29, 0.5); // 自定义分页控件小圆标颜色
             self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
             self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"lb1"];

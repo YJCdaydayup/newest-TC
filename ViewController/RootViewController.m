@@ -199,8 +199,6 @@
     
     NSString * locationString = [dateformatter stringFromDate:senddate];
     
-    //    NSLog(@"%@",locationString);
-    
     return locationString;
 }
 

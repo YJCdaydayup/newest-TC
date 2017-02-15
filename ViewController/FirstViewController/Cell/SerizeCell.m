@@ -55,7 +55,8 @@
         }
         
         //横向分布
-        horisonScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(13.5*S6+5*S6, 0, Wscreen-27*S6-10*S6, 85*S6)];
+//        horisonScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(13.5*S6+5*S6, 0, Wscreen-27*S6-10*S6, 85*S6)];
+           horisonScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 85*S6)];
 //        horisonScrollView.bounces = NO;
         horisonScrollView.delegate = self;
         horisonScrollView.showsHorizontalScrollIndicator = NO;

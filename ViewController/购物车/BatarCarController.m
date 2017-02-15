@@ -207,12 +207,13 @@
 
 -(void)removeOrders:(BOOL)islogged{
     
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.hud.labelText = @"正在删除中...";
-    self.hud.animationType = MBProgressHUDAnimationZoomOut;
+ 
     
     DBWorkerManager * dbManager = [DBWorkerManager shareDBManager];
     if(islogged){
+        self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hud.labelText = @"正在删除中...";
+        self.hud.animationType = MBProgressHUDAnimationZoomOut;
         //删除服务端订单
         NSMutableArray * selectArray = [NSMutableArray array];
         for(DBSaveModel * model in self.selectedArray){

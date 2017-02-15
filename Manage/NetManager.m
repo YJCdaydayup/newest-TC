@@ -8,7 +8,6 @@
 //
 
 #import "NetManager.h"
-//#import <IOKit/>
 
 @interface NetManager()<NSURLConnectionDataDelegate,NSURLConnectionDelegate>{
     
@@ -16,6 +15,8 @@
 }
 
 @property (nonatomic,copy) NSString * history_search_content;
+@property (nonatomic,copy) NSString * advertisePath;
+@property (nonatomic,copy) NSString * advertiseImgPath;
 
 @end
 
@@ -43,6 +44,12 @@
         
         //缓存IP PORT
         self.ip_PortPath = [NSString stringWithFormat:@"%@ip_port.plist",LIBPATH];
+        
+        //广告页数据
+        self.advertisePath = [NSString stringWithFormat:@"%@advertise.plist",LIBPATH];
+        //广告页图片数据
+        NSString * path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
+        self.advertiseImgPath = [path stringByAppendingPathComponent:@"advertiseImgPath"];
         
         /*搜索历史*/
         self.history_search_content = [NSString stringWithFormat:@"%@history_search",LIBPATH];
@@ -97,7 +104,7 @@
     
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"application/octet-stream",@"audio/wav", nil];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html",@"application/octet-stream",@"audio/wav",@"image/jpeg", nil];
     [manager GET:url parameters:obj progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         block(responseObject,nil);
@@ -173,14 +180,13 @@
 
 -(void)sendAppVersionToService{
     
-    
     NSString * ip = [self getIPAddress];
     NSString * urlStr = [NSString stringWithFormat:Send_VersionToService,ip];
     NSString * ID = [[UIDevice currentDevice].identifierForVendor UUIDString];
     NSDictionary * dict = @{@"imei":ID,@"version":[Common appVersion]};
     [self downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
-        NSLog(@"%@",error.description);
-        NSLog(@"%@",responseObject);
+        //        NSLog(@"%@",error.description);
+        //        NSLog(@"%@",responseObject);
     }];
 }
 
@@ -198,7 +204,6 @@
         [historyArray insertObject:text atIndex:0];
         //获取数组的最新10个数据
         if(historyArray.count>10){
-            
             NSFileManager * fm = [NSFileManager defaultManager];
             [fm removeItemAtPath:self.history_search_content error:nil];
             
@@ -225,8 +230,8 @@
 
 -(NSMutableArray *)getAllServers{
     
-//        NSFileManager * fm = [NSFileManager defaultManager];
-//        [fm removeItemAtPath:self.ip_PortPath error:nil];
+    //        NSFileManager * fm = [NSFileManager defaultManager];
+    //        [fm removeItemAtPath:self.ip_PortPath error:nil];
     
     NSMutableArray * muArray = [NSMutableArray array];
     NSArray * array = [NSArray arrayWithContentsOfFile:self.ip_PortPath];
@@ -260,7 +265,7 @@
     NSString * url = [NSString stringWithFormat:CODETYPE,[manager getIPAddress]];
     NSDictionary * dict = @{@"key":code};
     [manager downloadDataWithUrl:url parm:dict callback:^(id responseObject, NSError *error) {
-       
+        
         NSArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
         if(array.count==0){
             //不存在
@@ -271,6 +276,54 @@
             block(CoderTypeInaccurateType);
         }
     }];
+}
+
+-(void)bt_saveAdvertiseInfo{
+    
+    NSString * url = [NSString stringWithFormat:AdvertiseUrl,[self getIPAddress]];
+    [self downloadDataWithUrl:url parm:nil callback:^(id responseObject, NSError *error) {
+        if(error == nil){
+            //保存本地
+            /*
+             action = "<null>";
+             actiontype = 2;
+             image = fafa5efeaf3cbe3b23b2748d13e629a1;
+             isopen = 1;
+             showtime = 2;
+             */
+            NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+            [NSKeyedArchiver archiveRootObject:dict toFile:self.advertisePath];
+            //继续获取图片的二进制
+            [self adertiseImg:dict[@"image"]];
+        }else{
+//            NSLog(@"%@",error.description);
+            NSFileManager * fm = [NSFileManager defaultManager];
+            [fm removeItemAtPath:self.advertisePath error:nil];
+            [fm removeItemAtPath:self.advertiseImgPath error:nil];
+        }
+    }];
+}
+
+-(void)adertiseImg:(NSString *)imgName{
+    
+    NSString * imgUrl = [NSString stringWithFormat:startImg,[self getIPAddress],imgName];
+    [self downloadDataWithUrl:imgUrl parm:nil callback:^(id responseObject, NSError *error) {
+        
+       BOOL isOk = [NSKeyedArchiver archiveRootObject:responseObject toFile:self.advertiseImgPath];
+        NSLog(@"isOk----%zi",isOk);
+    }];
+}
+
+-(NSData *)bt_getAdvertiseInfo{
+    
+    NSData * imgData = [NSKeyedUnarchiver unarchiveObjectWithFile:self.advertiseImgPath];
+    return imgData;
+}
+
+-(NSDictionary *)bt_getAdvertiseControlInfo{
+    
+    NSDictionary * info = [NSKeyedUnarchiver unarchiveObjectWithFile:self.advertisePath];
+    return info;
 }
 
 @end

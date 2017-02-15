@@ -124,6 +124,12 @@ UIKIT_EXTERN NSString * const DeleteSaveURL;
 /*收藏:判断产品是否收藏*/
 UIKIT_EXTERN NSString * const WhetherSavedURl;
 
+/*启动广告页参数*/
+UIKIT_EXTERN NSString * const AdvertiseUrl;
+
+/*启动广告页图片*/
+UIKIT_EXTERN NSString * const startImg;
+
 /*iOS和安卓APP下载地址*/
 UIKIT_EXTERN NSString *const ANDARIOD_APPURL;
 UIKIT_EXTERN NSString *const IOS_APPURL;

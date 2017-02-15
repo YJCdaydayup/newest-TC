@@ -318,6 +318,7 @@
         self.coder_tf.background = [UIImage imageNamed:@"scan_bg"];
         self.coder_tf.centerX = self.view.centerX;
         self.coder_tf.keyboardType = UIKeyboardTypeASCIICapable;
+        self.coder_tf.autocapitalizationType = UITextAutocapitalizationTypeNone;
         self.coder_tf.backgroundColor = [UIColor whiteColor];
         [_inputBgView addSubview:self.coder_tf];
         

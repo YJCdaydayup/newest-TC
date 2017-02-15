@@ -16,16 +16,19 @@
 #import "BatarLoginController.h"
 #import "YLUploadToServer.h"
 #import "YLNetObseverManager.h"
+#import "BTAdverController.h"
 
 @interface AppDelegate ()<YLNetObseverDelegate>
 
 @property (nonatomic,strong) YLUploadToServer * uploadManager;
+@property (nonatomic,strong) NetManager * netManager;
 
 @end
 
 @implementation AppDelegate
 
 @synthesize uploadManager = _uploadManager;
+@synthesize netManager = _netManager;
 
 -(void)dealloc{
     
@@ -55,6 +58,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    // 启动图片延时: 1秒
+    //    [NSThread sleepForTimeInterval:0.1];
+    
     //网络变化的代理设置
     [YLNetObseverManager shareInstanceWithDelegate:self];
     
@@ -72,10 +78,8 @@
     
     //上传app版本
     NetManager * manager = [NetManager shareManager];
-    [manager sendAppVersionToService];
-    
-    // 启动图片延时: 1秒
-    [NSThread sleepForTimeInterval:1];
+    _netManager = manager;
+    [_netManager sendAppVersionToService];
     
     //基础设置
     [self setApperance];
@@ -85,14 +89,20 @@
     self.window.backgroundColor = [UIColor whiteColor];
     
     if([NetManager batar_getAllServers].count>0&&HasLogined){
-        BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
-        self.window.rootViewController = mainVc;
-        [self.window makeKeyAndVisible];
+        
+        if([_netManager bt_getAdvertiseInfo]){
+            
+            BTAdverController * adverVc = [[BTAdverController alloc]init];
+            self.window.rootViewController = adverVc;
+        }else{
+            BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
+            self.window.rootViewController = mainVc;
+        }
     }else{
         BatarLoginController * loginVc = [[BatarLoginController alloc]init];
         self.window.rootViewController = loginVc;
     }
-    
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -102,6 +112,9 @@
     [_uploadManager batar_stop];
     [_uploadManager batar_saveStop];
     [self uploadToServer];
+    
+    //切换服务器就清空本地搜索历史记录
+    [_netManager cleanHistorySearch];
 }
 
 -(void)uploadToServer{
