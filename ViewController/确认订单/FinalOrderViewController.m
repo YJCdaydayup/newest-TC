@@ -18,6 +18,9 @@
 #import "NetManager.h"
 #import "HeaderModel.h"
 #import "MJRefresh.h"
+#import "BTConfirmedController.h"
+#import "BTWaitingCheckController.h"
+#import "BTWaitingOrderController.h"
 
 @interface FinalOrderViewController ()<UITableViewDataSource,UITableViewDelegate>{
     
@@ -25,7 +28,12 @@
     YLFinalOrderView * finalBottomView;
     UIButton * selectAllBtn;
     NSInteger page;
+    
+    BTWaitingOrderController * waitingOrderVc;
+    BTWaitingCheckController * waitingCheckVc;
+    BTConfirmedController * confirmedVc;
 }
+
 @property (nonatomic,strong) UIButton * navLeftButton;
 @property (nonatomic,strong) UILabel * titlelabel;
 @property (nonatomic,strong) NSMutableArray * dataArray;
@@ -85,6 +93,7 @@
             model.createTime = dict[@"createtime"];
             model.orderid = dict[@"orderid"];
             model.isSelected = NO;
+            model.state = dict[@"state"];
             [self.titleArray addObject:model];
             
             if(i == 0){
@@ -93,14 +102,15 @@
                 [self.stateArray addObject:@"0"];
             }
             NSArray * productArray = dict[@"products"];
-//            NSLog(@"%zi",productArray.count);
             NSMutableArray * modelArr = [NSMutableArray array];
             for(NSDictionary * subDict in productArray){
-                OrderCarModel * model = [[OrderCarModel alloc]initWithDictionary:subDict error:nil];
-//                NSLog(@"%@",model.note);
-                [modelArr addObject:model];
+                OrderCarModel * order_model = [[OrderCarModel alloc]initWithDictionary:subDict error:nil];
+                [modelArr addObject:order_model];
+                if(selectAllBtn.selected){
+                    model.isSelected = YES;
+                    [self.selectedHeaderArray addObject:model];
+                }
             }
-            
             NSDictionary * dicts = @{model.orderid:modelArr};
             [self.dataArray addObject:dicts];
         }
@@ -154,60 +164,70 @@
         [self showAlertViewWithTitle:@"您尚未选择任何产品!"];
         return;
     }
-    
-    NSMutableArray * orderlist = [[NSMutableArray alloc]init];
-    for(HeaderModel * model in self.selectedHeaderArray){
-        [orderlist addObject:model.orderid];
-    }
-    
-    NetManager * manager = [NetManager shareManager];
-    NSString * urlStr = [NSString stringWithFormat:DELETEMYORDER,[manager getIPAddress]];
-    NSDictionary * dict = @{@"orderlist":[self myArrayToJson:orderlist]};
-    [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+    //删除
+    UIAlertController * controller = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSMutableArray * orderlist = [[NSMutableArray alloc]init];
+        for(HeaderModel * model in self.selectedHeaderArray){
+            [orderlist addObject:model.orderid];
+        }
         
-        if(responseObject){
+        NetManager * manager = [NetManager shareManager];
+        NSString * urlStr = [NSString stringWithFormat:DELETEMYORDER,[manager getIPAddress]];
+        NSDictionary * dict = @{@"orderlist":[self myArrayToJson:orderlist]};
+        [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
             
-            NSMutableArray * tempArray = [[NSMutableArray alloc]init];
-            for(HeaderModel * model in self.selectedHeaderArray){
-                for(int i=0;i<self.dataArray.count;i++){
-                    
-                    NSDictionary * dicts = self.dataArray[i];
-                    NSString * key = [[dicts allKeys]lastObject];
-                    if([key isEqualToString:model.orderid]){
-                        [tempArray addObject:dicts];
-                        [self.titleArray removeObject:model];
-                        [self.stateArray removeObjectAtIndex:i];
+            if(responseObject){
+                
+                NSMutableArray * tempArray = [[NSMutableArray alloc]init];
+                for(HeaderModel * model in self.selectedHeaderArray){
+                    for(int i=0;i<self.dataArray.count;i++){
+                        
+                        NSDictionary * dicts = self.dataArray[i];
+                        NSString * key = [[dicts allKeys]lastObject];
+                        if([key isEqualToString:model.orderid]){
+                            [tempArray addObject:dicts];
+                            [self.titleArray removeObject:model];
+                            [self.stateArray removeObjectAtIndex:i];
+                        }
                     }
                 }
+                for(NSDictionary * dataDict in tempArray){
+                    [self.dataArray removeObject:dataDict];
+                }
+                
+                [self.selectedHeaderArray removeAllObjects];
+                [orderTableView reloadData];
+                selectAllBtn.selected = NO;
             }
-            for(NSDictionary * dataDict in tempArray){
-                [self.dataArray removeObject:dataDict];
-            }
-            
-            [self.selectedHeaderArray removeAllObjects];
-            [orderTableView reloadData];
-            selectAllBtn.selected = NO;
-        }
+        }];
     }];
+    //修改按钮
+    [delete setValue:[UIColor redColor] forKey:@"titleTextColor"];
+    [controller addAction:cancel];
+    [controller addAction:delete];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 -(void)createTableView{
     
-    //顶部“全选”
-    selectAllBtn = [Tools createNormalButtonWithFrame:CGRectMake(12.5*S6, 12.5*S6+NAV_BAR_HEIGHT, 16.5*S6, 16.5*S6) textContent:nil withFont:nil textColor:nil textAlignment:NSTextAlignmentCenter];
-    [selectAllBtn setImage:[UIImage imageNamed:@"order_selectAll"] forState:UIControlStateSelected];
-    [selectAllBtn setImage:[UIImage imageNamed:@"order_selectNotAll"] forState:UIControlStateNormal];
-    [selectAllBtn addTarget:self action:@selector(selectAllAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:selectAllBtn];
+    UISegmentedControl * segmentView = [[UISegmentedControl alloc]initWithItems:@[@"全部订单",@"待详单回传",@"待确认详单",@"已确认详单"]];
+    segmentView.tintColor = BOARDCOLOR;
+    segmentView.frame = CGRectMake(-5*S6, NAV_BAR_HEIGHT-1*S6, Wscreen+10*S6, 45*S6);
+    segmentView.layer.borderColor = [BOARDCOLOR CGColor];
+    segmentView.layer.borderWidth = 0.5*S6;
+    segmentView.selectedSegmentIndex = 0;
     
-    UILabel * selectLabel = [Tools createLabelWithFrame:CGRectMake(CGRectGetMaxX(selectAllBtn.frame)+15.5*S6, CGRectGetMinY(selectAllBtn.frame), 100, 14*S6) textContent:@"全选" withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentLeft];
-    [self.view addSubview:selectLabel];
+    //设置文字属性
+    NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14*S6],NSForegroundColorAttributeName: RGB_COLOR(64, 64, 64, 1)};
+    [segmentView setTitleTextAttributes:unselectedTextAttributes forState:UIControlStateNormal];
+    [self.view addSubview:segmentView];
     
-    UIView * lineView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(selectAllBtn.frame)+11.5*S6, Wscreen, 2*S6)];
-    lineView.backgroundColor = RGB_COLOR(216, 133, 57, 1);
-    [self.view addSubview:lineView];
+    [segmentView addTarget:self action:@selector(switchItem:) forControlEvents:UIControlEventValueChanged];
     
-    orderTableView = [[UITableView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(lineView.frame),Wscreen,Hscreen-50*S6-lineView.y) style:UITableViewStylePlain];
+    orderTableView = [[UITableView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(segmentView.frame),Wscreen,Hscreen-210*S6) style:UITableViewStylePlain];
     orderTableView.delegate = self;
     orderTableView.dataSource = self;
     orderTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -216,6 +236,83 @@
     [orderTableView addHeaderWithTarget:self action:@selector(headerAction)];
     [orderTableView addFooterWithTarget:self action:@selector(footerAction)];
     [orderTableView headerBeginRefreshing];
+    
+    //顶部“全选”
+    selectAllBtn = [Tools createNormalButtonWithFrame:CGRectMake(12.5*S6, Hscreen-34*S6-45*S6, 16.5*S6, 16.5*S6) textContent:nil withFont:nil textColor:nil textAlignment:NSTextAlignmentCenter];
+    [selectAllBtn setImage:[UIImage imageNamed:@"order_selectAll"] forState:UIControlStateSelected];
+    [selectAllBtn setImage:[UIImage imageNamed:@"order_selectNotAll"] forState:UIControlStateNormal];
+    [selectAllBtn addTarget:self action:@selector(selectAllAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:selectAllBtn];
+    
+    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(-5, selectAllBtn.y-12*S6, Wscreen+10*S6, 40*S6)];
+    bgView.layer.borderWidth = 0.5*S6;
+    bgView.layer.borderColor = [BOARDCOLOR CGColor];
+    bgView.backgroundColor = RGB_COLOR(250, 250, 250, 0.1);
+    [self.view addSubview:bgView];
+    
+    UIControl * control = [[UIControl alloc]initWithFrame:CGRectMake(0, 0, 120*S6, 40*S6)];
+    [bgView addSubview:control];
+    [control addTarget:self action:@selector(zoomInSelectBtn) forControlEvents:UIControlEventTouchUpInside];
+    [self.view bringSubviewToFront:selectAllBtn];
+    
+    UILabel * selectLabel = [Tools createLabelWithFrame:CGRectMake(CGRectGetMaxX(selectAllBtn.frame)+15.5*S6, CGRectGetMinY(selectAllBtn.frame), 100, 14*S6) textContent:@"全选" withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentLeft];
+    [self.view addSubview:selectLabel];
+}
+
+-(void)zoomInSelectBtn{
+    
+    [self selectAct:selectAllBtn];
+}
+
+-(void)switchItem:(UISegmentedControl *)seg{
+    
+    [self cleanAllSubVc];
+    switch (seg.selectedSegmentIndex) {
+        case 0:
+            
+            break;
+        case 1:
+        {
+            BTWaitingOrderController * waitingBackVc = [[BTWaitingOrderController alloc]initWithController:self];
+            waitingBackVc.view.frame = orderTableView.frame;
+            waitingOrderVc = waitingBackVc;
+            [self.view addSubview:waitingBackVc.view];
+        }
+            break;
+        case 2:
+        {
+            
+            BTWaitingCheckController * confirmVc = [[BTWaitingCheckController alloc]initWithController:self];
+            confirmVc.view.frame = orderTableView.frame;
+            waitingCheckVc = confirmVc;
+            [self.view addSubview:confirmVc.view];
+        }
+            break;
+        case 3:
+        {
+            BTConfirmedController * confirmVc = [[BTConfirmedController alloc]initWithController:self];
+            confirmVc.view.frame = orderTableView.frame;
+            confirmedVc = confirmVc;
+            [self.view addSubview:confirmedVc.view];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+-(void)cleanAllSubVc{
+    
+    [self cleanVc:waitingCheckVc];
+    [self cleanVc:waitingOrderVc];
+    [self cleanVc:confirmedVc];
+}
+
+-(void)cleanVc:(RootViewController *)vc{
+    
+    [vc.view removeFromSuperview];
+    vc.view.hidden = YES;
+    vc = nil;
 }
 
 -(void)headerAction{
@@ -231,6 +328,11 @@
 #pragma mark - mark -全选按钮
 -(void)selectAllAction:(UIButton *)btn{
     
+    [self selectAct:btn];
+}
+
+-(void)selectAct:(UIButton *)btn{
+    
     for(int i =0;i<self.titleArray.count;i++){
         
         if(i == 0){
@@ -240,7 +342,6 @@
         }
     }
     
-    
     btn.selected = !btn.selected;
     if(btn.selected){
         [self.selectedHeaderArray removeAllObjects];
@@ -249,6 +350,7 @@
         [self.selectedHeaderArray removeAllObjects];
     }
     [orderTableView reloadData];
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -285,10 +387,10 @@
     
     HeaderModel * model = self.titleArray[indexPath.section];
     [cell clickDetailBtn:^(NSMutableArray *OrderMessage, UIImage *img, NSString *number,NSString * name) {
-       
+        
         OrderDetailController * orderDetailVc = [[OrderDetailController alloc]init];
         orderDetailVc.dataArray = OrderMessage;
-//        NSLog(@"%@",OrderMessage);
+        //        NSLog(@"%@",OrderMessage);
         orderDetailVc.img = img;
         orderDetailVc.number = number;
         orderDetailVc.name = name;
@@ -316,7 +418,7 @@
     bgView.backgroundColor = RGB_COLOR(249, 249, 249, 1);
     
     UIView * zoomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 50*S6, 40*S6)];
-//    zoomView.backgroundColor = [UIColor redColor];
+    //    zoomView.backgroundColor = [UIColor redColor];
     zoomView.tag = section+100000;
     UITapGestureRecognizer * zoomTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(zoomSelect:)];
     [zoomView addGestureRecognizer:zoomTap];
@@ -348,6 +450,20 @@
     
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showOut:)];
     [bgView addGestureRecognizer:tap];
+    
+    UILabel * stateLbl = [Tools createLabelWithFrame:CGRectMake(Wscreen-showOutBtn.width-100*S6, showOutBtn.y, 80*S6, 14*S6) textContent:@"待确认" withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+    [bgView addSubview:stateLbl];
+    
+    if([model.state integerValue] == 0){
+        stateLbl.text = @"待确认";
+        stateLbl.textColor = RGB_COLOR(166, 83, 33, 1);
+    }else if([model.state integerValue] == 1){
+        stateLbl.text = @"待确认";
+        stateLbl.textColor = TEXTCOLOR;
+    }else{
+        stateLbl.text = @"已确认";
+        stateLbl.textColor = BatarPlaceTextCol;
+    }
     
     return bgView;
 }
@@ -410,13 +526,14 @@
     int index = button.tag - 100;
     if(self.stateArray.count>0){
         NSString * status = [self.stateArray objectAtIndex:index];
-        if ([status isEqualToString:@"1"]) {
-            [self.stateArray replaceObjectAtIndex:index withObject:@"0"];
-        }else{
+        if([status isEqualToString:@"0"]){
+            for(int i=0;i<self.stateArray.count;i++){
+                [self.stateArray replaceObjectAtIndex:i withObject:@"0"];
+            }
             [self.stateArray replaceObjectAtIndex:index withObject:@"1"];
         }
         //刷新表格的某一个分组
-        [orderTableView reloadSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationFade];
+        [orderTableView reloadData];
     }
 }
 
@@ -426,13 +543,15 @@
     NSInteger index = bgView.tag - 10000;
     if(self.stateArray.count>0){
         NSString * status = [self.stateArray objectAtIndex:index];
-        if ([status isEqualToString:@"1"]) {
-            [self.stateArray replaceObjectAtIndex:index withObject:@"0"];
-        }else{
+        if([status isEqualToString:@"0"]){
+            for(int i=0;i<self.stateArray.count;i++){
+                [self.stateArray replaceObjectAtIndex:i withObject:@"0"];
+            }
             [self.stateArray replaceObjectAtIndex:index withObject:@"1"];
         }
+        
         //刷新表格的某一个分组
-        [orderTableView reloadSections:[NSIndexSet indexSetWithIndex:index] withRowAnimation:UITableViewRowAnimationFade];
+        [orderTableView reloadData];
     }
 }
 

@@ -14,6 +14,8 @@
 #import "YLLoginView.h"
 #import "NetManager.h"
 #import "YLOrdersController.h"
+#import "FinalOrderViewController.h"
+#import "YLVoicemanagerView.h"
 
 #define CELL @"CARCell"
 
@@ -23,7 +25,7 @@
 
 @property (nonatomic,strong) NSMutableArray * dataArray;
 @property (nonatomic,strong) UITableView * tableView;
-@property (nonatomic,strong) NSMutableArray * selectedArray;
+@property (nonatomic,strong) NSMutableArray<DBSaveModel *> * selectedArray;
 @property (nonatomic,strong) YLShoppingCarBottom * carBottom;
 @property (nonatomic,strong) YLLoginView * loginView;
 
@@ -89,7 +91,19 @@
                 break;
             case 1://我的订单
             {
-                
+                //确认选购
+                if(CUSTOMERID){
+                    //直接上传到服务器
+                    
+                    FinalOrderViewController * finalVc = [[FinalOrderViewController alloc]initWithController:self];
+                    [self pushToViewControllerWithTransition:finalVc withDirection:@"left" type:NO];
+                }else{
+                    YLLoginView * loginView = [[YLLoginView alloc]initWithVC:self.app.window withVc:self];
+                    [self.app.window addSubview:loginView];
+                    [loginView clickCancelBtn:^{
+                        
+                    }];
+                }
             }
                 break;
             case 2://删除购物单
@@ -170,12 +184,57 @@
     if(CUSTOMERID){
         //直接上传到服务器
         
+        if(self.selectedArray.count == 0){
+            [self showAlertViewWithTitle:@"您暂未选择任何产品"];
+            return;
+        }
+        
+        if(self.selectedArray.count >0 ){
+            self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.hud.labelText = @"正在提交产品数据...";
+            self.hud.animationType = MBProgressHUDAnimationZoomOut;
+        }
+        
+        NSMutableArray * orderSeleArray = [NSMutableArray array];
+        //获取订单数组
+        for(DBSaveModel * model in self.selectedArray){
+            [orderSeleArray addObject:model.number];
+        }
+        
+        NetManager * manager = [NetManager shareManager];
+        NSDictionary * dict = @{@"customerid":CUSTOMERID,@"shopcontext":[self myArrayToJson:orderSeleArray]};
+        NSString * urlStr = [NSString stringWithFormat:CONFRIMORDR,[manager getIPAddress]];
+        
+        [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
+            if(responseObject){
+                self.hud.labelText = @"提交成功!";
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self.hud hide:YES];
+                    [self getData];
+                    self.carBottom.selectAllBtn.selected = NO;
+                });
+            }
+        }];
+        
+        //移除本地缓存语音和文字信息
+        [self removeLocalMessageInfo];
+        
     }else{
         YLLoginView * loginView = [[YLLoginView alloc]initWithVC:self.app.window withVc:self];
         [self.app.window addSubview:loginView];
         [loginView clickCancelBtn:^{
             
         }];
+    }
+}
+
+-(void)removeLocalMessageInfo{
+    
+    for(DBSaveModel * model in self.selectedArray){
+        
+        [kUserDefaults setObject:model.number forKey:RECORDPATH];
+        YLVoicemanagerView * voiceManager = [[YLVoicemanagerView alloc]initWithFrame:self.view.frame withVc:[UIView new]];
+        [voiceManager cleanAllVoiceData];
     }
 }
 
@@ -206,8 +265,6 @@
 }
 
 -(void)removeOrders:(BOOL)islogged{
-    
- 
     
     DBWorkerManager * dbManager = [DBWorkerManager shareDBManager];
     if(islogged){

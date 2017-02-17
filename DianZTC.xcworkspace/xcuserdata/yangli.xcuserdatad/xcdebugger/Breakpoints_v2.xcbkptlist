@@ -19,92 +19,188 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ViewController/&#x6211;&#x7684;&#x9009;&#x8d2d;&#x5355;/MyOrdersController.m"
-            timestampString = "506292401.54005"
+            filePath = "ViewController/&#x8d2d;&#x7269;&#x8f66;/BatarCarController.m"
+            timestampString = "509061542.660802"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
-            landmarkName = "-createView"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ViewController/&#x6211;&#x7684;&#x9009;&#x8d2d;&#x5355;/MyOrdersController.m"
-            timestampString = "506292475.450888"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "-createView"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ViewController/DetailViewController/ViewController/DetailViewController.m"
-            timestampString = "506294171.500316"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "490"
-            endingLineNumber = "490"
-            landmarkName = "-touchesEnded:withEvent:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Manage/NetManager.m"
-            timestampString = "508885785.88282"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "284"
-            endingLineNumber = "284"
-            landmarkName = "-bt_saveAdvertiseInfo"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
+            landmarkName = "-createBottom"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "-[NetManager bt_saveAdvertiseInfo]"
+                  symbolName = "-[BatarCarController createBottom]"
                   moduleName = "DianZTC"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/yangli/Desktop/DianZTC8/Manage/NetManager.m"
-                  timestampString = "508886012.679304"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E8%B4%AD%E7%89%A9%E8%BD%A6/BatarCarController.m"
+                  timestampString = "509061722.772945"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "284"
-                  endingLineNumber = "284"
-                  offsetFromSymbolStart = "163">
+                  startingLineNumber = "158"
+                  endingLineNumber = "158"
+                  offsetFromSymbolStart = "730">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__34-[NetManager bt_saveAdvertiseInfo]_block_invoke"
+                  symbolName = "__34-[BatarCarController createBottom]_block_invoke"
                   moduleName = "DianZTC"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/yangli/Desktop/DianZTC8/Manage/NetManager.m"
-                  timestampString = "508886012.679488"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E8%B4%AD%E7%89%A9%E8%BD%A6/BatarCarController.m"
+                  timestampString = "509061722.773131"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "284"
-                  endingLineNumber = "284"
-                  offsetFromSymbolStart = "86">
+                  startingLineNumber = "159"
+                  endingLineNumber = "159"
+                  offsetFromSymbolStart = "53">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ViewController/&#x8d2d;&#x7269;&#x8f66;/BatarCarController.m"
+            timestampString = "509061542.660802"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "-createBottom"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[BatarCarController createBottom]_block_invoke"
+                  moduleName = "DianZTC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E8%B4%AD%E7%89%A9%E8%BD%A6/BatarCarController.m"
+                  timestampString = "509061722.773752"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "708">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[BatarCarController createBottom]_block_invoke"
+                  moduleName = "DianZTC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E8%B4%AD%E7%89%A9%E8%BD%A6/BatarCarController.m"
+                  timestampString = "509061722.773935"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "744">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ViewController/&#x8d2d;&#x7269;&#x8f66;/BatarCarController.m"
+            timestampString = "509061542.660802"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "-createBottom"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ViewController/&#x8d2d;&#x7269;&#x8f66;/BatarCarController.m"
+            timestampString = "509061542.660802"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "-createBottom"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ViewController/&#x8d2d;&#x7269;&#x8f66;/BatarCarController.m"
+            timestampString = "509061542.660802"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
+            landmarkName = "-createBottom"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ViewController/&#x8d2d;&#x7269;&#x8f66;/BatarCarController.m"
+            timestampString = "509061542.660802"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
+            landmarkName = "-createBottom"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[BatarCarController createBottom]_block_invoke"
+                  moduleName = "DianZTC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E8%B4%AD%E7%89%A9%E8%BD%A6/BatarCarController.m"
+                  timestampString = "509061722.776443"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "210">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[BatarCarController createBottom]_block_invoke"
+                  moduleName = "DianZTC"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yangli/Desktop/DianZTC8/ViewController/%E8%B4%AD%E7%89%A9%E8%BD%A6/BatarCarController.m"
+                  timestampString = "509061722.776617"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "162"
+                  endingLineNumber = "162"
+                  offsetFromSymbolStart = "246">
                </Location>
             </Locations>
          </BreakpointContent>

@@ -58,8 +58,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    NetManager * manager = [NetManager shareManager];
+    _netManager = manager;
+//    //请求广告页参数数据，并缓存在本地
+//    [_netManager bt_saveAdvertiseInfo];
+    
     // 启动图片延时: 1秒
-    //    [NSThread sleepForTimeInterval:0.1];
+//    [NSThread sleepForTimeInterval:3];
     
     //网络变化的代理设置
     [YLNetObseverManager shareInstanceWithDelegate:self];
@@ -77,8 +82,6 @@
     [self checkUpdated];
     
     //上传app版本
-    NetManager * manager = [NetManager shareManager];
-    _netManager = manager;
     [_netManager sendAppVersionToService];
     
     //基础设置
@@ -90,7 +93,8 @@
     
     if([NetManager batar_getAllServers].count>0&&HasLogined){
         
-        if([_netManager bt_getAdvertiseInfo]){
+        NSDictionary * info = [_netManager bt_getAdvertiseControlInfo];
+        if([_netManager bt_getAdvertiseInfo]&&[info[@"isopen"]integerValue]==1){
             
             BTAdverController * adverVc = [[BTAdverController alloc]init];
             self.window.rootViewController = adverVc;

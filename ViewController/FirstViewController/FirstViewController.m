@@ -248,6 +248,8 @@
 -(void)downloadCatagory{
     
     [manager downloadCatagoryData];
+    //请求广告页参数数据，并缓存在本地
+    [manager bt_saveAdvertiseInfo];
 }
 
 //导航条设置

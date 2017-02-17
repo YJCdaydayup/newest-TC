@@ -13,5 +13,6 @@
 @property (nonatomic,copy) NSString * createTime;
 @property (nonatomic,assign) BOOL isSelected;
 @property (nonatomic,copy) NSString * orderid;
+@property (nonatomic,strong) NSNumber * state;
 
 @end

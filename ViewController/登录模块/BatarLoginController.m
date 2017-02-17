@@ -232,9 +232,6 @@
     app.window.rootViewController = tabbar;
     
     [[NSNotificationCenter defaultCenter]postNotificationName:SwitchSerser object:nil];
-    
-    //请求广告页参数数据，并缓存在本地
-    [_manager bt_saveAdvertiseInfo];
 }
 
 #pragma mark - 退出登录界面
