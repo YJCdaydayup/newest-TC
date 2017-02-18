@@ -18,20 +18,15 @@
 #import "NetManager.h"
 #import "HeaderModel.h"
 #import "MJRefresh.h"
-#import "BTConfirmedController.h"
-#import "BTWaitingCheckController.h"
-#import "BTWaitingOrderController.h"
+#import "BatarSettingController.h"
 
 @interface FinalOrderViewController ()<UITableViewDataSource,UITableViewDelegate>{
     
     UITableView * orderTableView;
     YLFinalOrderView * finalBottomView;
     UIButton * selectAllBtn;
-    NSInteger page;
     
-    BTWaitingOrderController * waitingOrderVc;
-    BTWaitingCheckController * waitingCheckVc;
-    BTConfirmedController * confirmedVc;
+    NSInteger page;
 }
 
 @property (nonatomic,strong) UIButton * navLeftButton;
@@ -44,6 +39,9 @@
 @end
 
 @implementation FinalOrderViewController
+
+@synthesize type = type;
+
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
@@ -71,19 +69,22 @@
     
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:CHECKORDER,[manager getIPAddress]];
-    NSDictionary * dict = @{@"customerid":CUSTOMERID,@"page":@(page),@"size":@"10"};
+    NSDictionary * dict = @{@"customerid":CUSTOMERID,@"page":@(page),@"size":@"10",@"type":type};
+    NSLog(@"%@",urlStr);
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         
         if(!responseObject){
             return ;
         }
         NSMutableArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"%@",array);
         if(![array isKindOfClass:[NSArray class]]){
             return ;
         }
         if(page == 0){
             [self.dataArray removeAllObjects];
             [self.stateArray removeAllObjects];
+            [self.selectedHeaderArray removeAllObjects];
         }
         
         for(int i =0;i<array.count;i++){
@@ -114,6 +115,9 @@
             NSDictionary * dicts = @{model.orderid:modelArr};
             [self.dataArray addObject:dicts];
         }
+        
+        
+        
         [orderTableView reloadData];
         [orderTableView headerEndRefreshing];
         [orderTableView footerEndRefreshing];
@@ -218,7 +222,7 @@
     segmentView.frame = CGRectMake(-5*S6, NAV_BAR_HEIGHT-1*S6, Wscreen+10*S6, 45*S6);
     segmentView.layer.borderColor = [BOARDCOLOR CGColor];
     segmentView.layer.borderWidth = 0.5*S6;
-    segmentView.selectedSegmentIndex = 0;
+    segmentView.selectedSegmentIndex = self.selectIndex;
     
     //设置文字属性
     NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14*S6],NSForegroundColorAttributeName: RGB_COLOR(64, 64, 64, 1)};
@@ -233,6 +237,9 @@
     orderTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:orderTableView];
     
+    if(![self.fatherVc isKindOfClass:[BatarSettingController class]]){
+        type = @(-1);
+    }
     [orderTableView addHeaderWithTarget:self action:@selector(headerAction)];
     [orderTableView addFooterWithTarget:self action:@selector(footerAction)];
     [orderTableView headerBeginRefreshing];
@@ -266,34 +273,37 @@
 
 -(void)switchItem:(UISegmentedControl *)seg{
     
-    [self cleanAllSubVc];
+    [self.dataArray removeAllObjects];
+    [self.selectedHeaderArray removeAllObjects];
+    [self.stateArray removeAllObjects];
+    [self.titleArray removeAllObjects];
+    
+    selectAllBtn.selected = NO;
+    
+    page = 0;
     switch (seg.selectedSegmentIndex) {
         case 0:
-            
+        {
+            type = @(-1);
+            [self createData];
+        }
             break;
         case 1:
         {
-            BTWaitingOrderController * waitingBackVc = [[BTWaitingOrderController alloc]initWithController:self];
-            waitingBackVc.view.frame = orderTableView.frame;
-            waitingOrderVc = waitingBackVc;
-            [self.view addSubview:waitingBackVc.view];
+            type = @(0);
+            [self createData];
         }
             break;
         case 2:
         {
-            
-            BTWaitingCheckController * confirmVc = [[BTWaitingCheckController alloc]initWithController:self];
-            confirmVc.view.frame = orderTableView.frame;
-            waitingCheckVc = confirmVc;
-            [self.view addSubview:confirmVc.view];
+            type = @(1);
+            [self createData];
         }
             break;
         case 3:
         {
-            BTConfirmedController * confirmVc = [[BTConfirmedController alloc]initWithController:self];
-            confirmVc.view.frame = orderTableView.frame;
-            confirmedVc = confirmVc;
-            [self.view addSubview:confirmedVc.view];
+            type = @(2);
+            [self createData];
         }
             break;
         default:
@@ -301,12 +311,12 @@
     }
 }
 
--(void)cleanAllSubVc{
-    
-    [self cleanVc:waitingCheckVc];
-    [self cleanVc:waitingOrderVc];
-    [self cleanVc:confirmedVc];
-}
+//-(void)cleanAllSubVc{
+//
+//    [self cleanVc:waitingCheckVc];
+//    [self cleanVc:waitingOrderVc];
+//    [self cleanVc:confirmedVc];
+//}
 
 -(void)cleanVc:(RootViewController *)vc{
     
@@ -317,6 +327,7 @@
 
 -(void)headerAction{
     page = 0;
+    selectAllBtn.selected = NO;
     [self createData];
 }
 
@@ -455,7 +466,7 @@
     [bgView addSubview:stateLbl];
     
     if([model.state integerValue] == 0){
-        stateLbl.text = @"待确认";
+        stateLbl.text = @"待回传";
         stateLbl.textColor = RGB_COLOR(166, 83, 33, 1);
     }else if([model.state integerValue] == 1){
         stateLbl.text = @"待确认";
@@ -572,11 +583,6 @@
 }
 
 -(void)back{
-    
-    if(self.isFromSavaVc){
-        
-        
-    }
     
     [self popToViewControllerWithDirection:@"right" type:NO];
 }

@@ -433,9 +433,6 @@
 		8F9E91BA1E170860002297ED /* ScanHistoryContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91B91E170860002297ED /* ScanHistoryContoller.m */; };
 		8F9E91BD1E171C7D002297ED /* ScanHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */; };
 		8FA9D00A1E0DE00600DD0335 /* YLAddServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA9D0091E0DE00600DD0335 /* YLAddServer.m */; };
-		8FADB7171E5798730001B594 /* BTWaitingOrderController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FADB7161E5798730001B594 /* BTWaitingOrderController.m */; };
-		8FADB71A1E57988C0001B594 /* BTWaitingCheckController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FADB7191E57988C0001B594 /* BTWaitingCheckController.m */; };
-		8FADB71D1E57989D0001B594 /* BTConfirmedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FADB71C1E57989D0001B594 /* BTConfirmedController.m */; };
 		8FB9CCFB1E0C8D9A00DA6E11 /* Foundation+Log.m in Resources */ = {isa = PBXBuildFile; fileRef = 8FB9CCFA1E0C8D9A00DA6E11 /* Foundation+Log.m */; };
 		8FB9CD511E0CBDC200DA6E11 /* YLServerAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB9CD501E0CBDC200DA6E11 /* YLServerAddView.m */; };
 		8FC318031D5CCCFF00E56D31 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FC318021D5CCCFF00E56D31 /* Images.xcassets */; };
@@ -1331,12 +1328,6 @@
 		8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanHistoryCell.m; sourceTree = "<group>"; };
 		8FA9D0081E0DE00600DD0335 /* YLAddServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLAddServer.h; sourceTree = "<group>"; };
 		8FA9D0091E0DE00600DD0335 /* YLAddServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLAddServer.m; sourceTree = "<group>"; };
-		8FADB7151E5798730001B594 /* BTWaitingOrderController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTWaitingOrderController.h; sourceTree = "<group>"; };
-		8FADB7161E5798730001B594 /* BTWaitingOrderController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTWaitingOrderController.m; sourceTree = "<group>"; };
-		8FADB7181E57988C0001B594 /* BTWaitingCheckController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTWaitingCheckController.h; sourceTree = "<group>"; };
-		8FADB7191E57988C0001B594 /* BTWaitingCheckController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTWaitingCheckController.m; sourceTree = "<group>"; };
-		8FADB71B1E57989D0001B594 /* BTConfirmedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTConfirmedController.h; sourceTree = "<group>"; };
-		8FADB71C1E57989D0001B594 /* BTConfirmedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTConfirmedController.m; sourceTree = "<group>"; };
 		8FB9CCFA1E0C8D9A00DA6E11 /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Foundation+Log.m"; path = "../category/Foundation+Log.m"; sourceTree = "<group>"; };
 		8FB9CD4F1E0CBDC200DA6E11 /* YLServerAddView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLServerAddView.h; sourceTree = "<group>"; };
 		8FB9CD501E0CBDC200DA6E11 /* YLServerAddView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLServerAddView.m; sourceTree = "<group>"; };
@@ -1480,12 +1471,6 @@
 			children = (
 				8F77C0F21DD625AC005AD9D8 /* FinalOrderViewController.h */,
 				8F77C0F31DD625AC005AD9D8 /* FinalOrderViewController.m */,
-				8FADB7151E5798730001B594 /* BTWaitingOrderController.h */,
-				8FADB7161E5798730001B594 /* BTWaitingOrderController.m */,
-				8FADB7181E57988C0001B594 /* BTWaitingCheckController.h */,
-				8FADB7191E57988C0001B594 /* BTWaitingCheckController.m */,
-				8FADB71B1E57989D0001B594 /* BTConfirmedController.h */,
-				8FADB71C1E57989D0001B594 /* BTConfirmedController.m */,
 				8F77C0F81DD63724005AD9D8 /* FinalOrderCell.h */,
 				8F77C0F91DD63724005AD9D8 /* FinalOrderCell.m */,
 				8F7EFAD41DD7DB0C0021A9B0 /* HeaderModel.h */,
@@ -3513,7 +3498,6 @@
 				8F7CC1211E133A280033E7FB /* ZXAztecReader.m in Sources */,
 				8F7CC12A1E133A280033E7FB /* ZXEmailAddressParsedResult.m in Sources */,
 				8F4A193D1CDAB580006ED857 /* UIScrollView+MJExtension.m in Sources */,
-				8FADB7171E5798730001B594 /* BTWaitingOrderController.m in Sources */,
 				8F4A19431CDAB580006ED857 /* TAPageControl.m in Sources */,
 				8F7CC18F1E133A280033E7FB /* ZXAI01decoder.m in Sources */,
 				8F7CC1751E133A280033E7FB /* ZXDataMatrixC40Encoder.m in Sources */,
@@ -3538,7 +3522,6 @@
 				8F7CC1231E133A280033E7FB /* ZXAbstractDoCoMoResultParser.m in Sources */,
 				8F7CC1B51E133A280033E7FB /* ZXOneDReader.m in Sources */,
 				8F56680A1CDD37D600C39F75 /* SerizesCell.m in Sources */,
-				8FADB71D1E57989D0001B594 /* BTConfirmedController.m in Sources */,
 				8F8DDB901CDBF38B00F04D0C /* CatagoryViewController.m in Sources */,
 				8F12D39F1CDE32ED00712CDA /* DetailViewController.m in Sources */,
 				8F7CC15D1E133A280033E7FB /* ZXIntArray.m in Sources */,
@@ -3646,7 +3629,6 @@
 				8F7CC1841E133A280033E7FB /* ZXMaxiCodeReader.m in Sources */,
 				8F7CC16A1E133A280033E7FB /* ZXResult.m in Sources */,
 				8F7CC1651E133A280033E7FB /* ZXEncodeHints.m in Sources */,
-				8FADB71A1E57988C0001B594 /* BTWaitingCheckController.m in Sources */,
 				8F7CC1571E133A280033E7FB /* ZXDecoderResult.m in Sources */,
 				8F0276411E15C0FA006E78F6 /* BatarCommandModel.m in Sources */,
 				8F7CC1591E133A280033E7FB /* ZXDetectorResult.m in Sources */,

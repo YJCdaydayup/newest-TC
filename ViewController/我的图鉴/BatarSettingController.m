@@ -13,6 +13,7 @@
 #import "YLLocationManager.h"
 #import "NetManager.h"
 #import "YLCoder2D.h"
+#import "FinalOrderViewController.h"
 
 @interface BatarSettingController(){
     
@@ -147,7 +148,25 @@
 #pragma mark -我的订单部分
 -(void)clickFunction:(UIButton *)btn{
     
-    
+    FinalOrderViewController * finalvc = [[FinalOrderViewController alloc]initWithController:self];
+    finalvc.selectIndex = btn.tag;
+    switch (btn.tag) {
+        case 0:
+            finalvc.type = @(-1);
+            break;
+        case 1:
+            finalvc.type = @0;
+            break;
+        case 2:
+            finalvc.type = @1;
+            break;
+        case 3:
+            finalvc.type = @2;
+            break;
+        default:
+            break;
+    }
+    [self pushToViewControllerWithTransition:finalvc withDirection:@"right" type:NO];
 }
 
 #pragma mark - 我的设置
@@ -173,7 +192,7 @@
                 locationManager.bottomDict = bottomDict;
                 [locationManager createLocationManager];
             }
-
+            
         }
             break;
             

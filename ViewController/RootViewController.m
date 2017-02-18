@@ -78,8 +78,6 @@
 
 -(void)createView{
     
-    
-    
 }
 
 #pragma mark -计算产品描述Label的高度

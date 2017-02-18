@@ -10,6 +10,7 @@
 
 @interface FinalOrderViewController : RootViewController
 
-@property (nonatomic,assign) BOOL isFromSavaVc;
+@property (nonatomic,strong) NSNumber * type;
+@property (nonatomic,assign) NSInteger selectIndex;
 
 @end

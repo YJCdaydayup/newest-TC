@@ -23,6 +23,12 @@
 
 @implementation OrderDetailController
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     
     //将播放停止
