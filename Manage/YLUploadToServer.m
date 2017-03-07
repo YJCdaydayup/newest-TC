@@ -89,7 +89,7 @@ singleM(UploadToServer)
         if([[dict objectForKey:@"state"]integerValue]){
                 //收藏夹上传完毕，停止计时器,清空本地收藏夹
                 [self batar_cleanLocalSaveFile];
-                NSLog(@"收藏夹上传完毕，停止计时器---%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
+//                NSLog(@"收藏夹上传完毕，停止计时器---%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
         }else{
             NSLog(@"%@",error.description);
         }

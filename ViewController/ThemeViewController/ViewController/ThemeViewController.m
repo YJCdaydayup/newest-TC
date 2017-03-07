@@ -135,7 +135,7 @@
         ThemeModel * model = self.themeArray[i];
         
         UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(0, NAV_BAR_HEIGHT+i*41*S6+0.3*S6, 96*S6, 41*S6);
+        button.frame = CGRectMake(0, NAV_BAR_HEIGHT+i*41*S6+0.3*S6, 96*S6, 40*S6);//
         [button setTitle:model.theme forState:UIControlStateNormal];
         [button setTitleColor:TEXTCOLOR forState:UIControlStateNormal];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
@@ -143,6 +143,7 @@
         button.layer.borderColor = [RGB_COLOR(227, 227, 227, 1)CGColor];
         button.layer.borderWidth = 0.3f*S6;
         button.titleLabel.font = [UIFont systemFontOfSize:15*S6];
+        button.titleLabel.numberOfLines = 0;
         [self.view addSubview:button];
         
         if(i == 0){

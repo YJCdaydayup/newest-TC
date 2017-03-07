@@ -44,5 +44,10 @@ NSString * const SaveCellCancelEditNotification = @"SaveCellCancelEditNotificati
 
 NSString * const SaveCellDeleteNotification = @"SaveCellDeleteNotification";
 
+NSString * const CancelOrderNotification = @"CancelOrderNotification";//取消订单发出通知
+
+NSString *const ConfirmOrderNotification = @"ConfirmOrderNotification";//确认订单发出通知
+
+NSString *const UpdateMyOrderNotification = @"UpdateMyOrderNotification";
 
 @end

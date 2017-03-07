@@ -9,6 +9,8 @@
 #ifndef ColorComment_h
 #define ColorComment_h
 
+#define WeakObj(o) autoreleasepool{} __weak typeof(o) o##Weak = o
+
 //主题颜色
 #define THEMECOLOR RGB_COLOR(76, 66, 41, 1)
 
@@ -43,8 +45,6 @@
 
 //持久化NSUserDefault
 #define kUserDefaults [NSUserDefaults standardUserDefaults]
-
-#define  WEAKSELF(SELF)  __block typeof(self)(SELF) = self
 
 //注销按钮颜色
 #define LOGOUTBTNCOLOR RGB_COLOR(220, 119, 40, 1)

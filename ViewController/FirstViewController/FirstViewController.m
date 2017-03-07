@@ -109,6 +109,18 @@
 //设置表格frame
 -(void)setTableView{
     
+    UIImage * gifImage = [UIImage imageNamed:BANNERPLACEHOLDER];
+    self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0,0*S6,Wscreen,150*S6) delegate:self placeholderImage:gifImage];
+    self.cycleScrollView.delegate = self;
+    self.cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
+    self.cycleScrollView.currentPageDotColor = RGB_COLOR(215, 185, 29, 0.5); // 自定义分页控件小圆标颜色
+    self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
+    self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"lb1"];
+    self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"lb2"];
+    self.cycleScrollView.pageDotColor = RGB_COLOR(221, 193, 191,0.5);
+    self.cycleScrollView.pageControlDotSize = CGSizeMake(8*S6,8*S6);
+    self.cycleScrollView.contentMode = UIViewContentModeScaleAspectFill;
+    
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT) style:UITableViewStylePlain];
     self.tableView.backgroundColor = TABLEVIEWCOLOR;
     self.tableView.showsVerticalScrollIndicator = NO;
@@ -120,7 +132,7 @@
     [self.tableView registerClass:[SerizeCell class] forCellReuseIdentifier:serizeCell];
     [self.tableView registerClass:[ProductCell class] forCellReuseIdentifier:productCell];
     [self.tableView addHeaderWithTarget:self action:@selector(headerAction)];
-    
+    self.tableView.tableHeaderView = self.cycleScrollView;
     [self.tableView headerBeginRefreshing];
 }
 
@@ -131,9 +143,8 @@
 -(void)reloadView{
     
     //请求轮播图url
-    [self downloadBanner];
-    
     [self getMenueInfo];
+    [self downloadBanner];
 }
 
 -(void)getMenueInfo{
@@ -149,13 +160,17 @@
                 
                 BannerModel * model = [[BannerModel alloc]initWithDictionary:dict error:nil];
                 [tuiGuangArr addObject:model];
+                [self.tableView reloadData];
+                [self.tableView headerEndRefreshing];
             }
-            [self downloadNewestData];
         }else{
             NSLog(@"%@",error.description);
         }
     }];
-//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+    
+    
+    [self downloadNewestData];
+    //    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 -(void)downloadNewestData{
@@ -181,8 +196,9 @@
                 [self.dataArray addObject:model];
             }
             [self.tableView reloadData];
+            [self.tableView headerEndRefreshing];
         }
-        [self.tableView headerEndRefreshing];
+        
     }];
 }
 
@@ -216,20 +232,8 @@
                 NSString * URLstring = [NSString stringWithFormat:NEWBANNERCONNET,[manager getIPAddress]];
                 [imagesURLStrings addObject:[NSString stringWithFormat:@"%@%@",URLstring,model.img]];
             }
-            UIImage * gifImage = [UIImage imageNamed:BANNERPLACEHOLDER];
-            self.cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0,0*S6,Wscreen,150*S6) delegate:self placeholderImage:gifImage];
             self.cycleScrollView.imageURLStringsGroup = imagesURLStrings
             ;
-            self.cycleScrollView.delegate = self;
-            self.cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
-            self.cycleScrollView.currentPageDotColor = RGB_COLOR(215, 185, 29, 0.5); // 自定义分页控件小圆标颜色
-            self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
-            self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"lb1"];
-            self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"lb2"];
-            self.cycleScrollView.pageDotColor = RGB_COLOR(221, 193, 191,0.5);
-            self.cycleScrollView.pageControlDotSize = CGSizeMake(8*S6,8*S6);
-            self.cycleScrollView.contentMode = UIViewContentModeScaleAspectFill;
-            self.tableView.tableHeaderView = self.cycleScrollView;
         }
     }];
 }
@@ -237,11 +241,11 @@
 #pragma mark - 填充轮播默认图片
 -(void)createBannerPlaceImage{
     
-//    self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT+150*S6, Wscreen, Hscreen-NAV_BAR_HEIGHT-150*S6);
-//    placeHolderImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, 150)];
-//    placeHolderImageView.image = [UIImage sd_animatedGIFNamed:@"move"];
-//    placeHolderImageView.contentMode = UIViewContentModeCenter;
-//    [self.view addSubview:placeHolderImageView];
+    //    self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT+150*S6, Wscreen, Hscreen-NAV_BAR_HEIGHT-150*S6);
+    //    placeHolderImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, 150)];
+    //    placeHolderImageView.image = [UIImage sd_animatedGIFNamed:@"move"];
+    //    placeHolderImageView.contentMode = UIViewContentModeCenter;
+    //    [self.view addSubview:placeHolderImageView];
 }
 
 #pragma mark -请求分类搜索界面的数据
@@ -354,11 +358,12 @@
             }
             
             if([model.type integerValue] == 1){
-                
-                
-                
+//                RECOMMANDCLICK
+                SingleSearchCatagoryViewController * singeVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
+                singeVc.catagoryItem = model.actionname;
+                [self pushToViewControllerWithTransition:singeVc withDirection:@"right" type:NO];
             }else{
-                
+            
                 ThemeViewController * themeVc = [[ThemeViewController alloc]init];
                 themeVc.indexParm = model.actionname;
                 themeVc.themeTitle = model.actionaliasname;
@@ -379,8 +384,8 @@
             NSMutableArray * array = self.dataArray[indexPath.row].products;
             [cell setImageView:array];
             [cell clickImageForDetai:^(NSInteger index) {
-               
-//                NSLog(@"%zi",index);
+                
+                //                NSLog(@"%zi",index);
                 DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
                 detailVc.index = self.dataArray[indexPath.row].products[index].number;
                 [self pushToViewControllerWithTransition:detailVc withDirection:@"right" type:NO];

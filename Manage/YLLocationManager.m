@@ -28,7 +28,7 @@
     
     self.geocoder = [[CLGeocoder alloc]init];
     
-    NSLog(@"%@",self.address);
+//    NSLog(@"%@",self.address);
     __block typeof(self)weakSelf = self;
     [self.geocoder geocodeAddressString:self.address completionHandler:^(NSArray *placemarks, NSError *error) {
         
@@ -114,7 +114,7 @@
                 
                 NSString *urlString = [[NSString stringWithFormat:@"baidumap://map/direction?origin={{我的位置}}&destination=latlng:%.2f,%.2f|name=目的地&mode=driving&coord_type=gcj02",coordinate.latitude, coordinate.longitude] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
                 
-                NSLog(@"%@",urlString);
+//                NSLog(@"%@",urlString);
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
             }];

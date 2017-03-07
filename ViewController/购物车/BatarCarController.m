@@ -75,6 +75,10 @@
     YLOrdersController * ylOrderController = [[YLOrdersController alloc]init];
     [self.view addSubview:ylOrderController];
     
+    if(![self.fatherVc isKindOfClass:[DetailViewController class]]){
+        ylOrderController.hidden = YES;
+    }
+    
     //底部控制
     [ylOrderController clickBottomBtn:^(NSInteger tag) {
         
@@ -305,9 +309,9 @@
 
 -(void)getData{
     
+    @WeakObj(self);
     [self.selectedArray removeAllObjects];
     [self.dataArray removeAllObjects];
-    WEAKSELF(WEAKSS);
     if(CUSTOMERID){
         //服务器获取数据
         [self.hud show:YES];
@@ -337,7 +341,7 @@
                     }
                     [self.dataArray addObjectsFromArray:tempArray];
                 }
-                [WEAKSS.tableView reloadData];
+                [selfWeak.tableView reloadData];
             }else{
                 NSLog(@"%@",error.description);
             }
@@ -347,8 +351,8 @@
         //本地购物车获取数据
         [self.manager createOrderDB];
         [self.manager order_getAllObject:^(NSMutableArray *dataArray) {
-            WEAKSS.dataArray = dataArray;
-            [WEAKSS.tableView reloadData];
+            selfWeak.dataArray = dataArray;
+            [selfWeak.tableView reloadData];
         }];
         
     }

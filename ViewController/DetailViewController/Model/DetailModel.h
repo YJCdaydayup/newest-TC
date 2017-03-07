@@ -38,6 +38,6 @@
 @property (nonatomic,copy) NSString * size;
 @property (nonatomic,copy) NSString * number;
 @property (nonatomic,copy) NSString * weight;
-@property (nonatomic,copy) NSString * description;
+@property (nonatomic,copy) NSString * detail;
 
 @end

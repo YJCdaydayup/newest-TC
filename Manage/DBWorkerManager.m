@@ -551,7 +551,7 @@ static DBWorkerManager * manager = nil;
         
         for(DBSaveModel * model in dataArray){
             
-                        NSLog(@"bbbb:%@",model.number);
+//                        NSLog(@"bbbb:%@",model.number);
             
             if([model.number isEqualToString:number]){
                 isSaved = YES;

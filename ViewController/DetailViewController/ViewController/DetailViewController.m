@@ -408,11 +408,11 @@
     [self addItemIntoArray:detailModel.craft withTitle:@"    工       艺"];
     [self addItemIntoArray:detailModel.weight withTitle:@"    克       重"];
     [self addItemIntoArray:detailModel.shapes withTitle:@"    外观形态"];
-    [self addItemIntoArray:detailModel.crowd withTitle:@"    适合人群"];
+    [self addItemIntoArray:detailModel.crowd withTitle:@"  适合人群"];
     [self addItemIntoArray:detailModel.size withTitle:@"    尺寸规格"];
-    //    [self addItemIntoArray:detailModel.description withTitle:@"    产品描述"];
+    [self addItemIntoArray:detailModel.detail withTitle:@"  产品描述"];
     //展示先这样
-    //    [self addItemIntoArray:@"我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述我是产品描述" withTitle:@" 产品描述"];
+    //    [self addItemIntoArray:detailModel.detail withTitle:@"    产品描述"];
 }
 
 -(void)addItemIntoArray:(NSString *)item withTitle:(NSString *)title{
@@ -422,6 +422,11 @@
         NSDictionary * dict = @{title:item};
         [self.sortItemsArray addObject:dict];
     }
+    //    if(item == nil){
+    //            }else{
+    //                NSDictionary * dict = @{title:item};
+    //                [self.sortItemsArray addObject:dict];
+    //            }
 }
 
 -(void)setValueToView{
@@ -441,17 +446,10 @@
         if(i == self.sortItemsArray.count-1){
             
             label = itemLabel;
-            //            label.frame = CGRectMake(10*S6, 5*S6+self.max_Y+22.5*S6*i, Wscreen-20*S6, 22.5*S6);
+            label.frame = CGRectMake(10*S6, 5*S6+self.max_Y+22.5*S6*i, Wscreen-20*S6, 22.5*S6);
             label.numberOfLines = 0;
             label.lineSpace = 0.5*S6;
             label.height = [self getDescriptionHeight:content];
-        }
-        
-        if(i == 0){
-            
-            UIButton * shareBtn = [Tools createButtonNormalImage:@"share_out" selectedImage:nil tag:1 addTarget:self action:@selector(shareToPlaforms)];
-            shareBtn.frame = CGRectMake(Wscreen-69.5*S6,CGRectGetMaxY(self.bgView.frame)+5*S6, 119/2.0*S6, 23.5*S6);
-            [backgroundView addSubview:shareBtn];
         }
     }
     
@@ -551,17 +549,21 @@
     //导航条设置
     [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(backOut) size:CGSizeMake(24.5*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:13.5*S6];
     
+    UIButton * shareBtn = [Tools createButtonNormalImage:@"share" selectedImage:nil tag:1 addTarget:self action:@selector(shareToPlaforms)];
+    shareBtn.frame = CGRectMake(10,10, 22*S6, 22*S6);
+    UIBarButtonItem * shareBarBtn = [[UIBarButtonItem alloc]initWithCustomView:shareBtn];
+    
     //收藏按钮
     save_Button = [Tools createNormalButtonWithFrame:CGRectMake(0, 0, 0, 0) textContent:nil withFont:[UIFont systemFontOfSize:16*S6] textColor:RGB_COLOR(231, 140, 59, 1) textAlignment:NSTextAlignmentRight];
     //    [save_Button setTitle:@"取消收藏" forState:UIControlStateSelected];
     [save_Button setImage:[UIImage imageNamed:@"save_nor"] forState:UIControlStateNormal];
     [save_Button setImage:[UIImage imageNamed:@"save_sel"] forState:UIControlStateSelected];
     [save_Button setImage:[UIImage imageNamed:@"save_sel"] forState:UIControlStateHighlighted];
-    save_Button.frame = CGRectMake(100, 0, 25*S6, 32*S6);
+    save_Button.frame = CGRectMake(100, 0, 22*S6, 28*S6);
     [save_Button addTarget:self action:@selector(saveAction:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem * rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:save_Button];
-    self.navigationItem.rightBarButtonItem = rightBarBtn;
+    self.navigationItem.rightBarButtonItems = @[rightBarBtn,shareBarBtn];
     
     //导航条标题
     self.titlelabel = [Tools createLabelWithFrame:CGRectMake(15, 10,100, 20*S6) textContent:nil withFont:[UIFont systemFontOfSize:17*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];

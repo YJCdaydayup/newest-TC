@@ -213,6 +213,10 @@ NSString * const saveCell = @"saveCell";
                 NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
                 if(dict){
                     
+                    if(![dict[@"page"]isKindOfClass:[NSArray class]]){
+                        return ;
+                    }
+                    
                     NSArray * array = [dict objectForKey:@"page"];
                     if(array.count>0){
                         for(NSDictionary * subDict in array){

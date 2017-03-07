@@ -59,6 +59,14 @@ UIKIT_EXTERN NSString * const SaveCellCancelEditNotification;
 /*删除收藏夹成功后，通知详情界面*/
 UIKIT_EXTERN NSString * const SaveCellDeleteNotification;
 
+//取消订单发出通知
+UIKIT_EXTERN NSString * const CancelOrderNotification;
+
+//确认订单发出通知
+UIKIT_EXTERN NSString *const ConfirmOrderNotification;
+
+//我的订单刷新的通知
+UIKIT_EXTERN NSString *const UpdateMyOrderNotification;
 
 
 @end

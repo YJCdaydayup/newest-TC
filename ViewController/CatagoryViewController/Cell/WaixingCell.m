@@ -22,15 +22,14 @@
 
 -(void)setImageView{
     
-   self.bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 280*S6)];
-    self.bgView.backgroundColor = [UIColor whiteColor];
-    [self.contentView addSubview:self.bgView];
-    
     //从文件读取数据
     NSString * plistPath = [NSString stringWithFormat:@"%@catagory.plist",LIBPATH];
     NSArray * fileArray = [[NSArray alloc]initWithContentsOfFile:plistPath];
+        NSArray * titleArray = fileArray[3];
     
-    NSArray * titleArray = fileArray[3];
+   self.bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 90*titleArray.count*S6)];
+    self.bgView.backgroundColor = [UIColor whiteColor];
+    [self.contentView addSubview:self.bgView];
     
     //这里的按钮需要tag值从”tag ＝ 50“开始
     for(int i=0;i<titleArray.count;i++){

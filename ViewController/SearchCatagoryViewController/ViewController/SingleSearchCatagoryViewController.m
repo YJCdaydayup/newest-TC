@@ -85,54 +85,62 @@
     NetManager * manager = [NetManager shareManager];
     //判断参数的类型
     
-    switch (self.vc_flag) {
-            
-        case 0:{
-            //字典传过来
-            NSString * URLstring = [NSString stringWithFormat:CATAGORYURL,[manager getIPAddress]];
-            
-            urlStr = URLstring;
-            NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-            NSString * otherParm = [NSString stringWithFormat:@"%@%@",pageStr,@"@10"];
-            [self.parmDict setObject:otherParm forKey:@"others"];
-            NSString * jsonStr = [self dictionaryToJson:self.parmDict];
-            parmDict = @{@"parm":jsonStr};
+    if([self.fatherVc isKindOfClass:[FirstViewController class]]){
+        
+        urlStr = [NSString stringWithFormat:RECOMMANDCLICK,[manager getIPAddress]];
+        parmDict = @{@"page":@(page+1),@"size":@"10",@"id":self.catagoryItem};
+        
+    }else{
+        switch (self.vc_flag) {
+                
+            case 0:{
+                //字典传过来
+                NSString * URLstring = [NSString stringWithFormat:CATAGORYURL,[manager getIPAddress]];
+                
+                urlStr = URLstring;
+                NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+                NSString * otherParm = [NSString stringWithFormat:@"%@%@",pageStr,@"@10"];
+                [self.parmDict setObject:otherParm forKey:@"others"];
+                NSString * jsonStr = [self dictionaryToJson:self.parmDict];
+                parmDict = @{@"parm":jsonStr};
+            }
+                break;
+            case 1:
+                //无参数
+            {
+                NSString * URLstring1 = [NSString stringWithFormat:RECOMMENDURL,[manager getIPAddress]];
+                NSString * URLstring = [NSString stringWithFormat:URLstring1,[manager getIPAddress]];
+                urlStr = URLstring;
+                NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+                parmDict = @{@"page":pageStr,@"itemperpage":@"10"};
+            }
+                break;
+            case 2:
+                //需要传参
+            {
+                //拼接ip和port
+                NSString * URLstring = [NSString stringWithFormat:CATAGORYPUSHURL,[manager getIPAddress]];
+                NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
+                NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+                parmDict = nil;
+                urlStr = [NSString stringWithFormat:@"%@page=%@&itemperpage=%@",str,pageStr,@"10"];
+            }
+                break;
+            case 3:
+            {
+                //拼接ip和port
+                NSString * URLstring = [NSString stringWithFormat:CLICKMORE,[manager getIPAddress]];
+                NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
+                NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+                parmDict = nil;
+                urlStr = [NSString stringWithFormat:@"%@&page=%@&size=%@",str,pageStr,@"10"];
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        case 1:
-            //无参数
-        {
-            NSString * URLstring1 = [NSString stringWithFormat:RECOMMENDURL,[manager getIPAddress]];
-            NSString * URLstring = [NSString stringWithFormat:URLstring1,[manager getIPAddress]];
-            urlStr = URLstring;
-            NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-            parmDict = @{@"page":pageStr,@"itemperpage":@"10"};
-        }
-            break;
-        case 2:
-            //需要传参
-        {
-            //拼接ip和port
-            NSString * URLstring = [NSString stringWithFormat:CATAGORYPUSHURL,[manager getIPAddress]];
-            NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
-            NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-            parmDict = nil;
-            urlStr = [NSString stringWithFormat:@"%@page=%@&itemperpage=%@",str,pageStr,@"10"];
-        }
-            break;
-        case 3:
-        {
-            //拼接ip和port
-            NSString * URLstring = [NSString stringWithFormat:CLICKMORE,[manager getIPAddress]];
-            NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
-            NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-            parmDict = nil;
-            urlStr = [NSString stringWithFormat:@"%@&page=%@&size=%@",str,pageStr,@"10"];
-        }
-            break;
-        default:
-            break;
     }
+    
     [manager downloadDataWithUrl:urlStr parm:parmDict callback:^(id responseObject, NSError *error) {
         
         if(error == nil){

@@ -17,11 +17,13 @@
 #import "YLUploadToServer.h"
 #import "YLNetObseverManager.h"
 #import "BTAdverController.h"
+#import "YLSocketManager.h"
 
 @interface AppDelegate ()<YLNetObseverDelegate>
 
 @property (nonatomic,strong) YLUploadToServer * uploadManager;
 @property (nonatomic,strong) NetManager * netManager;
+@property (nonatomic,strong) YLSocketManager * socketManager;
 
 @end
 
@@ -66,6 +68,8 @@
     // 启动图片延时: 1秒
 //    [NSThread sleepForTimeInterval:3];
     
+    //与服务端建立
+    
     //网络变化的代理设置
     [YLNetObseverManager shareInstanceWithDelegate:self];
     
@@ -106,7 +110,9 @@
         BatarLoginController * loginVc = [[BatarLoginController alloc]init];
         self.window.rootViewController = loginVc;
     }
+    
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

@@ -12,6 +12,7 @@
 #import "HKPieChartView.h"
 #import "YLLocationManager.h"
 #import "NetManager.h"
+#import "YLLoginView.h"
 #import "YLCoder2D.h"
 #import "FinalOrderViewController.h"
 
@@ -28,6 +29,11 @@
 @end
 
 @implementation BatarSettingController
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = NO;
+}
 
 -(void)viewDidLoad{
     
@@ -87,7 +93,7 @@
     [self.view addSubview:title];
     
     NSArray * imgArray = @[@"all_order",@"waiting_feedback",@"waiting_confirm",@"confirm"];
-    NSArray * titleArray = @[@"全部订单",@"需求订单",@"待确认订单",@"已确认订单"];
+    NSArray * titleArray = @[@"全部订单",@"待明细",@"待确认",@"已确认"];
     for(int i =0;i<4;i++){
         
         UIButton * btn = [Tools createButtonNormalImage:imgArray[i] selectedImage:nil tag:i addTarget:self action:@selector(clickFunction:)];
@@ -148,11 +154,21 @@
 #pragma mark -我的订单部分
 -(void)clickFunction:(UIButton *)btn{
     
+    if(!CUSTOMERID){
+        YLLoginView * loginView = [[YLLoginView alloc]initWithVC:self.app.window withVc:self];
+        [self.app.window addSubview:loginView];
+        [loginView clickCancelBtn:^{
+            
+        }];
+        return;
+    }
+    
+    
     FinalOrderViewController * finalvc = [[FinalOrderViewController alloc]initWithController:self];
     finalvc.selectIndex = btn.tag;
     switch (btn.tag) {
         case 0:
-            finalvc.type = @(-1);
+            finalvc.type = @(-2);
             break;
         case 1:
             finalvc.type = @0;
@@ -166,6 +182,7 @@
         default:
             break;
     }
+    finalvc.hidesBottomBarWhenPushed = YES;
     [self pushToViewControllerWithTransition:finalvc withDirection:@"right" type:NO];
 }
 

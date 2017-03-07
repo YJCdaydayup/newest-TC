@@ -14,5 +14,6 @@
 @property (nonatomic,assign) BOOL isSelected;
 @property (nonatomic,copy) NSString * orderid;
 @property (nonatomic,strong) NSNumber * state;
+@property (nonatomic,assign) BOOL isOpen;
 
 @end

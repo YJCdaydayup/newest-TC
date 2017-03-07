@@ -19,6 +19,9 @@
 
 @property (nonatomic,strong) NSMutableArray * messageArray;
 
+/** 网络 */
+@property (nonatomic,strong) NetManager * manager;
+
 @end
 
 @implementation OrderDetailController
@@ -60,7 +63,11 @@
     imgView.layer.borderWidth = 2.5*S6;
     imgView.layer.borderColor = [CELLBGCOLOR CGColor];
     imgView.contentMode = UIViewContentModeScaleAspectFit;
-    imgView.image = self.img;
+    NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[self.manager getIPAddress]];
+    NSInteger width = 110*THUMBNAILRATE;
+    NSInteger height = 165/2.0*THUMBNAILRATE;
+    NSURL *url = [NSURL URLWithString:[Tools connectOriginImgStr:[NSString stringWithFormat:@"%@%@",URLstring,self.img] width:GETSTRING(width) height:GETSTRING(height)]];
+    [imgView sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:PLACEHOLDER]];
     [self.view addSubview:imgView];
     
     UILabel * nameLabel = [Tools createLabelWithFrame:CGRectMake(CGRectGetMaxX(imgView.frame)+17.5*S6, CGRectGetMinY(imgView.frame)+1.5*S6, 200, 14*S6) textContent:self.name withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentLeft];
@@ -241,6 +248,14 @@
     label.numberOfLines = 0;
     [label sizeToFit];
     return ((int)label.height/14)>1?(label.height/14.0)*label.height:35*S6;
+}
+
+-(NetManager *)manager{
+    
+    if(!_manager){
+        _manager = [NetManager shareManager];
+    }
+    return _manager;
 }
 
 - (void)didReceiveMemoryWarning {

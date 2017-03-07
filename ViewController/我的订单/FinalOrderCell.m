@@ -59,7 +59,7 @@
 
 -(void)getDetailInfo{
     
-//    NSLog(@"%@",self.model.note);
+//  NSLog(@"%@",self.model.note);
     NSString * noteStr;
     NSMutableArray * messageArray;
     if(self.model.note != nil){

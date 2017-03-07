@@ -102,12 +102,15 @@
     
     NetManager * manager = [NetManager shareManager];
     NSString * URLstring = [NSString stringWithFormat:SEARCHURL,[manager getIPAddress]];
-    self.param = [self.param stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    self.param = [self.param stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    self.param = [self.param stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
     NSString * str = [NSString stringWithFormat:@"%@?key=%@&",URLstring,self.param];
     NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
     NSString * urlStr = [NSString stringWithFormat:@"%@page=%@&size=%@",str,pageStr,@"100"];
+    
     [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
-        NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+        NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSArray * array = dict[@"page"];
         if(page == 0){
             [self.dataArray removeAllObjects];

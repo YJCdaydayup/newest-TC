@@ -702,11 +702,13 @@
     [self addClickActionWithBaseTag:70 andArray:self.weightNameArray andView:bgView5];
     
 }
+
 #pragma mark -返回cell高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    CGFloat height1 = 45;
-    CGFloat height2 = 90;
+    CGFloat height0 = 45;
+    CGFloat height1 = 42;
+    CGFloat height2 = 92;
     
     //从文件读取数据
     NSString * plistPath = [NSString stringWithFormat:@"%@catagory.plist",LIBPATH];
@@ -728,7 +730,7 @@
                 return 5*S6;
             }
             if(cataArray.count<=4){
-                return height1*S6;
+                return height0*S6;
             }else{
                 return height2*S6;
             }
@@ -756,7 +758,7 @@
             }
             
             if(craftArray.count<=4){
-                return height1*S6;
+                return height0*S6;
             }else{
     
                 return height2*S6;
@@ -782,7 +784,7 @@
             }
             
             if(materialArray.count<=4){
-                return height1*S6;
+                return height0*S6;
             }else{
                 return height2*S6;
             }
@@ -806,7 +808,7 @@
             }
             
             if(shapeArray.count<=4){
-                return height1*S6;
+                return height0*S6;
             }else{
                 return height2*S6;
             }
@@ -814,6 +816,7 @@
             
             int height = shapeArray.count/4*height1*S6;
             int leftHeight = shapeArray.count%4>0?height1*S6:0;
+
             return height+leftHeight;
         }
     }else{
@@ -830,7 +833,7 @@
             }
             
             if(weightArray.count<=4){
-                return height1*S6;
+                return height0*S6;
             }else{
                 return height2*S6;
             }
@@ -866,6 +869,15 @@
     [bgView addSubview:moreBtn];
     
     moreBtn.userInteractionEnabled = YES;
+    
+    NSString * plistPath = [NSString stringWithFormat:@"%@catagory.plist",LIBPATH];
+    NSArray * fileArray = [[NSArray alloc]initWithContentsOfFile:plistPath];
+    NSArray * array = fileArray[section];
+    if(array.count<=8){
+        moreBtn.hidden = YES;
+    }else{
+        moreBtn.hidden = NO;
+    }
     
     if(section == 0){
         self.moreButton1 = moreBtn;

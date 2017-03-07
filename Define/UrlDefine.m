@@ -64,7 +64,7 @@ NSString * const CONFRIMORDR = @"http://%@/photo-album/order/order_confirm";
 NSString * const CHECKORDER = @"http://%@/photo-album/order/order_list";
 
 /*删除最终确认的订单*/
-NSString * const DELETEMYORDER = @"http://%@/photo-album/order/order_delete";
+NSString * const DELETEMYORDER = @"http://%@/photo-album/order/app_order_remove";
 
 /*搜索提示*/
 NSString * const SEARCHINDICOTOR = @"http://%@/photo-album/index/autocomplete";
@@ -116,6 +116,11 @@ NSString * const AdvertiseUrl = @"http://%@/photo-album/startup/get_startup";
 
 /*启动广告页图片*/
 NSString * const startImg = @"http://%@/photo-album/startup/image/%@";
+
+NSString * const OrderDetailUrl = @"http://%@/photo-album/order_manger/get_details?";
+
+/*确认订单&&取消订单*/
+NSString * const ChangeOrderState = @"http://%@/photo-album/order/order_state_change";
 
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";

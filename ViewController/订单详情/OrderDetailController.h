@@ -11,7 +11,7 @@
 @interface OrderDetailController : RootViewController
 
 @property (nonatomic,strong) NSMutableArray * dataArray;
-@property (nonatomic,strong) UIImage * img;
+@property (nonatomic,copy) NSString * img;
 @property (nonatomic,copy)   NSString * number;
 @property (nonatomic,copy) NSString * name;
 @property (nonatomic,copy) NSString * createTime;

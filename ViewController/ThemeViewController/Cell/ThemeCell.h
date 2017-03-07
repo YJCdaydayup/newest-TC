@@ -17,6 +17,8 @@
 
 @property (nonatomic,strong) UIImageView * productImageView;
 @property (nonatomic,strong) UILabel * titleLabel;
+@property (nonatomic,strong) UILabel * numberLabel;
+
 
 @property (nonatomic,strong) ThemeDetailModel * model;
 

@@ -132,7 +132,6 @@
             [self.collectionView headerEndRefreshing];
             [self.collectionView footerEndRefreshing];
         }else{
-            
             NSLog(@"%@",error.description);
         }
     }];

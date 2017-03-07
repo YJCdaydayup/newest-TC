@@ -29,9 +29,9 @@
     line_view.backgroundColor = BOARDCOLOR;
     [self addSubview:line_view];
     
-    NSArray * titleArray = @[@"首页",@"我的收藏",@"选购单",@"删除"];
-    NSArray * imgArray = @[@"first_page",@"my_saved",@"my_order",@"my_addin"];
-    NSArray * imgSelectArray = @[@"first_page_select",@"my_saved_select",@"my_order_select"];
+    NSArray * titleArray = @[@"首页",@"我的收藏",@"购物车",@"删除"];
+    NSArray * imgArray = @[@"first_page",@"my_saved",@"shoppingcar_sel",@"my_addin"];
+    NSArray * imgSelectArray = @[@"first_page_select",@"my_saved_select",@"shoppingcar_nor"];
     
     for(int i=0;i<titleArray.count;i++){
         UIButton * btn;

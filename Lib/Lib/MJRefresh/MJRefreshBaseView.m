@@ -18,6 +18,7 @@
     __weak UIImageView *_arrowImage;
     __weak UIActivityIndicatorView *_activityView;
 }
+
 @end
 
 @implementation MJRefreshBaseView

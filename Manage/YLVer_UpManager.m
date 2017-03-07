@@ -7,7 +7,7 @@
 //
 
 #import "YLVer_UpManager.h"
-#import "NetManager.h"
+//#import "NetManager.h"
 
 @implementation YLVer_UpManager
 

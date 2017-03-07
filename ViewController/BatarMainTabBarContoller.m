@@ -45,9 +45,12 @@ singleM(tabbarController)
     
     for(int i=0;i<titleArray.count;i++){
         
-        //获取item
-        UITabBarItem * item = self.tabBar.items[i];
-        item = [item initWithTitle:titleArray[i] image:[self createImage:unSelectArray[i]] selectedImage:[self createImage:selectArray[i]]];
+        //创建自动释放池
+        @autoreleasepool {
+            //获取item
+            UITabBarItem * item = self.tabBar.items[i];
+            item = [item initWithTitle:titleArray[i] image:[self createImage:unSelectArray[i]] selectedImage:[self createImage:selectArray[i]]];
+        }
     }
     
     //设置item的字体颜色
@@ -59,6 +62,8 @@ singleM(tabbarController)
     
     //设置背景色
 //    [self.tabBar setBackgroundImage:[self createImage:@"tabbar_bg.png"]];
+    
+    
 }
 
 //路径转化为图片的方法
@@ -67,7 +72,6 @@ singleM(tabbarController)
     UIImage * image = [UIImage imageNamed:imageName];
     //处理阴影
     image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    
     return image;
 }
 
@@ -87,6 +91,11 @@ singleM(tabbarController)
     UINavigationController * settingNvc = [[UINavigationController alloc]initWithRootViewController:settingVc];
     
     self.viewControllers = @[firstNvc,discoverNvc,ordersNvc,settingNvc];
+    
+    firstNvc = nil;
+    discoverNvc = nil;
+    ordersNvc = nil;
+    settingNvc = nil;
 }
 
 @end

@@ -113,6 +113,7 @@
         
         block(nil,error);
     }];
+    manager = nil;
 }
 
 -(NSString *)getIPAddress{
@@ -310,7 +311,7 @@
     [self downloadDataWithUrl:imgUrl parm:nil callback:^(id responseObject, NSError *error) {
         
        BOOL isOk = [NSKeyedArchiver archiveRootObject:responseObject toFile:self.advertiseImgPath];
-        NSLog(@"isOk----%zi",isOk);
+//        NSLog(@"isOk----%zi",isOk);
     }];
 }
 
