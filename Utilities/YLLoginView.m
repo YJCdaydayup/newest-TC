@@ -31,8 +31,8 @@
     
     if(self = [super init]){
         
-//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
         
         currentVc = vc;
         parentVc = window;
@@ -43,43 +43,44 @@
     return self;
 }
 
-//-(void)keyBoardWillShow:(NSNotification *)notification{
-//    
-////    [user_code_field resignFirstResponder];
-//    // 获取通知的信息字典
-//    NSDictionary *userInfo = [notification userInfo];
-//    
-//    // 获取键盘弹出后的rect
-////    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-////    CGRect keyboardRect = [aValue CGRectValue];
-//    
-//    // 获取键盘弹出动画时间
-//    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-//    NSTimeInterval animationDuration;
-//    [animationDurationValue getValue:&animationDuration];
-//    
-//    // 调用代理
-//    [UIView animateWithDuration:animationDuration animations:^{
-//        parentVc.transform = CGAffineTransformMakeTranslation(0, -50*S6);
-//    }];
-//}
-//-(void)keyBoardWillHide:(NSNotification *)notification{
-//    
-////    [user_code_field resignFirstResponder];
-//    
-//    // 获取通知的信息字典
-//    NSDictionary *userInfo = [notification userInfo];
-//    
-//    // 获取键盘弹出动画时间
-//    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-//    NSTimeInterval animationDuration;
-//    [animationDurationValue getValue:&animationDuration];
-//    
-//    // 调用代理
-//    [UIView animateWithDuration:animationDuration animations:^{
-//        parentVc.transform = CGAffineTransformIdentity;
-//    }];
-//}
+-(void)keyBoardWillShow:(NSNotification *)notification{
+    
+//    [user_code_field resignFirstResponder];
+    // 获取通知的信息字典
+    NSDictionary *userInfo = [notification userInfo];
+    
+    // 获取键盘弹出后的rect
+//    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGRect keyboardRect = [aValue CGRectValue];
+    
+    // 获取键盘弹出动画时间
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    
+    // 调用代理
+    [UIView animateWithDuration:animationDuration animations:^{
+        parentVc.transform = CGAffineTransformMakeTranslation(0, -50*S6);
+    }];
+}
+
+-(void)keyBoardWillHide:(NSNotification *)notification{
+    
+//    [user_code_field resignFirstResponder];
+    
+    // 获取通知的信息字典
+    NSDictionary *userInfo = [notification userInfo];
+    
+    // 获取键盘弹出动画时间
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    
+    // 调用代理
+    [UIView animateWithDuration:animationDuration animations:^{
+        parentVc.transform = CGAffineTransformIdentity;
+    }];
+}
 
 -(void)createView{
     

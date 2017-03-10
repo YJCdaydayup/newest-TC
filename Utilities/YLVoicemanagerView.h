@@ -10,14 +10,14 @@
 #import "XHSoundRecorder.h"
 #import <CoreText/CoreText.h>
 
-@interface YLVoicemanagerView : UIView<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
+@interface YLVoicemanagerView : UIView<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate>{
     
-    UITableView * voiceTableView;
-    NSMutableArray * dataArray;
+    UITableView *voiceTableView;
+    NSMutableArray *dataArray;
 }
 
-@property (nonatomic,strong) XHSoundRecorder * audioRecorder;
-@property (nonatomic,strong)    UITextField * sendMessageTextfield;
+@property (nonatomic,strong) XHSoundRecorder *audioRecorder;
+@property (nonatomic,strong) UITextView *sendMessageTextfield;
 
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view;
 -(void)playWithData:(NSData *)data;

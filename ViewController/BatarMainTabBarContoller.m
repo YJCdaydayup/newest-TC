@@ -13,12 +13,26 @@
 #import "BatarCarController.h"
 #import "DetailViewController.h"
 #import "MyOrdersController.h"
+#import "BatarBadgeView.h"
+#import "AppDelegate.h"
+#import "BatarTabbar.h"
+#import "BatarManagerTool.h"
 
 @interface BatarMainTabBarContoller()<DetailChangeDelegate,MyOrdersDelegate>
+/** 数量显示 */
+@property (nonatomic,strong) BatarBadgeView *badgeView;
+@property (nonatomic,strong) BatarTabbar * tabBar;
 
 @end
 
+static UINavigationController * _carVc;
+
 @implementation BatarMainTabBarContoller
+
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:ShopCarNumberNotification];
+}
 
 singleM(tabbarController)
 
@@ -26,10 +40,21 @@ singleM(tabbarController)
     
     [super viewDidLoad];
     
-    [self createViewController];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeBadgeValue:) name:ShopCarNumberNotification object:nil];
     
+    [self createViewController];
+
     [self createTabBarItem];
 }
+
+-(void)changeBadgeValue:(NSNotification *)notice{
+    
+    //tabbar
+    [self setValue:[BatarTabbar shareBatarTabbar] forKeyPath:@"tabBar"];
+    [self.tabBar addSubview:self.badgeView];
+    [self.badgeView changeBadgeValue:[NSString stringWithFormat:@"%@",notice.object]];
+}
+
 -(void)changeRootController{
     
     self.selectedIndex = 0;
@@ -60,10 +85,6 @@ singleM(tabbarController)
     UIImage * image = [[UIImage alloc]init];
     [self.tabBar setShadowImage:image];
     
-    //设置背景色
-//    [self.tabBar setBackgroundImage:[self createImage:@"tabbar_bg.png"]];
-    
-    
 }
 
 //路径转化为图片的方法
@@ -89,13 +110,15 @@ singleM(tabbarController)
     
     BatarSettingController * settingVc = [[BatarSettingController alloc]init];
     UINavigationController * settingNvc = [[UINavigationController alloc]initWithRootViewController:settingVc];
-    
     self.viewControllers = @[firstNvc,discoverNvc,ordersNvc,settingNvc];
+}
+
+-(BatarBadgeView *)badgeView{
     
-    firstNvc = nil;
-    discoverNvc = nil;
-    ordersNvc = nil;
-    settingNvc = nil;
+    if(!_badgeView){
+        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(Wscreen*3/4.0-43*S6,6*S6,200,20)];
+    }
+    return _badgeView;
 }
 
 @end

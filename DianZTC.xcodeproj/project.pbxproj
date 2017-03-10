@@ -23,6 +23,8 @@
 		8F29A1F91E66375400C19A90 /* BTDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F29A1F81E66375400C19A90 /* BTDetailModel.m */; };
 		8F2CB8101E28516200B0E0C5 /* UIButton+Shake.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2CB80F1E28516200B0E0C5 /* UIButton+Shake.m */; };
 		8F2D1AB61DCA5D9700D40BEA /* MySelectedOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2D1AB51DCA5D9700D40BEA /* MySelectedOrderCell.m */; };
+		8F30CD4A1E71F63A00D85A8B /* BatarBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F30CD491E71F63A00D85A8B /* BatarBadgeView.m */; };
+		8F30CD501E720C9400D85A8B /* BatarTabbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F30CD4F1E720C9400D85A8B /* BatarTabbar.m */; };
 		8F31D16F1DE6128A00962818 /* YLCustomerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F31D16E1DE6128A00962818 /* YLCustomerHUD.m */; };
 		8F31D1751DE6449D00962818 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F31D1721DE6449D00962818 /* libmp3lame.a */; };
 		8F31D1761DE6449D00962818 /* XHSoundRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F31D1741DE6449D00962818 /* XHSoundRecorder.m */; };
@@ -141,6 +143,7 @@
 		8F6AFA481E5B9DDC008D3275 /* TKAlertCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F6AFA451E5B9DDC008D3275 /* TKAlertCenter.m */; };
 		8F6AFA491E5B9DDC008D3275 /* UIView+TKCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F6AFA471E5B9DDC008D3275 /* UIView+TKCategory.m */; };
 		8F6AFA6A1E5BBEC7008D3275 /* BTOrderDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F6AFA691E5BBEC7008D3275 /* BTOrderDetailController.m */; };
+		8F7073521E71C6400026A6EE /* BatarManagerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7073511E71C6400026A6EE /* BatarManagerTool.m */; };
 		8F70C7211E54C2A8000CDAAE /* BTAdverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F70C7201E54C2A8000CDAAE /* BTAdverController.m */; };
 		8F7302661DC50D500000E306 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7302651DC50D500000E306 /* WebViewController.m */; };
 		8F77C0F41DD625AC005AD9D8 /* FinalOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F77C0F31DD625AC005AD9D8 /* FinalOrderViewController.m */; };
@@ -496,6 +499,10 @@
 		8F2CB80F1E28516200B0E0C5 /* UIButton+Shake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Shake.m"; sourceTree = "<group>"; };
 		8F2D1AB41DCA5D9700D40BEA /* MySelectedOrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MySelectedOrderCell.h; path = "../我的选购单/MySelectedOrderCell.h"; sourceTree = "<group>"; };
 		8F2D1AB51DCA5D9700D40BEA /* MySelectedOrderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MySelectedOrderCell.m; path = "../我的选购单/MySelectedOrderCell.m"; sourceTree = "<group>"; };
+		8F30CD481E71F63A00D85A8B /* BatarBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarBadgeView.h; sourceTree = "<group>"; };
+		8F30CD491E71F63A00D85A8B /* BatarBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarBadgeView.m; sourceTree = "<group>"; };
+		8F30CD4E1E720C9400D85A8B /* BatarTabbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarTabbar.h; sourceTree = "<group>"; };
+		8F30CD4F1E720C9400D85A8B /* BatarTabbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarTabbar.m; sourceTree = "<group>"; };
 		8F31D16D1DE6128A00962818 /* YLCustomerHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLCustomerHUD.h; sourceTree = "<group>"; };
 		8F31D16E1DE6128A00962818 /* YLCustomerHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLCustomerHUD.m; sourceTree = "<group>"; };
 		8F31D1711DE6449D00962818 /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
@@ -725,6 +732,8 @@
 		8F6AFA471E5B9DDC008D3275 /* UIView+TKCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+TKCategory.m"; sourceTree = "<group>"; };
 		8F6AFA681E5BBEC7008D3275 /* BTOrderDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTOrderDetailController.h; sourceTree = "<group>"; };
 		8F6AFA691E5BBEC7008D3275 /* BTOrderDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTOrderDetailController.m; sourceTree = "<group>"; };
+		8F7073501E71C6400026A6EE /* BatarManagerTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarManagerTool.h; sourceTree = "<group>"; };
+		8F7073511E71C6400026A6EE /* BatarManagerTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarManagerTool.m; sourceTree = "<group>"; };
 		8F70C71F1E54C2A8000CDAAE /* BTAdverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BTAdverController.h; path = ../FirstViewController/ViewController/BTAdverController.h; sourceTree = "<group>"; };
 		8F70C7201E54C2A8000CDAAE /* BTAdverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BTAdverController.m; path = ../FirstViewController/ViewController/BTAdverController.m; sourceTree = "<group>"; };
 		8F7302641DC50D500000E306 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
@@ -1815,6 +1824,10 @@
 				8F662D251E2ACBF70076B566 /* UIView+Tap.m */,
 				8F3325E61E5510E400F9472D /* YLAdvertiseView.h */,
 				8F3325E71E5510E400F9472D /* YLAdvertiseView.m */,
+				8F30CD481E71F63A00D85A8B /* BatarBadgeView.h */,
+				8F30CD491E71F63A00D85A8B /* BatarBadgeView.m */,
+				8F30CD4E1E720C9400D85A8B /* BatarTabbar.h */,
+				8F30CD4F1E720C9400D85A8B /* BatarTabbar.m */,
 			);
 			path = Utilities;
 			sourceTree = SOURCE_ROOT;
@@ -1822,6 +1835,8 @@
 		8F4A185C1CDAB450006ED857 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				8F7073501E71C6400026A6EE /* BatarManagerTool.h */,
+				8F7073511E71C6400026A6EE /* BatarManagerTool.m */,
 				8F5E50D01D43DFF3004F404F /* RootViewController.h */,
 				8F5E50D11D43DFF3004F404F /* RootViewController.m */,
 				8FD3C4FF1E0B1DC600AB40F2 /* BatarMainTabBarContoller.h */,
@@ -3331,6 +3346,7 @@
 		8F4A18181CDAB0CA006ED857 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = Batar;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "杨力";
 				TargetAttributes = {
@@ -3648,6 +3664,7 @@
 				8F6AE56E1D5B939B00A423E2 /* LoginViewController.m in Sources */,
 				8F7CC1291E133A280033E7FB /* ZXCalendarParsedResult.m in Sources */,
 				8F7CC17E1E133A280033E7FB /* ZXDataMatrixX12Encoder.m in Sources */,
+				8F7073521E71C6400026A6EE /* BatarManagerTool.m in Sources */,
 				8F7CC1521E133A280033E7FB /* ZXBitMatrix.m in Sources */,
 				8F7CC17C1E133A280033E7FB /* ZXDataMatrixSymbolInfo144.m in Sources */,
 				8F7CC12B1E133A280033E7FB /* ZXEmailAddressResultParser.m in Sources */,
@@ -3780,6 +3797,7 @@
 				8F4A187C1CDAB463006ED857 /* ButtonSize.m in Sources */,
 				8F7CC1B21E133A280033E7FB /* ZXMultiFormatOneDReader.m in Sources */,
 				8F4A18881CDAB463006ED857 /* UILabel+LXAdd.m in Sources */,
+				8F30CD4A1E71F63A00D85A8B /* BatarBadgeView.m in Sources */,
 				8F87D1581E0C4348006F5361 /* BatarLoginController.m in Sources */,
 				8F7CC1DB1E133A280033E7FB /* ZXQRCodeDecoder.m in Sources */,
 				8F7CC17F1E133A280033E7FB /* ZXDataMatrixReader.m in Sources */,
@@ -3828,6 +3846,7 @@
 				8F7CC1971E133A280033E7FB /* ZXRSSExpandedDecodedObject.m in Sources */,
 				8F4A193A1CDAB580006ED857 /* MJRefreshConst.m in Sources */,
 				8F7CC1A51E133A280033E7FB /* ZXCodaBarWriter.m in Sources */,
+				8F30CD501E720C9400D85A8B /* BatarTabbar.m in Sources */,
 				8F31D16F1DE6128A00962818 /* YLCustomerHUD.m in Sources */,
 				8F7CC1641E133A280033E7FB /* ZXDimension.m in Sources */,
 				8F7CC10D1E133A280033E7FB /* LBXScanNative.m in Sources */,

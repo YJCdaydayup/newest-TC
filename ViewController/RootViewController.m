@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #import <AddressBook/AddressBook.h>
+#import "BatarManagerTool.h"
 
 @implementation RootViewController
 
@@ -19,6 +20,7 @@
     
     _leftNavBtn.hidden = NO;
     _rightNavBtn.hidden = NO;
+    [self makeNotification];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -90,7 +92,6 @@
     [label sizeToFit];
     return label.height;
 }
-
 
 #pragma mark - 获取本地图片路径
 -(NSString *)captureLocalImage:(NSString *)imageName withType:(NSString *)imageType{
@@ -203,6 +204,14 @@
     return locationString;
 }
 
+-(void)makeNotification{
+    
+    if(CUSTOMERID){
+        [BatarManagerTool caculateServerOrderCar];
+    }else{
+        [BatarManagerTool caculateDatabaseOrderCar];
+    }
+}
 
 -(MBProgressHUD *)hud{
     

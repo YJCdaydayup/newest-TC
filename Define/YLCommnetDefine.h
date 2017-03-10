@@ -68,5 +68,8 @@ UIKIT_EXTERN NSString *const ConfirmOrderNotification;
 //我的订单刷新的通知
 UIKIT_EXTERN NSString *const UpdateMyOrderNotification;
 
+//将购物车角标的数量通知出去
+UIKIT_EXTERN NSString *const ShopCarNumberNotification;
+
 
 @end

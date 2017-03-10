@@ -136,6 +136,9 @@ UIKIT_EXTERN NSString * const OrderDetailUrl;
 /*确认/取消订单*/
 UIKIT_EXTERN NSString * const ChangeOrderState;
 
+/*长连接地址*/
+UIKIT_EXTERN NSString * const ConnectWithServer;
+
 /*iOS和安卓APP下载地址*/
 UIKIT_EXTERN NSString *const ANDARIOD_APPURL;
 UIKIT_EXTERN NSString *const IOS_APPURL;

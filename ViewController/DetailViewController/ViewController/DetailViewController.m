@@ -21,8 +21,9 @@
 #import "BatarCarController.h"
 #import "ScanViewController.h"
 #import "BatarMainTabBarContoller.h"
+#import "BatarManagerTool.h"
 
-@interface DetailViewController ()<YLScrollerViewDelegate,STPhotoBrowserDelegate>{
+@interface DetailViewController ()<YLScrollerViewDelegate,STPhotoBrowserDelegate,UITextFieldDelegate>{
     
     //详情model
     DetailModel * detailModel;
@@ -171,7 +172,6 @@
 
 -(void)keyBoardWillShow:(NSNotification *)notification{
     
-    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     // 获取通知的信息字典
     NSDictionary *userInfo = [notification userInfo];
     
@@ -187,17 +187,16 @@
     // 调用代理
     if([loginView.user_code_field becomeFirstResponder]){
         [UIView animateWithDuration:animationDuration animations:^{
-            app.window.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+150*S6);
+            self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+150*S6);
         }];
     }else{
         [UIView animateWithDuration:animationDuration animations:^{
-            app.window.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+50*S6);
+            self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+50*S6);
         }];
     }
 }
 -(void)keyBoardWillHide:(NSNotification *)notification{
     
-    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     // 获取通知的信息字典
     NSDictionary *userInfo = [notification userInfo];
     
@@ -208,7 +207,7 @@
     
     // 调用代理
     [UIView animateWithDuration:animationDuration animations:^{
-        app.window.transform = CGAffineTransformIdentity;
+        self.view.transform = CGAffineTransformIdentity;
     }];
 }
 
@@ -589,6 +588,8 @@
     
     bottomControlView = [[YLOrderControlView alloc]init];
     [self.view addSubview:bottomControlView];
+    [self makeNotification];
+    self.tabBarController.tabBar.hidden = YES;
     [self.view bringSubviewToFront:bottomControlView];
     
     [bottomControlView clickBottomBtn:^(NSInteger tag) {
@@ -617,8 +618,9 @@
             }
                 break;
             case 3:{
-                //加入选购单
+                //加入购物车
                 if(LOGIN){
+                    
                     //客户已登录，上传服务端
                     [self addMyOrders];
                 }else{
@@ -626,8 +628,10 @@
                     //客户未登录，存放本地
                     [_db_managaer createOrderDB];
                     [_db_managaer order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number date:[self getCurrentDate]];
+                    [BatarManagerTool caculateDatabaseOrderCar];
                 }
                 [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
+                self.tabBarController.tabBar.hidden = YES;
             }
                 break;
             default:
@@ -805,6 +809,7 @@
             if(responseObject){
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     self.hud.labelText = @"上传成功!";
+                    [BatarManagerTool caculateServerOrderCar];
                 });
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self.hud hide:YES];

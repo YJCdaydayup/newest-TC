@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Single.h"
+//#import "Single.h"
 
 @interface BatarMainTabBarContoller : UITabBarController
 
 singleH(tabbarController)
 -(void)changeRootController;
+-(void)changeBadgeValue:(NSString *)number;
 @end

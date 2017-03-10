@@ -87,7 +87,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.tabBarController.tabBar.hidden = NO;
     manager = [NetManager shareManager];
     
     //隐藏系统的“返回导航按钮”
@@ -102,7 +102,6 @@
 
 //刷新界面
 -(void)updateView{
-    
     [self viewDidLoad];
 }
 

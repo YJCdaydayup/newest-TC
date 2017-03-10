@@ -18,6 +18,7 @@
 #import "YLNetObseverManager.h"
 #import "BTAdverController.h"
 #import "YLSocketManager.h"
+#import "BatarManagerTool.h"
 
 @interface AppDelegate ()<YLNetObseverDelegate>
 
@@ -68,7 +69,8 @@
     // 启动图片延时: 1秒
 //    [NSThread sleepForTimeInterval:3];
     
-    //与服务端建立
+    //与服务端建立长连接
+//    self.socketManager = [YLSocketManager alloc]initWithUrl:@"" delegate:<#(id)#>
     
     //网络变化的代理设置
     [YLNetObseverManager shareInstanceWithDelegate:self];

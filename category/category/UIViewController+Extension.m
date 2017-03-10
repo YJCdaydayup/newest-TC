@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+Extension.h"
+#import "BatarManagerTool.h"
 
 @implementation UIViewController (Extension)
 

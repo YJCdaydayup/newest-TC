@@ -61,4 +61,7 @@
 //获取当前日期时间
 -(NSString *)getCurrentDate;
 
+//时间监测购物车数量
+-(void)makeNotification;
+
 @end

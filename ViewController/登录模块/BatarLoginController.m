@@ -13,12 +13,14 @@
 #import "BatarMainTabBarContoller.h"
 #import "AppDelegate.h"
 #import "BatarSettingController.h"
+#import "YLSocketManager.h"
 
 @interface BatarLoginController()<UITextFieldDelegate>
 {
     UIButton * _closeBtn;
     UITextField * userCode_tf;
     BOOL clear_server;
+    YLSocketManager *_socketManager;
 }
 
 @property (nonatomic,strong) YLServerAddView * serverView;
@@ -44,6 +46,7 @@
     
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -199,6 +202,12 @@
             if([state intValue] == 1){
                 [kUserDefaults setObject:userCode_tf.text forKey:CustomerID];
                 [self setWindowTabbar];
+                
+                //与服务器建立长连接
+                NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[_manager getIPAddress]];
+                _socketManager = [[YLSocketManager alloc]initWithUrl:socketUrl delegate:self];
+                [_socketManager start];
+                
             }else{
                 AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
                 YLCustomerHUD * hud = [[YLCustomerHUD alloc]initWithWindow:app.window];
@@ -221,6 +230,27 @@
     }];
 }
 
+#pragma YLSocketDelegate
+-(void)ylSocketDidOpen:(SRWebSocket *)webSocket{
+    
+    NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:%@}",@"0",userCode_tf.text];
+    [_socketManager sendMessage:str];
+    NSLog(@"连接成功");
+}
+
+-(void)ylSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
+    NSLog(@"%@",reason);
+}
+
+-(void)ylSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
+    NSLog(@"fail:%@",error.description);
+}
+
+-(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    NSLog(@"%@",message);
+}
+
 -(void)setWindowTabbar{
     
     //登录后，下次进来改变入口
@@ -230,7 +260,6 @@
     BatarMainTabBarContoller * tabbar = [[BatarMainTabBarContoller alloc]init];
     [tabbar changeRootController];
     app.window.rootViewController = tabbar;
-    
     [[NSNotificationCenter defaultCenter]postNotificationName:SwitchSerser object:nil];
 }
 

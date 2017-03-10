@@ -7,24 +7,42 @@
 //
 
 #import "YLOrderControlView.h"
+#import "BatarBadgeView.h"
 
 @interface YLOrderControlView()
 
+/** 数量显示 */
+@property (nonatomic,strong) BatarBadgeView *badgeView;
+
+/** 购物车按钮 */
+@property (nonatomic,strong) UIButton * shopCarBtn;
 
 @end
 
 @implementation YLOrderControlView
 
+-(void)dealloc{
+    
+    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:ShopCarNumberNotification];
+}
+
 -(instancetype)init{
     
     if(self = [super init]){
         
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeBadgeValue:) name:ShopCarNumberNotification object:nil];
         self.frame = CGRectMake(0, Hscreen-51.5*S6, Wscreen, 65*S6);
         self.backgroundColor = [UIColor whiteColor];
         [self createView];
     }
     
     return self;
+}
+
+-(void)changeBadgeValue:(NSNotification *)notice{
+    
+    //tabbar
+    [self.badgeView changeBadgeValue:[NSString stringWithFormat:@"%@",notice.object]];
 }
 
 -(void)createView{
@@ -48,6 +66,9 @@
             
             UILabel * label = [Tools createLabelWithFrame:CGRectMake(5*S6, 50*S6, 50*S6, 11*S6) textContent:titleArray[i] withFont:[UIFont systemFontOfSize:11*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
             [btn addSubview:label];
+            if(i == 2){
+                self.shopCarBtn = btn;
+            }
             
         }else{
             
@@ -75,5 +96,13 @@
     self.block = block;
 }
 
+-(BatarBadgeView *)badgeView{
+    
+    if(!_badgeView){
+        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(35*S6,13*S6,20,20)];
+        [self.shopCarBtn addSubview:_badgeView];
+    }
+    return _badgeView;
+}
 
 @end

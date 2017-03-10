@@ -50,4 +50,6 @@ NSString *const ConfirmOrderNotification = @"ConfirmOrderNotification";//确认�
 
 NSString *const UpdateMyOrderNotification = @"UpdateMyOrderNotification";
 
+NSString *const ShopCarNumberNotification = @"ShopCarNumberNotification";
+
 @end

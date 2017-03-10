@@ -113,6 +113,15 @@
 
 @implementation CatagoryViewController
 
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
+    [self.pinleiSelectedArray removeAllObjects];
+    self.searchTextField1.hidden = NO;
+    [self configUI];
+}
+
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [self.searchTextField1 resignFirstResponder];
@@ -129,14 +138,6 @@
         waixing[i] = NO;
         weight[i] = NO;
     }
-}
-
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    [self.pinleiSelectedArray removeAllObjects];
-    self.searchTextField1.hidden = NO;
-    [self configUI];
 }
 
 - (void)viewDidLoad {

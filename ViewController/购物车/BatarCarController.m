@@ -16,6 +16,7 @@
 #import "YLOrdersController.h"
 #import "FinalOrderViewController.h"
 #import "YLVoicemanagerView.h"
+#import "BatarManagerTool.h"
 
 #define CELL @"CARCell"
 
@@ -259,6 +260,12 @@
         }else{
             [self removeOrders:NO];
         }
+        
+        if([self.fatherVc isKindOfClass:[DetailViewController class]]){
+            self.tabBarController.tabBar.hidden = YES;
+        }else{
+            self.tabBarController.tabBar.hidden = NO;
+        }
     }];
     //修改按钮
     [delete setValue:[UIColor redColor] forKey:@"titleTextColor"];
@@ -296,6 +303,7 @@
                 });
             }
         }];
+        _carBottom.selectAllBtn.selected = NO;
     }else{
         //删除本地订单
         [self.dataArray removeObjectsInArray:self.selectedArray];
@@ -303,6 +311,7 @@
             [dbManager order_cleanDBDataWithNumber:model.number];
         }
         _carBottom.selectAllBtn.selected = NO;
+        [BatarManagerTool caculateDatabaseOrderCar];
         [self.tableView reloadData];
     }
 }
@@ -341,7 +350,9 @@
                     }
                     [self.dataArray addObjectsFromArray:tempArray];
                 }
+                [BatarManagerTool caculateServerOrderCar];
                 [selfWeak.tableView reloadData];
+                
             }else{
                 NSLog(@"%@",error.description);
             }
@@ -354,7 +365,6 @@
             selfWeak.dataArray = dataArray;
             [selfWeak.tableView reloadData];
         }];
-        
     }
 }
 

@@ -122,6 +122,8 @@ NSString * const OrderDetailUrl = @"http://%@/photo-album/order_manger/get_detai
 /*确认订单&&取消订单*/
 NSString * const ChangeOrderState = @"http://%@/photo-album/order/order_state_change";
 
+NSString * const ConnectWithServer = @"ws://%@/photo-album/order_mobile_message";
+
 /*iOS和安卓APP下载地址*/
 NSString * const ANDARIOD_APPURL = @"http://zbtj.batar.cn:8888/photo-album/app/download/newversion";
 NSString * const IOS_APPURL = @"http://fir.im/enterpriseUrl";
