@@ -26,6 +26,7 @@
     
     //服务器获取数据
     NSMutableArray *dataArray = [NSMutableArray array];
+    [dataArray removeAllObjects];
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:MYORDERCAR,[manager getIPAddress]];
     NSDictionary * dict = @{@"customerid":CUSTOMERID};
@@ -49,8 +50,8 @@
                     [tempArray addObject:model];
                 }
                 [dataArray addObjectsFromArray:tempArray];
-                [[NSNotificationCenter defaultCenter]postNotificationName:ShopCarNumberNotification object:@(dataArray.count)];
             }
+                 [[NSNotificationCenter defaultCenter]postNotificationName:ShopCarNumberNotification object:@(dataArray.count)];
         }else{
             NSLog(@"%@",error.description);
         }

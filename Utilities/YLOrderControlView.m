@@ -99,7 +99,7 @@
 -(BatarBadgeView *)badgeView{
     
     if(!_badgeView){
-        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(35*S6,13*S6,20,20)];
+        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(35*S6,15*S6,20*S6,20*S6)];
         [self.shopCarBtn addSubview:_badgeView];
     }
     return _badgeView;

@@ -13,6 +13,7 @@
 -(void)addTapGestureCallback:(TapGestureBlock)block{
     
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickAction:)];
+     self.userInteractionEnabled = YES;
     [self addGestureRecognizer:tap];
     blockParam = block;
 }

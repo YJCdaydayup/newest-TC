@@ -7,7 +7,7 @@
 //
 
 #import "UILabel+Extension.h"
-#define XCFThemeColor RGB(249, 103, 80)        // TabBar选中颜色
+#define XCFTHEMECOLORS RGB(249, 103, 80)        // TabBar选中颜色
 #define RGB(r, g, b) RGBA(r, g, b, 1.0f)
 @implementation UILabel (Extension)
 

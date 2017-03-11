@@ -149,7 +149,7 @@
         if(i == 0){
             
             button.selected = YES;
-            button.backgroundColor = THEMECOLOR;
+            button.backgroundColor = THEMECOLORS;
         }
         
         //给予button的tag从100开始
@@ -170,7 +170,7 @@
     }
     
     button.selected = YES;
-    button.backgroundColor = THEMECOLOR;
+    button.backgroundColor = THEMECOLORS;
     
     //改变表格ProductTableView的偏移位置
     [self.productTableView reloadData];
@@ -287,7 +287,7 @@
         
         UIButton * button = (UIButton *)[self.view viewWithTag:100+path.section];
         button.selected = YES;
-        button.backgroundColor = THEMECOLOR;
+        button.backgroundColor = THEMECOLORS;
     }
     self.isClicked = NO;
 }

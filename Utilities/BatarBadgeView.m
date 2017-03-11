@@ -9,7 +9,7 @@
 
 #import "BatarBadgeView.h"
 
-#define VWidth (18*S6)
+#define VWidth (16*S6)
 
 @interface BatarBadgeView()
 {
@@ -22,11 +22,8 @@
 -(instancetype)initWithFrame:(CGRect)frame{
     
     if(self = [super initWithFrame:frame]){
-        
-//        CGPoint point = CGPointMake(CGRectGetMaxX(vc.frame), CGRectGetMinY(vc.frame));
-//        self.center = point;
-        self.size = CGSizeMake(VWidth, VWidth);
-       
+
+        self.size = CGSizeMake(VWidth, VWidth);       
         self.backgroundColor = [UIColor redColor];
         self.font = [UIFont systemFontOfSize:10*S6];
         self.textAlignment = NSTextAlignmentCenter;
@@ -45,6 +42,7 @@
     }else{
         self.hidden = NO;
     }
+    NSLog(@"number----%@",number);
 }
 
 

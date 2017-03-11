@@ -9,7 +9,7 @@
 #import "YLLoginView.h"
 #import "NetManager.h"
 
-@interface YLLoginView(){
+@interface YLLoginView()<YLSocketDelegate>{
     
     UIWindow * parentVc;
     UIView * maskView;
@@ -26,6 +26,16 @@
 @end
 
 @implementation YLLoginView
+
+static YLLoginView *_instance = nil;
++(instancetype)allocWithZone:(struct _NSZone *)zone{
+    
+    @synchronized(self) {
+        if(_instance == nil){
+            _instance = [super allocWithZone:zone];}
+    }
+    return _instance;
+}
 
 -(id)initWithVC:(UIWindow *)window withVc:(RootViewController *)vc{
     
@@ -45,13 +55,13 @@
 
 -(void)keyBoardWillShow:(NSNotification *)notification{
     
-//    [user_code_field resignFirstResponder];
+    //    [user_code_field resignFirstResponder];
     // 获取通知的信息字典
     NSDictionary *userInfo = [notification userInfo];
     
     // 获取键盘弹出后的rect
-//    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGRect keyboardRect = [aValue CGRectValue];
+    //    NSValue* aValue = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    //    CGRect keyboardRect = [aValue CGRectValue];
     
     // 获取键盘弹出动画时间
     NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
@@ -66,7 +76,7 @@
 
 -(void)keyBoardWillHide:(NSNotification *)notification{
     
-//    [user_code_field resignFirstResponder];
+    //    [user_code_field resignFirstResponder];
     
     // 获取通知的信息字典
     NSDictionary *userInfo = [notification userInfo];
@@ -106,8 +116,8 @@
     [controlView addSubview:title_label];
     
     UIView * leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 12*S6, 32*S6)];
-   self.user_code_field = [Tools createTextFieldFrame:CGRectMake(24*S6, CGRectGetMaxY(title_label.frame)+35*S6, 232*S6, 32*S6) placeholder:@"用户编号" bgImageName:nil leftView:leftView rightView:nil isPassWord:NO];
-   
+    self.user_code_field = [Tools createTextFieldFrame:CGRectMake(24*S6, CGRectGetMaxY(title_label.frame)+35*S6, 232*S6, 32*S6) placeholder:@"用户编号" bgImageName:nil leftView:leftView rightView:nil isPassWord:NO];
+    
     self.user_code_field.layer.borderWidth = 1*S6;
     self.user_code_field.layer.borderColor = [RGB_COLOR(204, 204, 204, 1)CGColor];
     self.user_code_field.layer.cornerRadius = 5*S6;
@@ -150,16 +160,27 @@
 }
 
 -(void)confrimAction{
-
+    
     wrongLabel.alpha = 0;
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:LOGIN_URL,[manager getIPAddress]];
     NSDictionary * dict = @{@"number":self.user_code_field.text};
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
-
+        
         NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSString * state = [dict objectForKey:@"state"];
         if([state intValue] == 1){
+             NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"0",self.user_code_field.text];
+            //与服务器建立长连接
+            if(SocketManager.isOpen){
+                [SocketManager sendMessage:str];
+            }else{
+                NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[manager getIPAddress]];
+                self.socketManager = [YLSocketManager shareSocketManager];
+                [self.socketManager createSocket:socketUrl delegate:self];
+                [self.socketManager start];
+            }
+            
             //发出通知
             [kUserDefaults setObject:self.user_code_field.text forKey:CustomerID];
             [[NSNotificationCenter defaultCenter]postNotificationName:UploadOrders object:nil];
@@ -175,6 +196,12 @@
             }];
         }
     }];
+}
+
+#pragma YLSocketDelegate
+-(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    NSLog(@"%@",message);
 }
 
 -(void)cancelAction{
@@ -199,7 +226,7 @@
 }
 
 -(void)clickCancelBtn:(CancelBlock)block{
-
+    
     if(self.cancel_block){
         self.cancel_block = block;
     }

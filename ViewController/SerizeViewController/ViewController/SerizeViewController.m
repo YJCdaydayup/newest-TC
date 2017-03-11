@@ -229,7 +229,7 @@
     
     //系列
     UIView * serizeBgView = [[UIView alloc]initWithFrame:CGRectMake(375/2.0*S6, NAV_BAR_HEIGHT, 375/2.0*S6, 40*S6)];
-    serizeBgView.backgroundColor = THEMECOLOR;
+    serizeBgView.backgroundColor = THEMECOLORS;
     [self.view addSubview:serizeBgView];
     
     UIImageView * serizeImageView = [[UIImageView alloc]initWithFrame:CGRectMake(66*S6, 13*S6, 35/2.0*S6, 16*S6)];

@@ -11,9 +11,6 @@
 
 @protocol YLSocketDelegate <NSObject>
 
--(void)ylSocketDidOpen:(SRWebSocket *)webSocket;
--(void)ylSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
--(void)ylSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 -(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 
 @end
@@ -21,9 +18,13 @@
 @interface YLSocketManager : NSObject<SRWebSocketDelegate>
 
 @property (nonatomic,weak) id<YLSocketDelegate>delegate;
--(instancetype)initWithUrl:(NSString *)urlStr delegate:(id)delegate;
+@property (nonatomic,strong) SRWebSocket *webSocket;
+
++(instancetype)shareSocketManager;
+-(void)createSocket:(NSString *)url delegate:(id)delegate;
 -(void)start;
 -(void)stop;
 -(void)sendMessage:(id)msg;
+-(BOOL)isOpen;
 
 @end

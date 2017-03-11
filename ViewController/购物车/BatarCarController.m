@@ -259,6 +259,7 @@
             [self removeOrders:YES];
         }else{
             [self removeOrders:NO];
+            [BatarManagerTool caculateDatabaseOrderCar];
         }
         
         if([self.fatherVc isKindOfClass:[DetailViewController class]]){
@@ -294,6 +295,7 @@
             NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
             if([[dict objectForKey:@"state"]integerValue]){
                 self.hud.labelText = @"删除成功!";
+                [BatarManagerTool caculateServerOrderCar];
                 _carBottom.selectAllBtn.selected = NO;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self.hud hide:YES];
@@ -311,7 +313,6 @@
             [dbManager order_cleanDBDataWithNumber:model.number];
         }
         _carBottom.selectAllBtn.selected = NO;
-        [BatarManagerTool caculateDatabaseOrderCar];
         [self.tableView reloadData];
     }
 }

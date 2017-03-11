@@ -64,4 +64,7 @@
 //时间监测购物车数量
 -(void)makeNotification;
 
+//计算文本宽度
+-(CGFloat)getDescriptionWidth:(NSString *)text font:(CGFloat)size height:(CGFloat)height;
+
 @end

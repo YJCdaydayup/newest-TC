@@ -15,7 +15,7 @@
 #import "BatarSettingController.h"
 #import "YLSocketManager.h"
 
-@interface BatarLoginController()<UITextFieldDelegate>
+@interface BatarLoginController()<UITextFieldDelegate,YLSocketDelegate>
 {
     UIButton * _closeBtn;
     UITextField * userCode_tf;
@@ -182,7 +182,23 @@
         [self setWindowTabbar];
     }else{
         [self checkUserCode];
+        [kUserDefaults setObject:userCode_tf.text forKey:CustomerID];
+        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\%@\}",@"0",userCode_tf.text];
+        if(SocketManager.isOpen){
+            [SocketManager sendMessage:str];
+        }else{
+            //与服务器建立长连接
+            NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[self.manager getIPAddress]];
+            YLSocketManager *socketManager = [YLSocketManager shareSocketManager];
+            [socketManager createSocket:socketUrl delegate:self];
+            [socketManager start];
+        }
     }
+}
+
+-(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    NSLog(@"登录界面---%@",message);
 }
 
 -(void)checkUserCode{
@@ -202,11 +218,6 @@
             if([state intValue] == 1){
                 [kUserDefaults setObject:userCode_tf.text forKey:CustomerID];
                 [self setWindowTabbar];
-                
-                //与服务器建立长连接
-                NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[_manager getIPAddress]];
-                _socketManager = [[YLSocketManager alloc]initWithUrl:socketUrl delegate:self];
-                [_socketManager start];
                 
             }else{
                 AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -228,27 +239,6 @@
             }
         });
     }];
-}
-
-#pragma YLSocketDelegate
--(void)ylSocketDidOpen:(SRWebSocket *)webSocket{
-    
-    NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:%@}",@"0",userCode_tf.text];
-    [_socketManager sendMessage:str];
-    NSLog(@"连接成功");
-}
-
--(void)ylSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean{
-    NSLog(@"%@",reason);
-}
-
--(void)ylSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
-    NSLog(@"fail:%@",error.description);
-}
-
--(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
-    
-    NSLog(@"%@",message);
 }
 
 -(void)setWindowTabbar{

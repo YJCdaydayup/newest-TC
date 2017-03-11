@@ -475,7 +475,7 @@
             
             UIButton * button = (UIButton *)[bgView1 viewWithTag:100+i];
             if(pinlei[button.tag-100]){
-                button.backgroundColor = THEMECOLOR;
+                button.backgroundColor = THEMECOLORS;
                 button.selected = YES;
             }else{
                 button.backgroundColor = [UIColor whiteColor];
@@ -490,7 +490,7 @@
             
             UIButton * button = (UIButton *)[bgView3 viewWithTag:10+i];
             if(craft[button.tag-10]){
-                button.backgroundColor = THEMECOLOR;
+                button.backgroundColor = THEMECOLORS;
                 button.selected = YES;
                 
             }else{
@@ -506,7 +506,7 @@
             
             UIButton * button = (UIButton *)[bgView4 viewWithTag:10+i];
             if(material[button.tag-40]){
-                button.backgroundColor = THEMECOLOR;
+                button.backgroundColor = THEMECOLORS;
                 button.selected = YES;
                 
             }else{
@@ -522,7 +522,7 @@
             
             UIButton * button = (UIButton *)[bgView2 viewWithTag:50+i];
             if(waixing[button.tag-50]){
-                button.backgroundColor = THEMECOLOR;
+                button.backgroundColor = THEMECOLORS;
                 button.selected = YES;
                 
             }else{
@@ -538,7 +538,7 @@
             
             UIButton * button = (UIButton *)[bgView5 viewWithTag:70+i];
             if(weight[button.tag-70]){
-                button.backgroundColor = THEMECOLOR;
+                button.backgroundColor = THEMECOLORS;
                 button.selected = YES;
                 
             }else{
@@ -601,7 +601,7 @@
     button.selected = !button.selected;
     pinlei[button.tag-100] = button.selected;
     if(pinlei[button.tag-100]){
-        button.backgroundColor = THEMECOLOR;
+        button.backgroundColor = THEMECOLORS;
         button.selected = YES;
     }else{
         button.backgroundColor = [UIColor whiteColor];
@@ -615,7 +615,7 @@
     button.selected = !button.selected;
     craft[button.tag-10] = button.selected;
     if(craft[button.tag-10]){
-        button.backgroundColor = THEMECOLOR;
+        button.backgroundColor = THEMECOLORS;
         button.selected = YES;
     }else{
         button.backgroundColor = [UIColor whiteColor];
@@ -629,7 +629,7 @@
     button.selected = !button.selected;
     material[button.tag-40] = button.selected;
     if(material[button.tag-40]){
-        button.backgroundColor = THEMECOLOR;
+        button.backgroundColor = THEMECOLORS;
         button.selected = YES;
     }else{
         button.backgroundColor = [UIColor whiteColor];
@@ -643,7 +643,7 @@
     button.selected = !button.selected;
     waixing[button.tag-50] = button.selected;
     if(waixing[button.tag-50]){
-        button.backgroundColor = THEMECOLOR;
+        button.backgroundColor = THEMECOLORS;
         button.selected = YES;
     }else{
         button.backgroundColor = [UIColor whiteColor];
@@ -657,7 +657,7 @@
     button.selected = !button.selected;
     weight[button.tag-70] = button.selected;
     if(weight[button.tag-70]){
-        button.backgroundColor = THEMECOLOR;
+        button.backgroundColor = THEMECOLORS;
         button.selected = YES;
     }else{
         button.backgroundColor = [UIColor whiteColor];

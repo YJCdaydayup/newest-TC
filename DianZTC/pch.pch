@@ -44,6 +44,8 @@
 #import "WelcomeViewController.h"
 #import "MBProgressHUD.h"
 #import "RootViewController.h"
+#import "YLSocketManager.h"
+#import "BatarSocketModel.h"
 
 // 屏幕高度
 #define XMGHeight [UIScreen mainScreen].bounds.size.height

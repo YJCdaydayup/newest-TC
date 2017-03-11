@@ -20,8 +20,9 @@
 #import "MJRefresh.h"
 #import "BatarSettingController.h"
 #import "BTOrderDetailController.h"
+#import "YLLoginView.h"
 
-@interface FinalOrderViewController ()<UITableViewDataSource,UITableViewDelegate>{
+@interface FinalOrderViewController ()<UITableViewDataSource,UITableViewDelegate,YLSocketDelegate>{
     
     UITableView * orderTableView;
     YLFinalOrderView * finalBottomView;
@@ -36,6 +37,8 @@
 @property (nonatomic,strong) NSMutableArray * titleArray;
 @property (nonatomic,strong) NSMutableArray * stateArray;
 @property (nonatomic,strong) NSMutableArray * selectedHeaderArray;
+/** 初始化socket */
+@property (nonatomic,strong) YLSocketManager *socket;
 
 @end
 
@@ -66,6 +69,11 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateAgain) name:UpdateMyOrderNotification object:nil];
     
     self.navigationItem.hidesBackButton = YES;
+    
+    //初始化长连接
+    YLSocketManager * socket = [YLSocketManager shareSocketManager];
+    socket.delegate = self;
+    self.socket = socket;
     
     [self configNav];
     [self createTableView];
@@ -122,6 +130,7 @@
             model.orderid = dict[@"orderid"];
             model.isSelected = NO;
             model.state = dict[@"state"];
+            model.type = [dict[@"type"]boolValue];
             [self.titleArray addObject:model];
             
             if(i == 0){
@@ -245,7 +254,7 @@
 -(void)createTableView{
     
     UISegmentedControl * segmentView = [[UISegmentedControl alloc]initWithItems:@[@"全部订单",@"待明细",@"待确认",@"已确认"]];
-    segmentView.tintColor = RGB_COLOR(225, 168, 111, 1);
+    //    segmentView.tintColor = RGB_COLOR(225, 168, 111, 1);
     segmentView.frame = CGRectMake(-5*S6, NAV_BAR_HEIGHT-1*S6, Wscreen+10*S6, 45*S6);
     segmentView.layer.borderColor = [BOARDCOLOR CGColor];
     segmentView.layer.borderWidth = 1*S6;
@@ -480,7 +489,7 @@
         selectBtn.selected = NO;
     }
     
-    UILabel * dateLabel = [Tools createLabelWithFrame:CGRectMake(CGRectGetMaxX(selectBtn.frame)+17.5*S6, 12.5*S6, 200, 16*S6) textContent:nil withFont:[UIFont systemFontOfSize:16*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentLeft];
+    UILabel * dateLabel = [Tools createLabelWithFrame:CGRectMake(CGRectGetMaxX(selectBtn.frame)+17.5*S6, 12.5*S6, [self getDescriptionWidth:model.createTime font:16 height:16], 16*S6) textContent:nil withFont:[UIFont systemFontOfSize:16*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentLeft];
     dateLabel.text = model.createTime;
     [bgView addSubview:dateLabel];
     
@@ -522,13 +531,25 @@
     UITapGestureRecognizer * detailTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showDetailOrder:)];
     [detailVc addGestureRecognizer:detailTap];
     
+    //添加是否查看过得标记
+    
+    UIView *checkSpot = nil;
+    if(model.type==0&&[model.state integerValue]==1){
+        checkSpot  = [[UIView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(dateLabel.frame)-40*S6, CGRectGetMinY(dateLabel.frame)-12*S6, 5*S6, 5*S6)];
+        checkSpot.backgroundColor = [UIColor redColor];
+        checkSpot.layer.cornerRadius = 2.5*S6;
+        checkSpot.layer.masksToBounds = YES;
+        [dateLabel addSubview:checkSpot];
+    }else{
+        checkSpot.hidden = YES;
+    }
+    
     return bgView;
 }
 
 #pragma mark - 进入订单详细界面
 -(void)showDetailOrder:(UITapGestureRecognizer *)tap{
     
-    OrderCarModel * model1;
     NSMutableArray *array;
     NSInteger index = tap.view.tag - 100000;
     if(self.dataArray.count>0){
@@ -536,9 +557,8 @@
         NSDictionary * dict = self.dataArray[index];
         NSString * key = [[dict allKeys]lastObject];
         array = dict[key];
-        model1 = array[index];
     }
- 
+    
     
     HeaderModel * model = self.titleArray[index];
     BTOrderDetailController * orderDvc = [[BTOrderDetailController alloc]initWithController:self];
@@ -547,6 +567,26 @@
     orderDvc.state = model.state;
     orderDvc.modelArray = array;
     [self pushToViewControllerWithTransition:orderDvc withDirection:@"left" type:NO];
+    
+    if([model.state integerValue]==1){
+        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:\"\%@\"\,\"\message\"\:\"\[\%@\]\"}",@"1",model.orderid];
+        [self.socket sendMessage:str];
+    }
+}
+
+-(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    [self.dataArray removeAllObjects];
+    [self.selectedHeaderArray removeAllObjects];
+    [self.stateArray removeAllObjects];
+    [self.titleArray removeAllObjects];
+    
+    selectAllBtn.selected = NO;
+    [orderTableView reloadData];
+    
+    page = 0;
+    [self createData];
+
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

@@ -44,15 +44,15 @@
     self.numberLabel = [Tools createLabelWithFrame:CGRectMake(CGRectGetMinX(nameLabel.frame), CGRectGetMaxY(nameLabel.frame)+15*S6, 200, 14*S6) textContent:nil withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.numberLabel];
     
-    UIView * lineView1 = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imgView.frame)+10*S6, Wscreen, 0.5*S6)];
+    UIView * lineView1 = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imgView.frame)+9*S6, Wscreen, 0.5*S6)];
     lineView1.backgroundColor = BOARDCOLOR;
     [self.contentView addSubview:lineView1];
     
     UIView * line = [[UIView alloc]initWithFrame:CGRectMake(Wscreen-50*S6, 0, 0.5*S6, 103.5*S6)];
-    line.backgroundColor = BOARDCOLOR;
+    line.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:line];
     
-    UIButton * detail_btn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-50*S6, 0, 50*S6, 103.5*S6) textContent:@"详情" withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+    UIButton * detail_btn = [Tools createNormalButtonWithFrame:CGRectMake(20*S6, 0, Wscreen-20*S6, 103.5*S6) textContent:@"" withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
     [self.contentView addSubview:detail_btn];
     [detail_btn addTarget:self action:@selector(getDetailInfo) forControlEvents:UIControlEventTouchUpInside];
 }

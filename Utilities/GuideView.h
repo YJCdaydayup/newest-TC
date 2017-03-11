@@ -1,9 +1,9 @@
 //
 //  GuideView.h
-//  杨双15131021
+//  杨力
 //
-//  Created by qf1 on 16/1/3.
-//  Copyright (c) 2016年 qf1. All rights reserved.
+//  Created by 杨力  on 16/1/3.
+//  Copyright (c) 2016年 杨力 . All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

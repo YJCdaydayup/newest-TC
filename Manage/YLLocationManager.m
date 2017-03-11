@@ -103,7 +103,7 @@
                                launchOptions:@{MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey: [NSNumber numberWithBool:YES]}];
             }];
             
-            [action setValue:THEMECOLOR forKey:@"titleTextColor"];
+            [action setValue:THEMECOLORS forKey:@"titleTextColor"];
             [alert addAction:action];
         }
         
@@ -118,7 +118,7 @@
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
             }];
-            [action setValue:THEMECOLOR forKey:@"titleTextColor"];
+            [action setValue:THEMECOLORS forKey:@"titleTextColor"];
             [alert addAction:action];
         }
         
@@ -132,7 +132,7 @@
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
             }];
-            [action setValue:THEMECOLOR forKey:@"titleTextColor"];
+            [action setValue:THEMECOLORS forKey:@"titleTextColor"];
             [alert addAction:action];
         }
         
@@ -146,7 +146,7 @@
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
             }];
-            [action setValue:THEMECOLOR forKey:@"titleTextColor"];
+            [action setValue:THEMECOLORS forKey:@"titleTextColor"];
             [alert addAction:action];
         }
         
@@ -158,7 +158,7 @@
                 
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
             }];
-            [action setValue:THEMECOLOR forKey:@"titleTextColor"];
+            [action setValue:THEMECOLORS forKey:@"titleTextColor"];
             [alert addAction:action];
         }
     }

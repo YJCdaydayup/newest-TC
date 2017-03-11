@@ -15,5 +15,6 @@
 @property (nonatomic,copy) NSString * orderid;
 @property (nonatomic,strong) NSNumber * state;
 @property (nonatomic,assign) BOOL isOpen;
+@property (nonatomic,assign) BOOL type;
 
 @end

@@ -67,6 +67,7 @@
     
     UIImageView * imgView = [[UIImageView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, LineY(95))];
     imgView.image = [UIImage imageNamed:@"set_bg"];
+    imgView.userInteractionEnabled = YES;
     [self.view addSubview:imgView];
     
     NSString * customerStr;
@@ -77,6 +78,21 @@
     }
     self.userName = [Tools createLabelWithFrame:CGRectMake(0,40*S6, Wscreen, 17*S6) textContent:customerStr withFont:[UIFont systemFontOfSize:16*S6] textColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
     [imgView addSubview:self.userName];
+    
+    @WeakObj(self);
+    [self.userName addTapGestureCallback:^{
+        if(!CUSTOMERID){
+            YLLoginView * loginView = [[YLLoginView alloc]initWithVC:selfWeak.app.window withVc:selfWeak];
+            [selfWeak.app.window addSubview:loginView];
+            [loginView clickCancelBtn:^{
+                
+            }];
+            
+            NSLog(@"***%p",loginView);
+            return;
+        }
+    }];
+    
     
     for(int i=0;i<4;i++){
         
@@ -160,9 +176,9 @@
         [loginView clickCancelBtn:^{
             
         }];
+            NSLog(@"----%p",loginView);
         return;
     }
-    
     
     FinalOrderViewController * finalvc = [[FinalOrderViewController alloc]initWithController:self];
     finalvc.selectIndex = btn.tag;

@@ -10,9 +10,12 @@
 #import "NetManager.h"
 #import "AppDelegate.h"
 #import "BatarMainTabBarContoller.h"
+#import "YLLoginView.h"
 
-@interface BTAdverController ()
-
+@interface BTAdverController ()<YLSocketDelegate>
+{
+    NetManager *_manager;
+}
 @property (nonatomic,strong) UIImageView * bgImgView;
 
 @end
@@ -26,6 +29,7 @@
     [self.view addSubview:self.bgImgView];
     
     NetManager * manager = [NetManager shareManager];
+    _manager = manager;
     self.bgImgView.image = [UIImage imageWithData:[manager bt_getAdvertiseInfo]];
     
     NSDictionary * info = [manager bt_getAdvertiseControlInfo];
@@ -38,6 +42,24 @@
     AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
     BatarMainTabBarContoller * tabbar = [[BatarMainTabBarContoller alloc]init];
     app.window.rootViewController = tabbar;
+    
+    if(!CUSTOMERID)return;
+    NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:%@}",@"0",CUSTOMERID];
+    if(SocketManager.isOpen){
+        [SocketManager sendMessage:str];
+    }else{
+        //与服务器建立长连接
+        NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[_manager getIPAddress]];
+        YLSocketManager *socketManager = [YLSocketManager shareSocketManager];
+        [socketManager createSocket:socketUrl delegate:self];
+        [socketManager start];
+    }
+}
+
+#pragma YLSocketDelegate
+-(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    NSLog(@"登录界面---%@",message);
 }
 
 - (void)didReceiveMemoryWarning {

@@ -25,6 +25,7 @@
 		8F2D1AB61DCA5D9700D40BEA /* MySelectedOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2D1AB51DCA5D9700D40BEA /* MySelectedOrderCell.m */; };
 		8F30CD4A1E71F63A00D85A8B /* BatarBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F30CD491E71F63A00D85A8B /* BatarBadgeView.m */; };
 		8F30CD501E720C9400D85A8B /* BatarTabbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F30CD4F1E720C9400D85A8B /* BatarTabbar.m */; };
+		8F30CD541E7351C900D85A8B /* BatarSocketModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F30CD531E7351C900D85A8B /* BatarSocketModel.m */; };
 		8F31D16F1DE6128A00962818 /* YLCustomerHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F31D16E1DE6128A00962818 /* YLCustomerHUD.m */; };
 		8F31D1751DE6449D00962818 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F31D1721DE6449D00962818 /* libmp3lame.a */; };
 		8F31D1761DE6449D00962818 /* XHSoundRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F31D1741DE6449D00962818 /* XHSoundRecorder.m */; };
@@ -503,6 +504,8 @@
 		8F30CD491E71F63A00D85A8B /* BatarBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarBadgeView.m; sourceTree = "<group>"; };
 		8F30CD4E1E720C9400D85A8B /* BatarTabbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarTabbar.h; sourceTree = "<group>"; };
 		8F30CD4F1E720C9400D85A8B /* BatarTabbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarTabbar.m; sourceTree = "<group>"; };
+		8F30CD521E7351C900D85A8B /* BatarSocketModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarSocketModel.h; sourceTree = "<group>"; };
+		8F30CD531E7351C900D85A8B /* BatarSocketModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarSocketModel.m; sourceTree = "<group>"; };
 		8F31D16D1DE6128A00962818 /* YLCustomerHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLCustomerHUD.h; sourceTree = "<group>"; };
 		8F31D16E1DE6128A00962818 /* YLCustomerHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLCustomerHUD.m; sourceTree = "<group>"; };
 		8F31D1711DE6449D00962818 /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
@@ -539,8 +542,8 @@
 		8F4215761D7C7F1900A7219A /* FMResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMResultSet.h; sourceTree = "<group>"; };
 		8F4215771D7C7F1900A7219A /* FMResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMResultSet.m; sourceTree = "<group>"; };
 		8F42157D1D7C7F4200A7219A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		8F4215831D7C9A0C00A7219A /* DBSaveModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBSaveModel.h; sourceTree = "<group>"; };
-		8F4215841D7C9A0C00A7219A /* DBSaveModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBSaveModel.m; sourceTree = "<group>"; };
+		8F4215831D7C9A0C00A7219A /* DBSaveModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DBSaveModel.h; path = ../../Manage/DBSaveModel.h; sourceTree = "<group>"; };
+		8F4215841D7C9A0C00A7219A /* DBSaveModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DBSaveModel.m; path = ../../Manage/DBSaveModel.m; sourceTree = "<group>"; };
 		8F4215871D7CB71D00A7219A /* SavaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SavaViewController.h; path = ../SavaViewController.h; sourceTree = "<group>"; };
 		8F4215881D7CB71D00A7219A /* SavaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SavaViewController.m; path = ../SavaViewController.m; sourceTree = "<group>"; };
 		8F426FC31E673AE3003B24EE /* BTDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTDetailCell.h; sourceTree = "<group>"; };
@@ -1516,6 +1519,17 @@
 			path = "../我的选购单";
 			sourceTree = "<group>";
 		};
+		8F30CD511E7351B400D85A8B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8F4215831D7C9A0C00A7219A /* DBSaveModel.h */,
+				8F4215841D7C9A0C00A7219A /* DBSaveModel.m */,
+				8F30CD521E7351C900D85A8B /* BatarSocketModel.h */,
+				8F30CD531E7351C900D85A8B /* BatarSocketModel.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		8F31D1701DE6449D00962818 /* XHSoundRecorder */ = {
 			isa = PBXGroup;
 			children = (
@@ -1634,6 +1648,7 @@
 		8F4A18221CDAB0CA006ED857 /* DianZTC */ = {
 			isa = PBXGroup;
 			children = (
+				8F30CD511E7351B400D85A8B /* Model */,
 				8F4A18561CDAB450006ED857 /* category */,
 				8F4A18571CDAB450006ED857 /* Define */,
 				8F4A18581CDAB450006ED857 /* Lib */,
@@ -1768,8 +1783,6 @@
 				8F5AB4D01D3EB84C006C53BD /* NetManager.m */,
 				8F4215691D7C708B00A7219A /* DBWorkerManager.h */,
 				8F42156A1D7C708B00A7219A /* DBWorkerManager.m */,
-				8F4215831D7C9A0C00A7219A /* DBSaveModel.h */,
-				8F4215841D7C9A0C00A7219A /* DBSaveModel.m */,
 				8FCD03661DA55BF200E6DCED /* YLVer_UpManager.h */,
 				8FCD03671DA55BF200E6DCED /* YLVer_UpManager.m */,
 				8FC318061D5CE34600E56D31 /* Nstimer的block封装 */,
@@ -1792,8 +1805,8 @@
 				8F137C3D1DB6CD4900B56C9B /* YLCoder2D.m */,
 				8F3DB76F1DB031E600AD78A2 /* YLLoginAlert.h */,
 				8F3DB7701DB031E600AD78A2 /* YLLoginAlert.m */,
-				8F4A19651CDABA01006ED857 /* GuideView.m */,
 				8F4A19641CDABA01006ED857 /* GuideView.h */,
+				8F4A19651CDABA01006ED857 /* GuideView.m */,
 				8F51C8A31D4BA87B007E4AB0 /* YLScrollerView.h */,
 				8F51C8A41D4BA87B007E4AB0 /* YLScrollerView.m */,
 				8FFD7E5C1D70D72900A4AE8F /* YLProgressHUD.h */,
@@ -3833,6 +3846,7 @@
 				8F8689E61DDE647E0030FD4D /* YLLocationManager.m in Sources */,
 				8F7CC17D1E133A280033E7FB /* ZXDataMatrixTextEncoder.m in Sources */,
 				8F4081C41D8070F3000E2975 /* MyInfoModel.m in Sources */,
+				8F30CD541E7351C900D85A8B /* BatarSocketModel.m in Sources */,
 				8F7CC19F1E133A280033E7FB /* ZXRSS14Reader.m in Sources */,
 				8FCD03681DA55BF200E6DCED /* YLVer_UpManager.m in Sources */,
 				8F7EFAD61DD7DB0C0021A9B0 /* HeaderModel.m in Sources */,
@@ -3960,7 +3974,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3984,7 +3998,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4007,7 +4021,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4024,7 +4038,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -4037,7 +4051,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
@@ -4080,7 +4094,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4092,7 +4106,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
@@ -4135,7 +4149,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

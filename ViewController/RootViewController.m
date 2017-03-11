@@ -225,4 +225,10 @@
     return _hud;
 }
 
+-(CGFloat)getDescriptionWidth:(NSString *)text font:(CGFloat)size height:(CGFloat)height{
+
+    CGSize se = [text boundingRectWithSize:CGSizeMake(MAXFLOAT, height*S6) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:size*S6]} context:nil].size;
+    return se.width;
+}
+
 @end

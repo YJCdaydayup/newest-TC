@@ -11,8 +11,10 @@
 
 #define WeakObj(o) autoreleasepool{} __weak typeof(o) o##Weak = o
 
+#define SocketManager [YLSocketManager shareSocketManager]
+
 //主题颜色
-#define THEMECOLOR RGB_COLOR(76, 66, 41, 1)
+#define THEMECOLORS RGB_COLOR(76, 66, 41, 1)
 
 //Logo处的文字颜色
 #define LOGOTEXTCOLOR RGB_COLOR(94, 94, 94, 1)
