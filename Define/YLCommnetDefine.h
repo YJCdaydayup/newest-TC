@@ -71,5 +71,8 @@ UIKIT_EXTERN NSString *const UpdateMyOrderNotification;
 //将购物车角标的数量通知出去
 UIKIT_EXTERN NSString *const ShopCarNumberNotification;
 
+//收到服务端的信息，就发出改变角标的通知
+UIKIT_EXTERN NSString *const ServerMsgNotification;
+
 
 @end

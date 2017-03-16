@@ -11,7 +11,7 @@
 
 #define WeakObj(o) autoreleasepool{} __weak typeof(o) o##Weak = o
 
-#define SocketManager [YLSocketManager shareSocketManager]
+#define SocketModel   [BatarSocketModel shareBatarSocketModel]
 
 //主题颜色
 #define THEMECOLORS RGB_COLOR(76, 66, 41, 1)

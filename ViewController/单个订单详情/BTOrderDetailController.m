@@ -133,7 +133,6 @@
     
     NSString * str = [self.date substringToIndex:10];
     
-    
     UILabel * state = [Tools createLabelWithFrame:CGRectMake(Wscreen-100*S6, date.y, 100*S6, 14*S6) textContent:str withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
     [bgView addSubview:state];
 }

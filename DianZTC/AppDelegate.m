@@ -43,19 +43,30 @@
     
     switch (type) {
         case BatarNetNotFound:
-            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"无网络"];
+            //            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"无网络"];
             break;
         case BatarNetChangedUnknow:
-            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"未知网络"];
+            //            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"未知网络"];
             break;
         case BatarNetChangeWifi:
-            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"当前网络是Wifi状态"];
+            //            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"当前网络是Wifi状态"];
+            //            [self netAccess];
             break;
         case BatarNetChangeWWAN:
-            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"当前网络是流量状态"];
+            //            [[TKAlertCenter defaultCenter]postAlertWithMessage:@"当前网络是流量状态"];
+            //            [self netAccess];
             break;
         default:
             break;
+    }
+}
+
+-(void)netAccess{
+    //与服务器建立长连接
+    if(CUSTOMERID){
+        NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[_netManager getIPAddress]];
+        YLSocketManager *socketManager = [YLSocketManager shareSocketManager];
+        [socketManager createSocket:socketUrl delegate:self];
     }
 }
 
@@ -63,14 +74,11 @@
     
     NetManager * manager = [NetManager shareManager];
     _netManager = manager;
-//    //请求广告页参数数据，并缓存在本地
-//    [_netManager bt_saveAdvertiseInfo];
+    //    //请求广告页参数数据，并缓存在本地
+    //    [_netManager bt_saveAdvertiseInfo];
     
     // 启动图片延时: 1秒
-//    [NSThread sleepForTimeInterval:3];
-    
-    //与服务端建立长连接
-//    self.socketManager = [YLSocketManager alloc]initWithUrl:@"" delegate:<#(id)#>
+    //    [NSThread sleepForTimeInterval:3];
     
     //网络变化的代理设置
     [YLNetObseverManager shareInstanceWithDelegate:self];
@@ -108,6 +116,17 @@
             BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
             self.window.rootViewController = mainVc;
         }
+        
+        if(CUSTOMERID){
+            
+            //与服务器建立长连接
+            NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[_netManager getIPAddress]];
+            YLSocketManager *socketManager = [YLSocketManager shareSocketManager];
+            [socketManager createSocket:socketUrl delegate:self];
+        }else{
+            //清空"待确认"订单角标
+            [BatarManagerTool caculateDatabaseOrderCar];
+        }
     }else{
         BatarLoginController * loginVc = [[BatarLoginController alloc]init];
         self.window.rootViewController = loginVc;
@@ -116,6 +135,38 @@
     [self.window makeKeyAndVisible];
     
     return YES;
+}
+
+
+#pragma YLSocketDelegate
+-(void)ylWebSocketDidOpen:(SRWebSocket *)webSocket{
+    
+    NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"2",CUSTOMERID];
+    [webSocket send:str];
+}
+
+-(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    NSLog(@"从Tabbar的入口进入--->%@",message);
+    
+    message = (NSString *)message;
+    if([message containsString:@"ok"]){
+        
+        //获取订单状态信息
+        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"0",CUSTOMERID];
+        [webSocket send:str];
+        
+    }else if([message containsString:@"logined"]){
+        [kUserDefaults removeObjectForKey:CustomerID];
+        [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
+        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        UIAlertController * alertVc = [UIAlertController alertControllerWithTitle:@"提示:" message:@"该客户编号已在其他地方登陆" preferredStyle:UIAlertControllerStyleAlert];
+        [app.window.rootViewController presentViewController:alertVc animated:YES completion:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [alertVc dismissViewControllerAnimated:YES completion:nil];
+            });
+        }];
+    }
 }
 
 -(void)switchServer{
@@ -222,6 +273,9 @@
     
     //2.清空缓存
     [[SDWebImageManager sharedManager].imageCache cleanDisk];
+    
+    [[SDWebImageManager sharedManager].imageCache clearDisk];
+    [[SDWebImageManager sharedManager].imageCache clearMemory];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

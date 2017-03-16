@@ -93,6 +93,9 @@ NSString * const PLIST_URL = @"https://git.oschina.net/jeffyang/TestInternalDist
 /*type=1时,首页推广点击*/
 NSString * const RECOMMANDCLICK = @"http://%@/photo-album/product/get_series_product";
 
+/*type=2时，首页推广接口*/
+NSString *const RecommandClickOther = @"http://%@/photo-album/manger/get_product_id";
+
 /*判断码的类型：精确，模糊，错误码*/
 NSString * const CODETYPE = @"http://%@/photo-album/index/_autocomplete";
 

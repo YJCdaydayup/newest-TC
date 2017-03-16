@@ -83,6 +83,14 @@
     [self.searchTextField resignFirstResponder];
     self.searchTextField.hidden = NO;
     self.tabBarController.tabBar.hidden = NO;
+    if(!CUSTOMERID){
+        SocketModel.state_0 = @0;
+        SocketModel.state_1 = @0;
+        SocketModel.state_2 = @0;
+        [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
+    }else{
+        [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
+    }
 }
 
 - (void)viewDidLoad {
@@ -166,10 +174,7 @@
             NSLog(@"%@",error.description);
         }
     }];
-    
-    
     [self downloadNewestData];
-    //    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 -(void)downloadNewestData{
@@ -356,17 +361,37 @@
                 return ;
             }
             
-            if([model.type integerValue] == 1){
-//                RECOMMANDCLICK
-                SingleSearchCatagoryViewController * singeVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
-                singeVc.catagoryItem = model.actionname;
-                [self pushToViewControllerWithTransition:singeVc withDirection:@"right" type:NO];
-            }else{
-            
-                ThemeViewController * themeVc = [[ThemeViewController alloc]init];
-                themeVc.indexParm = model.actionname;
-                themeVc.themeTitle = model.actionaliasname;
-                [self pushToViewControllerWithTransition:themeVc withDirection:@"right" type:NO];
+            switch ([model.type integerValue]) {
+                case 0:
+                {
+                    ThemeViewController * themeVc = [[ThemeViewController alloc]init];
+                    themeVc.indexParm = model.actionname;
+                    themeVc.themeTitle = model.actionaliasname;
+                    [self pushToViewControllerWithTransition:themeVc withDirection:@"right" type:NO];
+                }
+                    break;
+                case 1:
+                {
+                    //RECOMMANDCLICK
+                    SingleSearchCatagoryViewController * singeVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
+                    singeVc.catagoryItem = model.actionname;
+                    singeVc.themeTitle = model.actionaliasname;
+                    singeVc.vc_flag = 1;
+                    [self pushToViewControllerWithTransition:singeVc withDirection:@"right" type:NO];
+                }
+                    break;
+                case 2:
+                {
+//                    RecommandClickOther
+                    SingleSearchCatagoryViewController * singeVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
+                    singeVc.catagoryItem = model.actionname;
+                    singeVc.themeTitle = model.actionaliasname;
+                    singeVc.vc_flag = 2;
+                    [self pushToViewControllerWithTransition:singeVc withDirection:@"right" type:NO];
+                }
+                    break;
+                default:
+                    break;
             }
         }];
         return cell;
@@ -384,7 +409,6 @@
             [cell setImageView:array];
             [cell clickImageForDetai:^(NSInteger index) {
                 
-                //                NSLog(@"%zi",index);
                 DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
                 detailVc.index = self.dataArray[indexPath.row].products[index].number;
                 [self pushToViewControllerWithTransition:detailVc withDirection:@"right" type:NO];
@@ -398,10 +422,8 @@
     
     if(indexPath.section == 0)
     {
-        if(tuiGuangArr.count<8&&tuiGuangArr.count>0){
+        if(tuiGuangArr.count>0){
             return 95*S6;
-        }else if(tuiGuangArr.count == 8){
-            return 170*S6;
         }else{
             return 0;
         }

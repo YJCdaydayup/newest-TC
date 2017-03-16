@@ -52,4 +52,6 @@ NSString *const UpdateMyOrderNotification = @"UpdateMyOrderNotification";
 
 NSString *const ShopCarNumberNotification = @"ShopCarNumberNotification";
 
+NSString *const ServerMsgNotification = @"ServerMsgNotification";
+
 @end

@@ -16,6 +16,7 @@
 +(void)caculateDatabaseOrderCar{
     
     DBWorkerManager * manager = [DBWorkerManager shareDBManager];
+    [manager createOrderDB];
     [manager order_getAllObject:^(NSMutableArray *dataArray) {
         
         [[NSNotificationCenter defaultCenter]postNotificationName:ShopCarNumberNotification object:@(dataArray.count)];

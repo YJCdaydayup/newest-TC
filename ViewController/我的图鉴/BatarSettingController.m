@@ -15,6 +15,7 @@
 #import "YLLoginView.h"
 #import "YLCoder2D.h"
 #import "FinalOrderViewController.h"
+#import "BatarBadgeView.h"
 
 @interface BatarSettingController(){
     
@@ -25,6 +26,9 @@
 }
 
 @property (nonatomic,strong) UILabel * userName;
+
+/** 待确认角标 */
+@property (nonatomic,strong) BatarBadgeView * badgeView;
 
 @end
 
@@ -40,8 +44,15 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(hasLogined) name:UploadOrders object:nil];
+     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeBadge) name:ServerMsgNotification object:nil];
     
     [self getBottomData];
+}
+
+#pragma 改变角标
+-(void)changeBadge{
+    
+    [self.badgeView changeBadgeValue:[NSString stringWithFormat:@"%@",SocketModel.state_1]];
 }
 
 -(void)hasLogined{
@@ -124,6 +135,17 @@
         [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 36*S6, 18*S6, 0)];
         
         [self.view addSubview:btn];
+        
+        if(i == 2){
+            
+            //待确认的角标
+            BatarBadgeView * badgeVw = [[BatarBadgeView alloc]initWithFrame:CGRectMake(56*S6, 2*S6, 10, 10)];
+            self.badgeView = badgeVw;
+            [btn addSubview:badgeVw];
+            
+            BatarSocketModel * model = [BatarSocketModel shareBatarSocketModel];
+            [badgeVw changeBadgeValue:[NSString stringWithFormat:@"%@",model.state_1]];
+        }
     }
     
     NSArray * titleArr = @[@"我的收藏",@"清除缓存",@"联系我们"];

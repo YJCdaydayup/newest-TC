@@ -20,6 +20,8 @@
     UILabel * wrongLabel;
 }
 
+/** 进度条 */
+@property (nonatomic,strong) MBProgressHUD * p_hup;
 @property (nonatomic,copy) ConfirmBlock confirm_block;
 @property (nonatomic,copy) CancelBlock cancel_block;
 
@@ -170,20 +172,13 @@ static YLLoginView *_instance = nil;
         NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSString * state = [dict objectForKey:@"state"];
         if([state intValue] == 1){
-             NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"0",self.user_code_field.text];
-            //与服务器建立长连接
-            if(SocketManager.isOpen){
-                [SocketManager sendMessage:str];
-            }else{
-                NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[manager getIPAddress]];
-                self.socketManager = [YLSocketManager shareSocketManager];
-                [self.socketManager createSocket:socketUrl delegate:self];
-                [self.socketManager start];
-            }
             
-            //发出通知
-            [kUserDefaults setObject:self.user_code_field.text forKey:CustomerID];
-            [[NSNotificationCenter defaultCenter]postNotificationName:UploadOrders object:nil];
+            //与服务器建立长连接
+            NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[manager getIPAddress]];
+            self.socketManager = [YLSocketManager shareSocketManager];
+            [self.socketManager createSocket:socketUrl delegate:self];
+            [BatarManagerTool caculateDatabaseOrderCar];
+            
             [UIView animateWithDuration:0.5 animations:^{
                 controlView.alpha = 0;
                 maskView.alpha = 0;
@@ -199,9 +194,40 @@ static YLLoginView *_instance = nil;
 }
 
 #pragma YLSocketDelegate
+-(void)ylWebSocketDidOpen:(SRWebSocket *)webSocket{
+    
+    NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"2",self.user_code_field.text];
+    [webSocket send:str];
+    
+    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    self.p_hup = [[MBProgressHUD alloc]initWithFrame:app.window.frame];
+    [app.window addSubview:self.p_hup];
+    self.p_hup.labelText = @"正在连接中...";
+    [self.p_hup show:YES];
+}
+
 -(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
     
-    NSLog(@"%@",message);
+    NSLog(@"YLLoginView--->:%@",message);
+    
+    [self.p_hup hide:YES];
+    message = (NSString *)message;
+    if([message containsString:@"ok"]){
+        //发出通知
+        [kUserDefaults setObject:self.user_code_field.text forKey:CustomerID];
+        [[NSNotificationCenter defaultCenter]postNotificationName:UploadOrders object:nil];
+        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"0",self.user_code_field.text];
+        [webSocket send:str];
+    }else if([message containsString:@"logined"]){
+        [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
+        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        UIAlertController * alertVc = [UIAlertController alertControllerWithTitle:@"提示:" message:@"该客户编号已在其他地方登陆" preferredStyle:UIAlertControllerStyleAlert];
+        [app.window.rootViewController presentViewController:alertVc animated:YES completion:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [alertVc dismissViewControllerAnimated:YES completion:nil];
+            });
+        }];
+    }
 }
 
 -(void)cancelAction{

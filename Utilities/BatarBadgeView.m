@@ -30,6 +30,7 @@
         self.textColor = [UIColor whiteColor];
         self.layer.cornerRadius = VWidth/2.0;
         self.layer.masksToBounds = YES;
+        self.hidden = YES;
     }
     return self;
 }
@@ -37,12 +38,11 @@
 -(void)changeBadgeValue:(NSString *)number{
     
     self.text = number;
-    if([number integerValue]==0){
+    if([number integerValue]<=0){
         self.hidden = YES;
     }else{
         self.hidden = NO;
     }
-    NSLog(@"number----%@",number);
 }
 
 

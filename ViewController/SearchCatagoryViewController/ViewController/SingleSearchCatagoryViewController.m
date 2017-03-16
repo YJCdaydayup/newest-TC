@@ -83,12 +83,37 @@
     NSDictionary * parmDict;
     NSString * urlStr;
     NetManager * manager = [NetManager shareManager];
-    //判断参数的类型
     
+    //判断参数的类型
     if([self.fatherVc isKindOfClass:[FirstViewController class]]){
         
-        urlStr = [NSString stringWithFormat:RECOMMANDCLICK,[manager getIPAddress]];
-        parmDict = @{@"page":@(page+1),@"size":@"10",@"id":self.catagoryItem};
+        switch (self.vc_flag) {
+            case 1:{
+                urlStr = [NSString stringWithFormat:RECOMMANDCLICK,[manager getIPAddress]];
+                parmDict = @{@"page":@(page+1),@"size":@"10",@"id":self.catagoryItem};
+                self.titlelabel.text = self.themeTitle;
+            }
+                break;
+            case 2:{
+                urlStr = [NSString stringWithFormat:RecommandClickOther,[manager getIPAddress]];
+                parmDict = @{@"page":@(page+1),@"size":@"10",@"id":self.catagoryItem};
+                self.titlelabel.text = self.themeTitle;
+            }
+                break;
+            case 3:
+            {
+                //拼接ip和port
+                NSString * URLstring = [NSString stringWithFormat:CLICKMORE,[manager getIPAddress]];
+                NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
+                NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+                parmDict = nil;
+                urlStr = [NSString stringWithFormat:@"%@&page=%@&size=%@",str,pageStr,@"10"];
+            }
+                break;
+                
+            default:
+                break;
+        }
         
     }else{
         switch (self.vc_flag) {
@@ -128,12 +153,6 @@
                 break;
             case 3:
             {
-                //拼接ip和port
-                NSString * URLstring = [NSString stringWithFormat:CLICKMORE,[manager getIPAddress]];
-                NSString * str = [NSString stringWithFormat:@"%@?id=%@",URLstring,self.catagoryItem];
-                NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
-                parmDict = nil;
-                urlStr = [NSString stringWithFormat:@"%@&page=%@&size=%@",str,pageStr,@"10"];
             }
                 break;
             default:
@@ -146,10 +165,8 @@
         if(error == nil){
             [self.hud hide:YES];
             if(page == 0){
-                
                 [self.dataArray removeAllObjects];
             }
-            
             id obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSMutableArray * downArray = [NSMutableArray array];
             if([obj isKindOfClass:[NSDictionary class]]){

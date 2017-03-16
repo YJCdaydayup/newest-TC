@@ -20,7 +20,7 @@ singleH(BatarSocketModel);
 @property (nonatomic,strong) NSNumber * state_0;
 
 /** 待确认 */
-@property (nonatomic,strong) NSNumber * state_1;
+@property (nonatomic,retain) NSNumber * state_1;
 
 /** 已确认 */
 @property (nonatomic,strong) NSNumber * state_2;

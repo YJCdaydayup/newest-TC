@@ -37,6 +37,7 @@
 #import "YLCommnetDefine.h"
 #import "UIView+Tap.h"//添加手势的分类
 #import "TKAlertCenter.h"
+#import "BatarBadgeView.h"
 
 //界面及代理类
 #import "AppDelegate.h"
@@ -46,6 +47,7 @@
 #import "RootViewController.h"
 #import "YLSocketManager.h"
 #import "BatarSocketModel.h"
+#import "BatarManagerTool.h"
 
 // 屏幕高度
 #define XMGHeight [UIScreen mainScreen].bounds.size.height

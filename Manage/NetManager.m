@@ -64,6 +64,7 @@
 
 -(void)downloadCatagoryData{
     
+    @WeakObj(self);
     //写入数据
     AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -74,7 +75,7 @@
         if(responseObject){
             
             //清空数据
-            [self.dataArray removeAllObjects];
+            [selfWeak.dataArray removeAllObjects];
             NSFileManager *fm = [NSFileManager defaultManager];
             [fm removeItemAtPath:self.plistPath error:nil];
             
@@ -86,17 +87,17 @@
             NSArray * array4 = [dict objectForKey:@"shapes"];
             NSArray * array5 = [dict objectForKey:@"weight"];
             
-            [self.dataArray addObject:array1];
-            [self.dataArray addObject:array2];
-            [self.dataArray addObject:array3];
-            [self.dataArray addObject:array4];
-            [self.dataArray addObject:array5];
+            [selfWeak.dataArray addObject:array1];
+            [selfWeak.dataArray addObject:array2];
+            [selfWeak.dataArray addObject:array3];
+            [selfWeak.dataArray addObject:array4];
+            [selfWeak.dataArray addObject:array5];
             
-            [self.dataArray writeToFile:self.plistPath atomically:YES];
+            [selfWeak.dataArray writeToFile:self.plistPath atomically:YES];
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        //        NSLog(@"%@",error.description);
+
     }];
 }
 

@@ -31,7 +31,23 @@
 
 @implementation DiscoverViewController
 
+static DiscoverViewController * _instance = nil;
++(instancetype)allocWithZone:(struct _NSZone *)zone{
+    
+    @synchronized(self) {
+        if(_instance == nil){
+            _instance = [super allocWithZone:zone];
+        }
+    }
+    return _instance;
+}
+
 @synthesize layoutBtn = _layoutBtn;
+
+-(void)dealloc{
+    
+    NSLog(@"%s",__func__);
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     
@@ -81,6 +97,7 @@
     
     [self.hud show:YES];
     
+    @WeakObj(self);
     NSDictionary * parmDict;
     NSString * urlStr;
     NetManager * manager = [NetManager shareManager];
@@ -92,10 +109,10 @@
     [manager downloadDataWithUrl:urlStr parm:parmDict callback:^(id responseObject, NSError *error) {
         
         if(error == nil){
-            [self.hud hide:YES];
+            [selfWeak.hud hide:YES];
             if(page == 0){
                 
-                [self.dataArray removeAllObjects];
+                [selfWeak.dataArray removeAllObjects];
             }
             
             id obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -122,15 +139,15 @@
                     [downArray addObject:model];
                 }
             }
-            [self.dataArray addObjectsFromArray:downArray];
-            if(self.dataArray.count==0){
-                [self showAlertViewWithTitle:@"未搜到任何产品信息!"];
-                [self.collectionView headerEndRefreshing];
+            [selfWeak.dataArray addObjectsFromArray:downArray];
+            if(selfWeak.dataArray.count==0){
+                [selfWeak showAlertViewWithTitle:@"未搜到任何产品信息!"];
+                [selfWeak.collectionView headerEndRefreshing];
                 return;
             }
-            [self.collectionView reloadData];
-            [self.collectionView headerEndRefreshing];
-            [self.collectionView footerEndRefreshing];
+            [selfWeak.collectionView reloadData];
+            [selfWeak.collectionView headerEndRefreshing];
+            [selfWeak.collectionView footerEndRefreshing];
         }else{
             NSLog(@"%@",error.description);
         }
@@ -156,12 +173,12 @@
 #pragma mark - 改变偏移位置
 -(void)changeScrollPosition{
     
-//    if(self.currentIndexPath.row%2){
-//        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+6 inSection:self.currentIndexPath.section];
-//    }else{
-//        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row/2 inSection:self.currentIndexPath.section];
-//    }
-//    [self.collectionView scrollToItemAtIndexPath:self.indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+    //    if(self.currentIndexPath.row%2){
+    //        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row+6 inSection:self.currentIndexPath.section];
+    //    }else{
+    //        self.indexPath = [NSIndexPath indexPathForRow:self.currentIndexPath.row/2 inSection:self.currentIndexPath.section];
+    //    }
+    //    [self.collectionView scrollToItemAtIndexPath:self.indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 -(void)getInitialData{
@@ -218,9 +235,9 @@
     }
     
     if(self.dataArray.count>0){
-            [cell configCell:self.dataArray[indexPath.row]];
+        [cell configCell:self.dataArray[indexPath.row]];
     }
-
+    
     __block typeof(self)weakSelf = self;
     [cell clickImageView:^(NSString *number) {
         
@@ -257,7 +274,7 @@
 }
 
 //-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-//    
+//
 //}
 
 -(NSMutableArray *)dataArray{
@@ -268,6 +285,13 @@
     }
     
     return _dataArray;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    self.view = nil;
+    [self removeFromParentViewController];
+    // Dispose of any resources that can be recreated.
 }
 
 @end

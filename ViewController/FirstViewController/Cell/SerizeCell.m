@@ -53,9 +53,7 @@
     }
     
     //横向分布
-    //        horisonScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(13.5*S6+5*S6, 0, Wscreen-27*S6-10*S6, 85*S6)];
     horisonScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 85*S6)];
-    //        horisonScrollView.bounces = NO;
     horisonScrollView.delegate = self;
     horisonScrollView.showsHorizontalScrollIndicator = NO;
     horisonScrollView.contentSize = CGSizeMake(modelArray.count*(Wscreen-32*S6)/4.0, 85*S6);
@@ -74,7 +72,6 @@
         
         UILabel * label = [Tools createLabelWithFrame:CGRectMake((Wscreen-32*S6)/4.0*i-3*S6, 50*S6,(Wscreen-32*S6)/4.0 , 55*S6) textContent:model.aliasname withFont:[UIFont systemFontOfSize:12*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
         [horisonScrollView addSubview:label];
-        
     }
 }
 

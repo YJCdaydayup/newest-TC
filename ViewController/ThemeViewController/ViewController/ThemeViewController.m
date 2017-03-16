@@ -125,6 +125,7 @@
     self.titlelabel = [Tools createLabelWithFrame:CGRectMake(10, 10, 100*S6, 20*S6) textContent:self.themeTitle
                                          withFont:[UIFont systemFontOfSize:18*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];
     self.navigationItem.titleView = self.titlelabel;
+    NSLog(@"%@",self.themeTitle);
 }
 
 //设置主题表格

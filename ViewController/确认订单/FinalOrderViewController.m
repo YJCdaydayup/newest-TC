@@ -20,6 +20,7 @@
 #import "MJRefresh.h"
 #import "BatarSettingController.h"
 #import "BTOrderDetailController.h"
+#import "BatarMainTabBarContoller.h"
 #import "YLLoginView.h"
 
 @interface FinalOrderViewController ()<UITableViewDataSource,UITableViewDelegate,YLSocketDelegate>{
@@ -37,8 +38,12 @@
 @property (nonatomic,strong) NSMutableArray * titleArray;
 @property (nonatomic,strong) NSMutableArray * stateArray;
 @property (nonatomic,strong) NSMutableArray * selectedHeaderArray;
-/** 初始化socket */
-@property (nonatomic,strong) YLSocketManager *socket;
+
+/** 长连接 */
+@property (nonatomic,strong) YLSocketManager * socketManager;
+
+/** 待确认角标 */
+@property (nonatomic,strong) BatarBadgeView * badgeView;
 
 @end
 
@@ -67,17 +72,29 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(updateAgain) name:UpdateMyOrderNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeBadge) name:ServerMsgNotification object:nil];
+    
+    YLSocketManager * socketManager = [YLSocketManager shareSocketManager];
+    self.socketManager = socketManager;
+    if([socketManager isOpen]){
+        socketManager.delegate = self;
+    }else{
+        //与服务器建立长连接
+        NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[[NetManager shareManager] getIPAddress]];
+        [socketManager createSocket:socketUrl delegate:self];
+    }
     
     self.navigationItem.hidesBackButton = YES;
-    
-    //初始化长连接
-    YLSocketManager * socket = [YLSocketManager shareSocketManager];
-    socket.delegate = self;
-    self.socket = socket;
     
     [self configNav];
     [self createTableView];
     [self createBottomView];
+}
+
+#pragma 改变角标
+-(void)changeBadge{
+    
+     [self.badgeView changeBadgeValue:[NSString stringWithFormat:@"%@",SocketModel.state_1]];
 }
 
 -(void)updateAgain{
@@ -172,6 +189,11 @@
             {//首页
                 FirstViewController * firstVc = [[FirstViewController alloc]init];
                 [self pushToViewControllerWithTransition:firstVc withDirection:@"left" type:NO];
+                [self removeNaviPushedController:self];
+                //回到主页时，tabbar选中主页的根视图
+                BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
+                [mainVc changeRootController];
+
             }
                 break;
             case 1:
@@ -254,7 +276,7 @@
 -(void)createTableView{
     
     UISegmentedControl * segmentView = [[UISegmentedControl alloc]initWithItems:@[@"全部订单",@"待明细",@"待确认",@"已确认"]];
-    //    segmentView.tintColor = RGB_COLOR(225, 168, 111, 1);
+    segmentView.tintColor = RGB_COLOR(225, 168, 111, 1);
     segmentView.frame = CGRectMake(-5*S6, NAV_BAR_HEIGHT-1*S6, Wscreen+10*S6, 45*S6);
     segmentView.layer.borderColor = [BOARDCOLOR CGColor];
     segmentView.layer.borderWidth = 1*S6;
@@ -262,6 +284,14 @@
     segment = segmentView;
     segmentView.momentary = NO;
     [self.view addSubview:segmentView];
+    
+    //待确认的角标
+    BatarBadgeView * badgeVw = [[BatarBadgeView alloc]initWithFrame:CGRectMake(Wscreen*2/3.0, 8*S6+NAV_BAR_HEIGHT, 10, 10)];
+    self.badgeView = badgeVw;
+    [self.view addSubview:badgeVw];
+    
+    BatarSocketModel * model = [BatarSocketModel shareBatarSocketModel];
+    [badgeVw changeBadgeValue:[NSString stringWithFormat:@"%@",model.state_1]];
     
     //设置文字属性
     NSDictionary* unselectedTextAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:14*S6],NSForegroundColorAttributeName: RGB_COLOR(153, 153, 153, 1)};
@@ -349,13 +379,6 @@
             break;
     }
 }
-
-//-(void)cleanAllSubVc{
-//
-//    [self cleanVc:waitingCheckVc];
-//    [self cleanVc:waitingOrderVc];
-//    [self cleanVc:confirmedVc];
-//}
 
 -(void)cleanVc:(RootViewController *)vc{
     
@@ -569,12 +592,38 @@
     [self pushToViewControllerWithTransition:orderDvc withDirection:@"left" type:NO];
     
     if([model.state integerValue]==1){
+        //默认连接完好时
         NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:\"\%@\"\,\"\message\"\:\"\[\%@\]\"}",@"1",model.orderid];
-        [self.socket sendMessage:str];
+        [self.socketManager sendMessage:str];
     }
 }
 
+#define mark - YLSocketDelegate
+-(void)ylWebSocketDidOpen:(SRWebSocket *)webSocket{
+    
+    NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"2",CUSTOMERID];
+    [webSocket send:str];
+}
+
 -(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    message = (NSString *)message;
+    if([message containsString:@"ok"]){
+        //发出通知
+//        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:\"\%@\"\,\"\message\"\:\"\[\%@\]\"}",@"1",model.orderid];
+//        [webSocket send:str];
+    }else if([message containsString:@"logined"]){
+        [kUserDefaults removeObjectForKey:CustomerID];
+        [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
+        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        UIAlertController * alertVc = [UIAlertController alertControllerWithTitle:@"提示:" message:@"该客户编号已在其他地方登陆" preferredStyle:UIAlertControllerStyleAlert];
+        [app.window.rootViewController presentViewController:alertVc animated:YES completion:^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [alertVc dismissViewControllerAnimated:YES completion:nil];
+            });
+        }];
+    }
+
     
     [self.dataArray removeAllObjects];
     [self.selectedHeaderArray removeAllObjects];
@@ -586,7 +635,6 @@
     
     page = 0;
     [self createData];
-
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{

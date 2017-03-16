@@ -28,6 +28,9 @@
 @property (nonatomic,strong) NetManager * manager;
 @property (nonatomic,copy) NSString * tempIP_Port;
 
+/** 客户断网时的等待框 */
+@property (nonatomic,strong) MBProgressHUD * p_hup;
+
 @end
 
 @implementation BatarLoginController
@@ -171,6 +174,8 @@
 #pragma mark - 登录
 -(void)loginAction{
     
+    [self.hud show:YES];
+    
     if(clear_server){
         
         [self showAlertViewWithTitle:@"服务器已清空，请添加服务器再登录!"];
@@ -180,44 +185,38 @@
     if(userCode_tf.text.length == 0){
         [kUserDefaults removeObjectForKey:CustomerID];
         [self setWindowTabbar];
+        //断开长连接
+        YLSocketManager * socket = [YLSocketManager shareSocketManager];
+        [socket closeServerByForce:YES];
     }else{
         [self checkUserCode];
-        [kUserDefaults setObject:userCode_tf.text forKey:CustomerID];
-        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\%@\}",@"0",userCode_tf.text];
-        if(SocketManager.isOpen){
-            [SocketManager sendMessage:str];
-        }else{
-            //与服务器建立长连接
-            NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[self.manager getIPAddress]];
-            YLSocketManager *socketManager = [YLSocketManager shareSocketManager];
-            [socketManager createSocket:socketUrl delegate:self];
-            [socketManager start];
-        }
     }
-}
-
--(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
-    
-    NSLog(@"登录界面---%@",message);
 }
 
 -(void)checkUserCode{
     
     //只需要检验客户编号即可
-    self.hud = [[MBProgressHUD alloc]initWithFrame:self.view.frame];
-    [self.view addSubview:self.hud];
+    //    self.hud = [[MBProgressHUD alloc]initWithFrame:self.view.frame];
+    //    [self.view addSubview:self.hud];
     self.hud.labelText = @"正在检验客户编号...";
     [self.hud show:YES];
     NSString * urlStr = [NSString stringWithFormat:LOGIN_URL,[_manager getIPAddress]];
     NSDictionary * dict = @{@"number":userCode_tf.text};
     [_manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.hud hide:YES];
+            
             NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSString * state = [dict objectForKey:@"state"];
             if([state intValue] == 1){
-                [kUserDefaults setObject:userCode_tf.text forKey:CustomerID];
-                [self setWindowTabbar];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    self.hud.labelText = @"正在等待连接...";
+                });
+                [self.hud hide:YES];
+                
+                YLSocketManager * socketManager = [YLSocketManager shareSocketManager];
+                //与服务器建立长连接
+                NSString *socketUrl = [NSString stringWithFormat:ConnectWithServer,[self.manager getIPAddress]];
+                [socketManager createSocket:socketUrl delegate:self];
                 
             }else{
                 AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -239,6 +238,36 @@
             }
         });
     }];
+}
+
+#pragma mark - 获取服务端数据
+-(void)ylWebSocketDidOpen:(SRWebSocket *)webSocket{
+    
+    NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"2",userCode_tf.text];
+    [webSocket send:str];
+    
+    self.p_hup = [[MBProgressHUD alloc]initWithFrame:self.view.frame];
+    [self.app.window addSubview:self.p_hup];
+    self.p_hup.labelText = @"正在连接中...";
+    [self.p_hup show:YES];
+}
+
+-(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
+    
+    NSLog(@"登录界面---%@",message);
+    message = (NSString *)message;
+    
+    [self.p_hup hide:YES];
+    if([message containsString:@"ok"]){
+        //发出通知
+        [kUserDefaults setObject:userCode_tf.text forKey:CustomerID];
+        [self setWindowTabbar];
+        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"0",userCode_tf.text];
+        [webSocket send:str];
+    }else if([message containsString:@"logined"]){
+        [self showAlertViewWithTitle:@"该客户编号已在其他地方登陆"];
+        [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
+    }
 }
 
 -(void)setWindowTabbar{

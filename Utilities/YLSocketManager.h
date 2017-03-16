@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <SRWebSocket.h>
-
+typedef void(^completion)(NSInteger connect);
 @protocol YLSocketDelegate <NSObject>
 
+-(void)ylWebSocketDidOpen:(SRWebSocket *)webSocket;
 -(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 
 @end
@@ -22,9 +23,8 @@
 
 +(instancetype)shareSocketManager;
 -(void)createSocket:(NSString *)url delegate:(id)delegate;
--(void)start;
--(void)stop;
 -(void)sendMessage:(id)msg;
 -(BOOL)isOpen;
+-(void)closeServerByForce:(BOOL)force;
 
 @end

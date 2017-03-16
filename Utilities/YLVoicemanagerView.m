@@ -110,6 +110,7 @@ static int temp = 0;
     sendMessageTextfield.returnKeyType = UIReturnKeySend;
     sendMessageTextfield.font = [UIFont systemFontOfSize:16*S6];
     sendMessageTextfield.textContainerInset = UIEdgeInsetsMake(8*S6,5*S6, 0, 0);
+    sendMessageTextfield.userInteractionEnabled = YES;
     [self addSubview:sendMessageTextfield];
     
     recordBtn = [Tools createNormalButtonWithFrame:sendMessageTextfield.frame textContent:@"按住发言" withFont:[UIFont systemFontOfSize:16*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
@@ -142,7 +143,7 @@ static int temp = 0;
     temp = 0;
 }
 
-- (BOOL)textView: (UITextView *) textView  shouldChangeTextInRange: (NSRange) range replacementText: (NSString *)text {
+- (BOOL)textView: (UITextView *) textView shouldChangeTextInRange: (NSRange) range replacementText: (NSString *)text {
     if( [ @"\n" isEqualToString: text]){
         [self sendMsg];
         return NO;

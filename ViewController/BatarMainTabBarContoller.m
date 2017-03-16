@@ -22,6 +22,7 @@
 /** 数量显示 */
 @property (nonatomic,strong) BatarBadgeView *badgeView;
 @property (nonatomic,strong) BatarTabbar * tabBar;
+@property (nonatomic,strong) UIView * mySettingBadge;
 
 @end
 
@@ -31,7 +32,7 @@ static UINavigationController * _carVc;
 
 -(void)dealloc{
     
-    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:ShopCarNumberNotification];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 singleM(tabbarController)
@@ -41,17 +42,28 @@ singleM(tabbarController)
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeBadgeValue:) name:ShopCarNumberNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeMeBadge) name:ServerMsgNotification object:nil];
+    
+    [self setValue:[BatarTabbar shareBatarTabbar] forKeyPath:@"tabBar"];
+    [self.tabBar addSubview:self.mySettingBadge];
     
     [self createViewController];
-
     [self createTabBarItem];
+}
+
+#pragma "我的图鉴"角标
+-(void)changeMeBadge{
+    
+    if([SocketModel.state_1 integerValue]>0){
+        self.mySettingBadge.hidden = NO;
+    }else{
+        self.mySettingBadge.hidden = YES;
+    }
 }
 
 -(void)changeBadgeValue:(NSNotification *)notice{
     
     //tabbar
-    [self setValue:[BatarTabbar shareBatarTabbar] forKeyPath:@"tabBar"];
-    [self.tabBar addSubview:self.badgeView];
     [self.badgeView changeBadgeValue:[NSString stringWithFormat:@"%@",notice.object]];
 }
 
@@ -116,9 +128,26 @@ singleM(tabbarController)
 -(BatarBadgeView *)badgeView{
     
     if(!_badgeView){
-        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(Wscreen*3/4.0-43*S6,6*S6,200,20)];
+        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(Wscreen*3/4.0-40*S6,2*S6,200,20)];
+        [self setValue:[BatarTabbar shareBatarTabbar] forKeyPath:@"tabBar"];
+        [self.tabBar addSubview:self.badgeView];
     }
     return _badgeView;
+}
+
+-(UIView *)mySettingBadge{
+    
+    if(!_mySettingBadge){
+        
+        _mySettingBadge = [[UIView alloc]initWithFrame:CGRectMake(Wscreen*3/4.0+50*S6,6*S6,8*S6,8*S6)];
+        _mySettingBadge.backgroundColor = [UIColor redColor];
+        _mySettingBadge.layer.cornerRadius = 4*S6;
+        _mySettingBadge.layer.masksToBounds = YES;
+        [self setValue:[BatarTabbar shareBatarTabbar] forKeyPath:@"tabBar"];
+        [self.tabBar addSubview:self.badgeView];
+        _mySettingBadge.hidden = YES;
+    }
+    return _mySettingBadge;
 }
 
 @end

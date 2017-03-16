@@ -35,11 +35,23 @@
 @synthesize dataArray = _dataArray;
 @synthesize layoutBtn = _layoutBtn;
 
+static DiscoverShapeController * _instance = nil;
++(instancetype)allocWithZone:(struct _NSZone *)zone{
+    
+    @synchronized(self) {
+        if(_instance == nil){
+            _instance = [super allocWithZone:zone];
+        }
+    }
+    return _instance;
+}
+
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
     self.tabBarController.tabBar.hidden = NO;
     _layoutBtn.hidden = NO;
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -51,21 +63,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-}
-
--(void)createView{
-    
-    [self batar_setNavibar:@"发现"];
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
     _layoutBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen-38*S6, 31, 22*S6, 22*S6) textContent:nil withFont:[UIFont systemFontOfSize:15*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentRight];
     [_layoutBtn setImage:[UIImage imageNamed:@"shape_sel"] forState:UIControlStateNormal];
     [_layoutBtn setImage:[UIImage imageNamed:@"shape_nor"] forState:UIControlStateHighlighted];
     [self.navigationController.view addSubview:_layoutBtn];
     _layoutBtn.selected = NO;
     [_layoutBtn addTarget:self action:@selector(changeLayout) forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(void)createView{
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT)];
+    [self batar_setNavibar:@"发现"];
+    
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-TABBAR_HEIGHT-NAV_BAR_HEIGHT)];
+    //    _tableView.backgroundColor = [UIColor redColor];
+    //    _tableView.contentInset = UIEdgeInsetsMake(0, 0, NAV_BAR_HEIGHT, 0);
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -73,7 +85,9 @@
     
     [_tableView addHeaderWithTarget:self action:@selector(headerAction)];
     [_tableView addFooterWithTarget:self action:@selector(footerAction)];
-    [self headerAction];
+    
+    [_tableView headerBeginRefreshing];
+    
 }
 
 -(void)changeLayout{
@@ -97,13 +111,16 @@
     urlStr = URLstring;
     NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
     parmDict = @{@"page":pageStr,@"itemperpage":@"10"};
+    
+    @WeakObj(self);
+    
     [manager downloadDataWithUrl:urlStr parm:parmDict callback:^(id responseObject, NSError *error) {
         
         if(error == nil){
-            [self.hud hide:YES];
+            [selfWeak.hud hide:YES];
             if(page == 0){
                 
-                [self.dataArray removeAllObjects];
+                [selfWeak.dataArray removeAllObjects];
             }
             
             id obj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -131,15 +148,15 @@
                     [downArray addObject:model];
                 }
             }
-            [self.dataArray addObjectsFromArray:downArray];
-            if(self.dataArray.count==0){
-                [self showAlertViewWithTitle:@"未搜到任何产品信息!"];
-                [self.tableView headerEndRefreshing];
+            [selfWeak.dataArray addObjectsFromArray:downArray];
+            if(selfWeak.dataArray.count==0){
+                [selfWeak showAlertViewWithTitle:@"未搜到任何产品信息!"];
+                [selfWeak.tableView headerEndRefreshing];
                 return;
             }
-            [self.tableView reloadData];
-            [self.tableView headerEndRefreshing];
-            [self.tableView footerEndRefreshing];
+            [selfWeak.tableView reloadData];
+            [selfWeak.tableView headerEndRefreshing];
+            [selfWeak.tableView footerEndRefreshing];
         }else{
             
             NSLog(@"%@",error.description);
@@ -182,7 +199,7 @@
     if(cell == nil){
         cell = [[MySelectedOrderCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CODERCELL];
     }
-    
+    //    cell.backgroundColor = [UIColor redColor];
     BatarResultModel * model = self.dataArray[indexPath.row];
     [cell configResultCellWithModel:model];
     cell.select_btn.hidden = YES;
@@ -263,6 +280,8 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+    self.view = nil;
+    [self removeFromParentViewController];
     // Dispose of any resources that can be recreated.
 }
 
