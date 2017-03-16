@@ -47,8 +47,8 @@
         //保存所有含有语音或者文件的路径名
         self.pathNameFile = [NSString  stringWithFormat:@"%@%@",LIBPATH,[self getScanDBMD5]];
         
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboradWillShow) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+        //        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboradWillShow) name:UIKeyboardWillShowNotification object:nil];
+        //        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
         recordKeyboradHeight = 35*S6;
         bgViews = bg_view;
         [self createView];
@@ -58,13 +58,13 @@
 
 static int temp = 0;
 #pragma 键盘弹出
--(void)keyboradWillShow{
-    
-    sendMessageTextfield.height = recordKeyboradHeight;
-    if(sendMessageTextfield.text.length>0){
-        [self moveView:(temp-1)];
-    }
-}
+//-(void)keyboradWillShow{
+//
+//    sendMessageTextfield.height = recordKeyboradHeight;
+//    if(sendMessageTextfield.text.length>0){
+//        [self moveView:(temp-1)];
+//    }
+//}
 
 #pragma 键盘隐藏
 -(void)keyboardWillHide{
@@ -100,7 +100,7 @@ static int temp = 0;
     keyBoardBtn.frame = CGRectMake(10*S6,CGRectGetMaxY(lineView.frame)+7*S6, 30*S6, 30*S6);
     [self addSubview:keyBoardBtn];
     
-    sendMessageTextfield = [[UITextView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(keyBoardBtn.frame)+10*S6, CGRectGetMaxY(lineView.frame)+7*S6,  Wscreen-(10+30+20+10)*S6, 35*S6)];
+    sendMessageTextfield = [[HPGrowingTextView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(keyBoardBtn.frame)+10*S6, CGRectGetMaxY(lineView.frame)+7*S6,  Wscreen-(10+30+20+10)*S6, 35*S6)];
     sendMessageTextfield.layer.cornerRadius = 5*S6;
     sendMessageTextfield.layer.masksToBounds = YES;
     sendMessageTextfield.layer.borderWidth = 1.0*S6;
@@ -109,7 +109,7 @@ static int temp = 0;
     sendMessageTextfield.backgroundColor = [UIColor whiteColor];
     sendMessageTextfield.returnKeyType = UIReturnKeySend;
     sendMessageTextfield.font = [UIFont systemFontOfSize:16*S6];
-    sendMessageTextfield.textContainerInset = UIEdgeInsetsMake(8*S6,5*S6, 0, 0);
+    //    sendMessageTextfield.textContainerInset = UIEdgeInsetsMake(8*S6,5*S6, 0, 0);
     sendMessageTextfield.userInteractionEnabled = YES;
     [self addSubview:sendMessageTextfield];
     
@@ -126,11 +126,12 @@ static int temp = 0;
     [recordBtn addTarget:self action:@selector(pressAction) forControlEvents:UIControlEventTouchDown];
     [recordBtn addTarget:self action:@selector(touchUpAction) forControlEvents:UIControlEventTouchUpInside];
     [recordBtn addTarget:self action:@selector(dragAction) forControlEvents:UIControlEventTouchDragExit];
+    recordKeyboradHeight = 0;
 }
 
+#pragma 发送消息
 -(void)sendMsg
 {
-    //发送消息
     if(sendMessageTextfield.text.length>0&&[self judgeSpace:sendMessageTextfield.text]){
         
         [self sendOutTextMessage:sendMessageTextfield.text];
@@ -143,7 +144,17 @@ static int temp = 0;
     temp = 0;
 }
 
-- (BOOL)textView: (UITextView *) textView shouldChangeTextInRange: (NSRange) range replacementText: (NSString *)text {
+#pragma mark - HPGrowingTextDelegate
+-(void)growingTextView:(HPGrowingTextView *)growingTextView didChangeHeight:(float)height{
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        bgViews.transform = CGAffineTransformMakeTranslation(0, -height+35*S6);
+    }];
+    recordKeyboradHeight = height-35*S6;
+}
+
+-(BOOL)growingTextView:(HPGrowingTextView *)growingTextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     if( [ @"\n" isEqualToString: text]){
         [self sendMsg];
         return NO;
@@ -151,57 +162,28 @@ static int temp = 0;
     return YES;
 }
 
--(void)textViewDidChange:(UITextView *)textView{
+-(void)growingTextViewDidBeginEditing:(HPGrowingTextView *)growingTextView{
     
-    CGFloat textHeight = [self getDescriptionHeight:sendMessageTextfield.text];
-    int rate = (int)textHeight/(16*S6);
-    if(rate==2&&rate!=temp){
-        sendMessageTextfield.height = sendMessageTextfield.height+20*S6;
-        temp = 2;
-        [self moveView:(temp-1)];
-    }else if (rate == 3&&rate!=temp){
-        sendMessageTextfield.height = sendMessageTextfield.height+20*S6;
-        temp = 3;
-        [self moveView:(temp-1)];
-    }else if (rate==4&&rate!=temp){
-        sendMessageTextfield.height = sendMessageTextfield.height+20*S6;
-        temp = 4;
-        [self moveView:(temp-1)];
+    sendMessageTextfield.height = recordKeyboradHeight+35*S6;
+    bgViews.transform = CGAffineTransformMakeTranslation(0, -recordKeyboradHeight);
+}
+
+-(void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView{
+    
+}
+
+-(void)growingTextViewDidEndEditing:(HPGrowingTextView *)growingTextView{
+    
+    sendMessageTextfield.height = recordKeyboradHeight+35*S6;
+    if(keyboardState==NO){
+        bgViews.transform = CGAffineTransformMakeTranslation(0, -35*S6);
+    }else{
+        bgViews.transform = CGAffineTransformMakeTranslation(0, -recordKeyboradHeight);
     }
-    
-//    switch (temp) {
-//        case 2:
-//            if(rate==1){
-//                temp = 1;
-//                [self moveBackView:0];
-//                sendMessageTextfield.height = sendMessageTextfield.height-20*S6;
-//            }
-//            break;
-//        case 3:
-//            if(rate == 2){
-//                [self moveBackView:0];
-//                sendMessageTextfield.height = sendMessageTextfield.height-40*S6;
-//            }
-//            break;
-//            
-//        default:
-//            break;
-//    }
-    
-    recordKeyboradHeight = sendMessageTextfield.height;
 }
 
--(void)moveView:(NSInteger)count{
-    
-    [UIView animateWithDuration:0.2 animations:^{
-        bgViews.transform = CGAffineTransformMakeTranslation(0, -20*count*S6);
-    }];
-}
-
--(void)moveBackView:(NSInteger)count{
-    [UIView animateWithDuration:0.2 animations:^{
-        bgViews.transform = CGAffineTransformMakeTranslation(0, 20*count*S6);
-    }];
+-(BOOL)growingTextViewShouldReturn:(HPGrowingTextView *)growingTextView{
+    return YES;
 }
 
 #pragma mark -计算产品描述Label的高度
@@ -389,17 +371,19 @@ static int temp = 0;
 #pragma mark -更换键盘
 -(void)changeVoice{
     
-    keyboardState = !keyboardState;
     if(keyboardState){
         recordBtn.hidden = YES;
-        keyBoardBtn.selected = YES;
+        keyBoardBtn.selected = NO;
         [sendMessageTextfield becomeFirstResponder];
     }else{
         
         [sendMessageTextfield resignFirstResponder];
         recordBtn.hidden = NO;
-        keyBoardBtn.selected = NO;
+        keyBoardBtn.selected = YES;
+        
+        sendMessageTextfield.height = 35*S6;
     }
+    keyboardState = !keyboardState;
 }
 
 #pragma mark - 获取所有数据

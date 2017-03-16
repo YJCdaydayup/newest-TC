@@ -9,15 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "XHSoundRecorder.h"
 #import <CoreText/CoreText.h>
+#import "HPGrowingTextView.h"
 
-@interface YLVoicemanagerView : UIView<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate>{
+@interface YLVoicemanagerView : UIView<UITableViewDataSource,UITableViewDelegate,HPGrowingTextViewDelegate>{
     
     UITableView *voiceTableView;
     NSMutableArray *dataArray;
 }
 
 @property (nonatomic,strong) XHSoundRecorder *audioRecorder;
-@property (nonatomic,strong) UITextView *sendMessageTextfield;
+@property (nonatomic,strong) HPGrowingTextView *sendMessageTextfield;
 
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view;
 -(void)playWithData:(NSData *)data;

@@ -147,6 +147,8 @@
 		8F7073521E71C6400026A6EE /* BatarManagerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7073511E71C6400026A6EE /* BatarManagerTool.m */; };
 		8F70C7211E54C2A8000CDAAE /* BTAdverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F70C7201E54C2A8000CDAAE /* BTAdverController.m */; };
 		8F7302661DC50D500000E306 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F7302651DC50D500000E306 /* WebViewController.m */; };
+		8F73DA351E7B356B00724ED1 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73DA321E7B356B00724ED1 /* HPGrowingTextView.m */; };
+		8F73DA361E7B356B00724ED1 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F73DA341E7B356B00724ED1 /* HPTextViewInternal.m */; };
 		8F77C0F41DD625AC005AD9D8 /* FinalOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F77C0F31DD625AC005AD9D8 /* FinalOrderViewController.m */; };
 		8F77C0F71DD63317005AD9D8 /* YLFinalOrderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F77C0F61DD63317005AD9D8 /* YLFinalOrderView.m */; };
 		8F77C0FA1DD63724005AD9D8 /* FinalOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F77C0F91DD63724005AD9D8 /* FinalOrderCell.m */; };
@@ -741,6 +743,10 @@
 		8F70C7201E54C2A8000CDAAE /* BTAdverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BTAdverController.m; path = ../FirstViewController/ViewController/BTAdverController.m; sourceTree = "<group>"; };
 		8F7302641DC50D500000E306 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		8F7302651DC50D500000E306 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		8F73DA311E7B356B00724ED1 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
+		8F73DA321E7B356B00724ED1 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
+		8F73DA331E7B356B00724ED1 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
+		8F73DA341E7B356B00724ED1 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
 		8F77C0F21DD625AC005AD9D8 /* FinalOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FinalOrderViewController.h; path = "../确认订单/FinalOrderViewController.h"; sourceTree = "<group>"; };
 		8F77C0F31DD625AC005AD9D8 /* FinalOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FinalOrderViewController.m; path = "../确认订单/FinalOrderViewController.m"; sourceTree = "<group>"; };
 		8F77C0F51DD63317005AD9D8 /* YLFinalOrderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLFinalOrderView.h; sourceTree = "<group>"; };
@@ -1747,6 +1753,7 @@
 		8F4A18581CDAB450006ED857 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				8F73DA301E7B356B00724ED1 /* HPGrowingTextView */,
 				8F6AFA431E5B9DDC008D3275 /* TKAlertView */,
 				8F7CBEFC1E133A280033E7FB /* Scan */,
 				8F31D1701DE6449D00962818 /* XHSoundRecorder */,
@@ -2186,6 +2193,17 @@
 				8F426FC41E673AE3003B24EE /* BTDetailCell.m */,
 			);
 			path = "单个订单详情";
+			sourceTree = "<group>";
+		};
+		8F73DA301E7B356B00724ED1 /* HPGrowingTextView */ = {
+			isa = PBXGroup;
+			children = (
+				8F73DA311E7B356B00724ED1 /* HPGrowingTextView.h */,
+				8F73DA321E7B356B00724ED1 /* HPGrowingTextView.m */,
+				8F73DA331E7B356B00724ED1 /* HPTextViewInternal.h */,
+				8F73DA341E7B356B00724ED1 /* HPTextViewInternal.m */,
+			);
+			path = HPGrowingTextView;
 			sourceTree = "<group>";
 		};
 		8F7CBEF81E131F1A0033E7FB /* 扫描二维码 */ = {
@@ -3576,6 +3594,7 @@
 				8F4A193B1CDAB580006ED857 /* MJRefreshFooterView.m in Sources */,
 				8F662D261E2ACBF70076B566 /* UIView+Tap.m in Sources */,
 				8F7CC16B1E133A280033E7FB /* ZXResultPoint.m in Sources */,
+				8F73DA351E7B356B00724ED1 /* HPGrowingTextView.m in Sources */,
 				8F426FC61E673AE3003B24EE /* BTDetailCell.m in Sources */,
 				8F7CC1281E133A280033E7FB /* ZXBookmarkDoCoMoResultParser.m in Sources */,
 				8F7CC15A1E133A280033E7FB /* ZXGlobalHistogramBinarizer.m in Sources */,
@@ -3589,6 +3608,7 @@
 				8F8DDB871CDBE07600F04D0C /* ProductCell.m in Sources */,
 				8F7CC1C81E133A280033E7FB /* ZXPDF417DetectionResultColumn.m in Sources */,
 				8F7CC1231E133A280033E7FB /* ZXAbstractDoCoMoResultParser.m in Sources */,
+				8F73DA361E7B356B00724ED1 /* HPTextViewInternal.m in Sources */,
 				8F7CC1B51E133A280033E7FB /* ZXOneDReader.m in Sources */,
 				8F56680A1CDD37D600C39F75 /* SerizesCell.m in Sources */,
 				8F8DDB901CDBF38B00F04D0C /* CatagoryViewController.m in Sources */,
@@ -3974,7 +3994,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3998,7 +4018,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4021,7 +4041,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -4038,7 +4058,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -4092,9 +4112,9 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.domainBatar.DianZTC;
+				PRODUCT_BUNDLE_IDENTIFIER = domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4147,9 +4167,9 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.domainBatar.DianZTC;
+				PRODUCT_BUNDLE_IDENTIFIER = domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "021f8111-fbda-4613-ba1c-0f8e6dadad43";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
