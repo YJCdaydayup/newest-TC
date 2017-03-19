@@ -147,7 +147,7 @@
 
 -(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
     
-    NSLog(@"从Tabbar的入口进入--->%@",message);
+//    NSLog(@"从Tabbar的入口进入--->%@",message);
     
     message = (NSString *)message;
     if([message containsString:@"ok"]){
@@ -157,6 +157,9 @@
         [webSocket send:str];
         
     }else if([message containsString:@"logined"]){
+        
+        webSocket.delegate = nil;
+        webSocket = nil;
         [kUserDefaults removeObjectForKey:CustomerID];
         [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
         AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;

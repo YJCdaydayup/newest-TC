@@ -246,6 +246,10 @@ NSString * const singleCell = @"singleCell";
                     [downArray addObject:model];
                 }
             }
+            
+            if(downArray.count==0){
+                [self showAlertViewWithTitle:@"未找到更多产品信息"];
+            }
             [self.dataArray addObjectsFromArray:downArray];
             if(self.dataArray.count==0){
                 [self showAlertViewWithTitle:@"未搜到任何产品信息!"];
@@ -292,8 +296,8 @@ NSString * const singleCell = @"singleCell";
 }
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-        
-        return CGSizeMake(180.3*S6, 179*S6);
+    
+    return CGSizeMake(180.3*S6, 179*S6);
 }
 
 -(CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{

@@ -287,12 +287,12 @@
 //刷新表格
 -(void)reloadTableView{
     
-     [self.tableView reloadRowsAtIndexPaths:@[self.indexPath4] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadRowsAtIndexPaths:@[self.indexPath4] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark -跳转到品类的分组界面
 -(void)searchCatagory{
-
+    
     //遍历数组，找出哪些“品类”被选中
     NSMutableArray * categorys = [[NSMutableArray alloc]init];
     NSMutableArray * crafts = [[NSMutableArray alloc]init];
@@ -361,10 +361,21 @@
         [self.navigationController pushViewController:singleVc animated:YES];
         
     }else{
-        [kUserDefaults removeObjectForKey:@"temp"];
-        SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
-        singleVc.vc_flag = 1;
-        [self.navigationController pushViewController:singleVc animated:NO];
+        //不选品类，但选了其他项目
+        if(categorys.count>0||crafts.count>0||materials.count>0||shapes.count>0||weights.count>0){
+            [kUserDefaults removeObjectForKey:@"temp"];
+            SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
+            singleVc.vc_flag = 3;
+            singleVc.parmDict = [NSMutableDictionary dictionaryWithDictionary:dict];
+            singleVc.catagoryItem = @"搜索结果";
+            [self.navigationController pushViewController:singleVc animated:NO];
+        }else{
+            //啥也没选
+            [kUserDefaults removeObjectForKey:@"temp"];
+            SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]init];
+            singleVc.vc_flag = 1;
+            [self.navigationController pushViewController:singleVc animated:NO];
+        }
     }
     
     [self cleanAllArrayData];
@@ -677,22 +688,49 @@
     if(button == self.moreButton1){
         
         self.flag1 = !self.flag1;
+        if(self.flag1){
+            [button setImage:[UIImage imageNamed:@"shouqi"] forState:UIControlStateNormal];
+        }else{
+            [button setImage:[UIImage imageNamed:@"more_btn"] forState:UIControlStateNormal];
+        }
         [self.tableView reloadRowsAtIndexPaths:@[self.indexPath1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }else if (button == self.moreButton4){
         
         self.flag4 = !self.flag4;
+        if(self.flag4){
+            [button setImage:[UIImage imageNamed:@"shouqi"] forState:UIControlStateNormal];
+        }else{
+            [button setImage:[UIImage imageNamed:@"more_btn"] forState:UIControlStateNormal];
+        }
         [self.tableView reloadRowsAtIndexPaths:@[self.indexPath4] withRowAnimation:UITableViewRowAnimationAutomatic];
     }else if (button == self.moreButton2){
         
         self.flag2 = !self.flag2;
+        if(self.flag2){
+            [button setImage:[UIImage imageNamed:@"shouqi"] forState:UIControlStateNormal];
+        }else{
+            [button setImage:[UIImage imageNamed:@"more_btn"] forState:UIControlStateNormal];
+        }
         [self.tableView reloadRowsAtIndexPaths:@[self.indexPath2] withRowAnimation:UITableViewRowAnimationAutomatic];
     }else if (button == self.moreButton3){
         self.flag3 = !self.flag3;
+        if(self.flag3){
+            [button setImage:[UIImage imageNamed:@"shouqi"] forState:UIControlStateNormal];
+        }else{
+            [button setImage:[UIImage imageNamed:@"more_btn"] forState:UIControlStateNormal];
+        }
         [self.tableView reloadRowsAtIndexPaths:@[self.indexPath3] withRowAnimation:UITableViewRowAnimationAutomatic];
-
+        
     }else if (button == self.moreButton5){
         self.flag5 = !self.flag5;
+        if(self.flag5){
+            [button setImage:[UIImage imageNamed:@"shouqi"] forState:UIControlStateNormal];
+        }else{
+            [button setImage:[UIImage imageNamed:@"more_btn"] forState:UIControlStateNormal];
+        }
         [self.tableView reloadRowsAtIndexPaths:@[self.indexPath5] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //将表格移到最上面
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:4] atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
     
     //每个品类的按钮添加事件
@@ -701,7 +739,6 @@
     [self addClickActionWithBaseTag:10 andArray:self.craftNameArray andView:bgView3];
     [self addClickActionWithBaseTag:40 andArray:self.materialNameArray andView:bgView4];
     [self addClickActionWithBaseTag:70 andArray:self.weightNameArray andView:bgView5];
-    
 }
 
 #pragma mark -返回cell高度
@@ -740,7 +777,7 @@
             
             int height = cataArray.count/4*height1*S6;
             int leftHeight = cataArray.count%4>0?height1*S6:0;
-            return height+leftHeight;
+            return height+leftHeight+10*S6;
         }
     }else if(indexPath.section == 1){
         
@@ -761,14 +798,14 @@
             if(craftArray.count<=4){
                 return height0*S6;
             }else{
-    
+                
                 return height2*S6;
             }
         }else{
             
             int height = craftArray.count/4*height1*S6;
             int leftHeight = craftArray.count%4>0?height1*S6:0;
-            return height+leftHeight;
+            return height+leftHeight+10*S6;
         }
         
     }else if(indexPath.section == 2){
@@ -793,7 +830,7 @@
             
             int height = materialArray.count/4*height1*S6;
             int leftHeight = materialArray.count%4>0?height1*S6:0;
-            return height+leftHeight ;
+            return height+leftHeight+10*S6;
         }
     }else if(indexPath.section == 3){
         NSArray * shapeArray = fileArray[3];
@@ -817,8 +854,8 @@
             
             int height = shapeArray.count/4*height1*S6;
             int leftHeight = shapeArray.count%4>0?height1*S6:0;
-
-            return height+leftHeight;
+            
+            return height+leftHeight+10*S6;
         }
     }else{
         NSArray * weightArray = fileArray[4];
@@ -842,7 +879,7 @@
             
             int height = weightArray.count/4*height1*S6;
             int leftHeight = weightArray.count%4>0?height1*S6:0;
-            return height+leftHeight;
+            return height+leftHeight+10*S6;
         }
     }
 }
@@ -875,9 +912,9 @@
     NSArray * fileArray = [[NSArray alloc]initWithContentsOfFile:plistPath];
     NSArray * array = fileArray[section];
     if(array.count<=8){
-        moreBtn.hidden = YES;
+        moreBtn.selected = YES;
     }else{
-        moreBtn.hidden = NO;
+        moreBtn.selected = NO;
     }
     
     if(section == 0){

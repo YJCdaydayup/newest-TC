@@ -18,7 +18,8 @@ singleM(BatarTabbar);
     for(UIView * btn in self.subviews){
         
         if([btn isKindOfClass:NSClassFromString(@"UILabel")]) {
-            [self insertSubview:btn atIndex:5];
+//            [self insertSubview:btn atIndex:5];
+            [self bringSubviewToFront:btn];
         };
     }
 }

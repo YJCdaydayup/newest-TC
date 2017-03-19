@@ -168,19 +168,17 @@
     self.connectCount = 0;
 }
 
-
 -(void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
     
     message = (NSString *)message;
     if([message containsString:@"hello"]){
         
         NSString * heartBeatMsg = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"hello",CUSTOMERID];
-        NSLog(@"%@",heartBeatMsg);
         [webSocket send:heartBeatMsg];
         return;
     }
     
-    NSLog(@"收到消息,%@------%p",message,webSocket);
+//    NSLog(@"收到消息,%@------%p",message,webSocket);
     BatarSocketModel * model = [BatarSocketModel shareBatarSocketModel];
     //将数据封装成模型
     NSMutableDictionary * dict = [self dictionaryWithJsonString:message];
@@ -230,7 +228,6 @@
     if(self.connectCount<3){
         
     }else{
-        NSLog(@"超过三次，不再连接");
         [self closeServer];
         [self.connectTimer setFireDate:[NSDate distantFuture]];
         if (self.connectTimer) {
@@ -240,7 +237,6 @@
         }
     }
 }
-
 
 //将json字符串转字典
 -(NSMutableDictionary *)dictionaryWithJsonString:(NSString *)jsonString{

@@ -115,6 +115,11 @@
         if(page == 0){
             [self.dataArray removeAllObjects];
         }
+        
+        if(array.count == 0){
+            [self showAlertViewWithTitle:@"未找到更多产品信息"];
+        }
+        
         for(NSDictionary * dict in array){
             BatarResultModel * model = [[BatarResultModel alloc]initWithDictionary:dict error:nil];
             [self.dataArray addObject:model];

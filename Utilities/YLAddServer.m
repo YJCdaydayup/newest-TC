@@ -103,7 +103,7 @@
     
     UIView * leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 12*S6, 32*S6)];
     self.user_code_field = [Tools createTextFieldFrame:CGRectMake(12.5*S6, 30*S6, 160*S6, 35*S6) placeholder:nil bgImageName:nil leftView:leftView rightView:nil isPassWord:NO];
-    self.user_code_field.text = @"zbtj.batar.cn";
+    self.user_code_field.placeholder = @"zbtj.batar.cn";
     self.user_code_field.delegate = self;
     [self setTextfield:self.user_code_field];
     [controlView addSubview:self.user_code_field];

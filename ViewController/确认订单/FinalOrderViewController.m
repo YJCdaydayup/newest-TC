@@ -22,6 +22,7 @@
 #import "BTOrderDetailController.h"
 #import "BatarMainTabBarContoller.h"
 #import "YLLoginView.h"
+#import "BatarCarController.h"
 
 @interface FinalOrderViewController ()<UITableViewDataSource,UITableViewDelegate,YLSocketDelegate>{
     
@@ -193,7 +194,6 @@
                 //回到主页时，tabbar选中主页的根视图
                 BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
                 [mainVc changeRootController];
-
             }
                 break;
             case 1:
@@ -205,7 +205,10 @@
                 break;
             case 2:
             {//选购单
-                [self popToViewControllerWithDirection:@"right" type:NO];
+                BatarCarController *carVc = [[BatarCarController alloc]initWithController:self];
+                [self pushToViewControllerWithTransition:carVc withDirection:@"right" type:NO];
+//                BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
+//                [mainVc changeRootController:2];
             }
                 break;
             case 3:
@@ -470,6 +473,12 @@
         //传递给最后的详情界面
         orderDvc.modelArray = array;
         [self pushToViewControllerWithTransition:orderDvc withDirection:@"left" type:NO];
+        
+        if([model.state integerValue]==1){
+            //默认连接完好时
+            NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:\"\%@\"\,\"\message\"\:\"\[\%@\]\"}",@"1",model.orderid];
+            [self.socketManager sendMessage:str];
+        }
     }];
     
     return cell;

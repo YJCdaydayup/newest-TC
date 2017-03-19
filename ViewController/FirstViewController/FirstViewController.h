@@ -11,4 +11,8 @@
 
 @interface FirstViewController : RootViewController
 
+-(void)showDetailViewNumber:(NSString *)number;
+-(void)showRecommandType:(NSInteger)type param:(NSString *)param;
+-(void)showWebViewVc:(NSString *)urlStr;
+
 @end

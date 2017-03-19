@@ -14,4 +14,5 @@
 singleH(tabbarController)
 -(void)changeRootController;
 -(void)changeBadgeValue:(NSString *)number;
+-(void)changeRootController:(NSInteger)index;
 @end

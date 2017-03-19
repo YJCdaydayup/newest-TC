@@ -12,7 +12,7 @@
 
 -(void)btn_leftShake{
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.1 animations:^{
         
         self.transform = CGAffineTransformMakeRotation(M_PI*0.01);
         
@@ -24,9 +24,9 @@
 
 -(void)btn_rightShake{
     
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.1 animations:^{
         
-        self.transform = CGAffineTransformMakeRotation(-M_PI*0.02);
+        self.transform = CGAffineTransformMakeRotation(-M_PI*0.01);
         
     } completion:^(BOOL finished) {
         

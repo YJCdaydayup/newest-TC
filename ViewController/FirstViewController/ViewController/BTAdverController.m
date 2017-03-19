@@ -10,10 +10,13 @@
 #import "NetManager.h"
 #import "AppDelegate.h"
 #import "BatarMainTabBarContoller.h"
+#import "WebViewController.h"
+#import "DetailViewController.h"
 
 @interface BTAdverController ()
 {
     NetManager *_manager;
+    NSDictionary *_infoDict;
 }
 @property (nonatomic,strong) UIImageView * bgImgView;
 
@@ -30,18 +33,72 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.bgImgView = [[UIImageView alloc]initWithFrame:self.view.frame];
-    [self.view addSubview:self.bgImgView];
-    
     NetManager * manager = [NetManager shareManager];
     _manager = manager;
-    self.bgImgView.image = [UIImage imageWithData:[manager bt_getAdvertiseInfo]];
-    
     NSDictionary * info = [manager bt_getAdvertiseControlInfo];
+    _infoDict = info;
+    self.bgImgView = [[UIImageView alloc]initWithFrame:self.view.frame];
+    [self.view addSubview:self.bgImgView];
+    self.bgImgView.userInteractionEnabled = YES;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickImg)];
+    [self.bgImgView addGestureRecognizer:tap];
+    self.bgImgView.image = [UIImage imageWithData:[manager bt_getAdvertiseInfo]];
     CGFloat showTime = [info[@"showtime"]floatValue];
     self.showTime = showTime;
-    
+    self.showTime = 10;
     [self showTimerLabel];
+}
+
+/*
+ {
+ action = "<null>";
+ actiontype = 1;
+ image = cc1a59a05d4f36b4547f8453cb4eca97;
+ isopen = 1;
+ showtime = 2;
+ }
+ */
+-(void)clickImg{
+    
+    [self changeMode];
+    BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
+    UINavigationController * nvc = mainVc.viewControllers[0];
+    FirstViewController * firstVc = nvc.viewControllers[0];
+    switch ([_infoDict[@"actiontype"]integerValue]) {
+        case 1:
+            //推广类别
+        {
+            //            type = 1的接口
+            [firstVc showRecommandType:1 param:_infoDict[@"action"]];
+        }
+            break;
+        case 2:
+            //产品详情
+        {
+            [firstVc showDetailViewNumber:_infoDict[@"action"]];
+            
+        }
+            break;
+        case 3:
+            //网页跳转
+        {
+            [firstVc showWebViewVc:_infoDict[@"action"]];
+        }
+            break;
+        case 11:
+        {
+            //推广类别
+            //type = 2的接口
+            [firstVc showRecommandType:2 param:_infoDict[@"action"]];
+            
+        }
+            break;
+        default:
+            break;
+    }
+    [self.advTimer setFireDate:[NSDate distantFuture]];
+    [self.advTimer invalidate];
+    self.advTimer = nil;
 }
 
 -(void)showTimerLabel{
@@ -51,6 +108,14 @@
     self.timerLbl.layer.cornerRadius = 7.5*S6;
     self.timerLbl.layer.masksToBounds = YES;
     [self.bgImgView addSubview:self.timerLbl];
+    
+    @WeakObj(self);
+    [self.timerLbl addTapGestureCallback:^{
+        [selfWeak changeMode];
+        [selfWeak.advTimer setFireDate:[NSDate distantFuture]];
+        [selfWeak.advTimer invalidate];
+        selfWeak.advTimer = nil;
+    }];
     
     self.timerLbl.text = [NSString stringWithFormat:@"跳过 %zi",self.showTime];
     self.advTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(timeDown) userInfo:nil repeats:YES];
@@ -72,9 +137,9 @@
 
 -(void)changeMode{
     
-        AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        BatarMainTabBarContoller * tabbar = [[BatarMainTabBarContoller alloc]init];
-        app.window.rootViewController = tabbar;
+    AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    BatarMainTabBarContoller * tabbar = [BatarMainTabBarContoller sharetabbarController];
+    app.window.rootViewController = tabbar;
 }
 
 @end

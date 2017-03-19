@@ -54,4 +54,6 @@ NSString *const ShopCarNumberNotification = @"ShopCarNumberNotification";
 
 NSString *const ServerMsgNotification = @"ServerMsgNotification";
 
+NSString *const ConfirmAddCarNotification = @"ConfirmAddCarNotification";
+
 @end

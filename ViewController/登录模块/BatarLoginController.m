@@ -121,6 +121,7 @@
     userCode_tf = [Tools createTextFieldFrame:CGRectMake(0, CGRectGetMaxY(logoImg.frame)+35*S6, 300*S6, 40*S6) placeholder:@"请向销售人员索取(可为空)" bgImageName:nil leftView:nil rightView:nil isPassWord:YES];
     userCode_tf.centerX = self.view.centerX;
     [self configTf:userCode_tf withView:@"users"];
+    userCode_tf.delegate = self;
     [self.view addSubview:userCode_tf];
     
     UIView * line = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(userCode_tf.frame)+20*S6, userCode_tf.width, 1*S6)];
@@ -254,7 +255,7 @@
 
 -(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
     
-    NSLog(@"登录界面---%@",message);
+//    NSLog(@"登录界面---%@",message);
     message = (NSString *)message;
     
     [self.p_hup hide:YES];
@@ -265,6 +266,8 @@
         NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:%@,\"\message\"\:\"\%@\"\}",@"0",userCode_tf.text];
         [webSocket send:str];
     }else if([message containsString:@"logined"]){
+        webSocket.delegate = nil;
+        webSocket = nil;
         [self showAlertViewWithTitle:@"该客户编号已在其他地方登陆"];
         [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
     }
@@ -276,7 +279,7 @@
     [kUserDefaults setObject:BatarEntrance forKey:BatarEntrance];
     
     AppDelegate * app = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    BatarMainTabBarContoller * tabbar = [[BatarMainTabBarContoller alloc]init];
+    BatarMainTabBarContoller * tabbar = [BatarMainTabBarContoller sharetabbarController];
     [tabbar changeRootController];
     app.window.rootViewController = tabbar;
     [[NSNotificationCenter defaultCenter]postNotificationName:SwitchSerser object:nil];
@@ -299,6 +302,12 @@
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [self.view endEditing:YES];
     [_serverView cancelEdit];
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    [self loginAction];
+    return YES;
 }
 
 @end

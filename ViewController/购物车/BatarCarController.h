@@ -11,7 +11,9 @@
 
 @protocol BatarCarDelegate <NSObject>
 
+@optional
 -(void)changeRootController;
+-(void)deleteLocalInfomation;
 
 @end
 

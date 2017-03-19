@@ -74,5 +74,8 @@ UIKIT_EXTERN NSString *const ShopCarNumberNotification;
 //收到服务端的信息，就发出改变角标的通知
 UIKIT_EXTERN NSString *const ServerMsgNotification;
 
+//确认加入购物车后，发出通知删除本地
+UIKIT_EXTERN NSString *const ConfirmAddCarNotification;
+
 
 @end

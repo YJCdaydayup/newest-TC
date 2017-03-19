@@ -121,7 +121,7 @@
     self.cycleScrollView.delegate = self;
     self.cycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
     self.cycleScrollView.currentPageDotColor = RGB_COLOR(215, 185, 29, 0.5); // 自定义分页控件小圆标颜色
-    self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
+    self.cycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
     self.cycleScrollView.currentPageDotImage = [UIImage imageNamed:@"lb1"];
     self.cycleScrollView.pageDotImage = [UIImage imageNamed:@"lb2"];
     self.cycleScrollView.pageDotColor = RGB_COLOR(221, 193, 191,0.5);
@@ -132,6 +132,7 @@
     self.tableView.backgroundColor = TABLEVIEWCOLOR;
     self.tableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:self.tableView];
+    self.tableView.bounces = NO;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -382,7 +383,7 @@
                     break;
                 case 2:
                 {
-//                    RecommandClickOther
+                    //                    RecommandClickOther
                     SingleSearchCatagoryViewController * singeVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
                     singeVc.catagoryItem = model.actionname;
                     singeVc.themeTitle = model.actionaliasname;
@@ -531,6 +532,29 @@
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
+}
+
+-(void)showDetailViewNumber:(NSString *)number{
+    
+    DetailViewController * vc = [[DetailViewController alloc]initWithController:self];
+    vc.index = number;
+    [self pushToViewControllerWithTransition:vc withDirection:@"left" type:NO];
+}
+
+-(void)showRecommandType:(NSInteger)type param:(NSString *)param{
+    
+    SingleSearchCatagoryViewController * singeVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
+    singeVc.catagoryItem = param;
+    singeVc.vc_flag = type;
+    [self pushToViewControllerWithTransition:singeVc withDirection:@"right" type:NO];
+}
+
+-(void)showWebViewVc:(NSString *)urlStr{
+    
+    WebViewController * webVc = [[WebViewController alloc]initWithController:self];
+    UINavigationController * nvc = [[UINavigationController alloc]initWithRootViewController:webVc];
+    webVc.urlString = urlStr;
+    [self presentViewController:nvc animated:YES completion:NO];
 }
 
 - (void)didReceiveMemoryWarning {

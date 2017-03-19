@@ -182,7 +182,6 @@ singleM(UploadToServer)
     //获取所有的文字
     NetManager * netmanager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:UPLOADORDERCAR,[netmanager getIPAddress]];
-    //    NSLog(@"%@",[recordManager getAllTextMessageStr]);
     NSDictionary * subDict;
     if([recordManager getAllTextMessageStr].count>0){
         subDict = @{@"number":model.number,@"customerid":CUSTOMERID,@"message":[self arrayToJson:[recordManager getAllTextMessageStr]]};
@@ -192,7 +191,6 @@ singleM(UploadToServer)
     
     [netmanager downloadDataWithUrl:urlStr parm:subDict callback:^(id responseObject, NSError *error) {
         
-        //        NSLog(@"%@",[[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding]);
         if(responseObject){
             if(_timer_count == self.initialDataArray.count){
                 if(reNameVoiceArray.count == 0){

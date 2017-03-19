@@ -44,7 +44,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(hasLogined) name:UploadOrders object:nil];
-     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeBadge) name:ServerMsgNotification object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(changeBadge) name:ServerMsgNotification object:nil];
     
     [self getBottomData];
 }
@@ -99,7 +99,7 @@
                 
             }];
             
-            NSLog(@"***%p",loginView);
+            //            NSLog(@"***%p",loginView);
             return;
         }
     }];
@@ -131,7 +131,7 @@
         btn.layer.borderColor = [CELLBGCOLOR CGColor];
         btn.layer.borderWidth = 0.5*S6;
         
-        [btn setTitleEdgeInsets:UIEdgeInsetsMake(28*S6, 0, 0, 15*S6)];
+        [btn setTitleEdgeInsets:UIEdgeInsetsMake(28*S6, 0, 0, 18*S6)];
         [btn setImageEdgeInsets:UIEdgeInsetsMake(0, 36*S6, 18*S6, 0)];
         
         [self.view addSubview:btn];
@@ -198,7 +198,6 @@
         [loginView clickCancelBtn:^{
             
         }];
-            NSLog(@"----%p",loginView);
         return;
     }
     
@@ -241,7 +240,8 @@
         }
             break;
         case 2:
-        {//联系我们
+        {
+            //联系我们
             if([bottomDict[@"address"] isKindOfClass:[NSString class]]){
                 YLLocationManager * locationManager = [[YLLocationManager alloc]initShareLocationManager:bottomDict[@"address"] ViewController:self];
                 locationManager.bottomDict = bottomDict;

@@ -11,6 +11,6 @@
 @interface SearchCatagoryViewController : RootViewController
 
 @property (nonatomic,strong) NSMutableArray * pinleiArray;
-@property (nonatomic,strong) NSMutableDictionary * parmDict;
+@property (nonatomic,strong) NSDictionary * parmDict;
 
 @end

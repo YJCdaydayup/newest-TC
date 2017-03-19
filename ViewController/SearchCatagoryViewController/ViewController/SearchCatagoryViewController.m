@@ -54,8 +54,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-   
-//    隐藏系统“back”左导航按钮
+    
+    //    隐藏系统“back”左导航按钮
     self.navigationItem.hidesBackButton = YES;
     
     [self configUI];
@@ -72,23 +72,27 @@
     self.dataArray = [NSMutableArray array];
     
     [self.hud show:YES];
-    
+    @WeakObj(self);
     NetManager * manager = [NetManager shareManager];
     NSString * URLstring = [NSString stringWithFormat:CATAGORYURL,[manager getIPAddress]];
     [manager downloadDataWithUrl:URLstring parm:self.parmDict callback:^(id responseObject, NSError *error) {
-       
-       
+        
+        
         if(error == nil){
-             [self.hud hide:YES];
+            [selfWeak.hud hide:YES];
             NSArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
+            
+            if(array.count == 0){
+                [selfWeak showAlertViewWithTitle:@"未搜到更多产品信息"];
+            }
             
             for(int i=0;i<array.count;i++){
                 
                 SearchCatagoryModel * model = [[SearchCatagoryModel alloc]initWithDictionary:array[i] error:nil];
-                [self.dataArray addObject:model];
+                [selfWeak.dataArray addObject:model];
             }
             
-            [self.tableView reloadData];
+            [selfWeak.tableView reloadData];
         }else{
             NSLog(@"%@",error.description);
         }
@@ -210,13 +214,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

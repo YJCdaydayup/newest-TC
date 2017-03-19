@@ -175,10 +175,6 @@
     [self updateServerView];
     [self getSelectedBtn];
     
-//    for(UIButton * btn in _btnArray){
-//        [btn endShake];
-//    }
-    
     [[NSNotificationCenter defaultCenter]postNotificationName:ServerEditCancelNotification object:nil];
 }
 
@@ -246,7 +242,6 @@
 -(void)chooseServer:(UIButton *)btn{
     
     if(btn.tag == _btnArray.count-1){
-        //        NSLog(@"添加按钮");
         [self addServer];
         return;
     }
@@ -273,7 +268,6 @@
     selectIp_port = self.serverArray[btn.tag];
     [kUserDefaults setObject:[self getIpWithPort:selectIp_port][0] forKey:IPSTRING];
     [kUserDefaults setObject:[self getIpWithPort:selectIp_port][1] forKey:PORTSTRING];
-//    NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
 }
 
 -(NSArray *)getIpWithPort:(NSString *)str{
@@ -296,7 +290,6 @@
         [kUserDefaults setObject:[self getIpWithPort:selectIp_port][1] forKey:PORTSTRING];
         [[NSNotificationCenter defaultCenter]postNotificationName:DeleteServer object:nil];
         [self getSelectedBtn];
-//        NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
     }];
 }
 
@@ -341,8 +334,6 @@
         btn.layer.borderWidth = 0.5*S6;
         btn.layer.borderColor = [BOARDCOLOR CGColor];
     }
-    
-//    NSLog(@"域名:%@---端口号:%@",[kUserDefaults objectForKey:IPSTRING],[kUserDefaults objectForKey:PORTSTRING]);
 }
 
 -(UIImage *)btnSelectedImg:(NSString *)currentImg{

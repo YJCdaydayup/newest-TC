@@ -26,6 +26,8 @@
     NSTimer * my_timer;
     //记录键盘高度
     CGFloat recordKeyboradHeight;
+    
+    BOOL clickKeyBoardBtn;
 }
 
 @property (nonatomic,copy) NSString * my_RecordPath;
@@ -37,16 +39,30 @@
 
 @implementation YLVoicemanagerView
 
-@synthesize sendMessageTextfield = sendMessageTextfield;
+//@synthesize self.self.sendMessageTextfield = self.sendMessageTextfield;
+
+//static YLVoicemanagerView * _instance = nil;
+//+(instancetype)allocWithZone:(struct _NSZone *)zone{
+//    
+//    @synchronized(self) {
+//        if(_instance == nil){
+//            _instance = [super allocWithZone:zone];
+//        }
+//    }
+//    return _instance;
+//}
+
+-(void)layoutIfNeeded{
+    self.sendMessageTextfield.delegate = nil;
+}
 
 -(id)initWithFrame:(CGRect)frame withVc:(UIView *)bg_view{
     
     if(self = [super initWithFrame:frame]){
         self.my_RecordPath = [NSString stringWithFormat:@"%@%@%@.plist",LIBPATH,[kUserDefaults objectForKey:RECORDPATH],[self getScanDBMD5]];
-        
+        //        self.backgroundColor = [UIColor blueColor];
         //保存所有含有语音或者文件的路径名
         self.pathNameFile = [NSString  stringWithFormat:@"%@%@",LIBPATH,[self getScanDBMD5]];
-        
         //        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboradWillShow) name:UIKeyboardWillShowNotification object:nil];
         //        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
         recordKeyboradHeight = 35*S6;
@@ -57,19 +73,10 @@
 }
 
 static int temp = 0;
-#pragma 键盘弹出
-//-(void)keyboradWillShow{
-//
-//    sendMessageTextfield.height = recordKeyboradHeight;
-//    if(sendMessageTextfield.text.length>0){
-//        [self moveView:(temp-1)];
-//    }
-//}
-
 #pragma 键盘隐藏
 -(void)keyboardWillHide{
     
-    sendMessageTextfield.height = 35*S6;
+    self.sendMessageTextfield.height = 35*S6;
     bgViews.transform = CGAffineTransformIdentity;
 }
 
@@ -100,20 +107,24 @@ static int temp = 0;
     keyBoardBtn.frame = CGRectMake(10*S6,CGRectGetMaxY(lineView.frame)+7*S6, 30*S6, 30*S6);
     [self addSubview:keyBoardBtn];
     
-    sendMessageTextfield = [[HPGrowingTextView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(keyBoardBtn.frame)+10*S6, CGRectGetMaxY(lineView.frame)+7*S6,  Wscreen-(10+30+20+10)*S6, 35*S6)];
-    sendMessageTextfield.layer.cornerRadius = 5*S6;
-    sendMessageTextfield.layer.masksToBounds = YES;
-    sendMessageTextfield.layer.borderWidth = 1.0*S6;
-    sendMessageTextfield.layer.borderColor = [BOARDCOLOR CGColor];
-    sendMessageTextfield.delegate = self;
-    sendMessageTextfield.backgroundColor = [UIColor whiteColor];
-    sendMessageTextfield.returnKeyType = UIReturnKeySend;
-    sendMessageTextfield.font = [UIFont systemFontOfSize:16*S6];
-    //    sendMessageTextfield.textContainerInset = UIEdgeInsetsMake(8*S6,5*S6, 0, 0);
-    sendMessageTextfield.userInteractionEnabled = YES;
-    [self addSubview:sendMessageTextfield];
+    self.sendMessageTextfield = [[HPGrowingTextView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(keyBoardBtn.frame)+10*S6, CGRectGetMaxY(lineView.frame)+7*S6,  Wscreen-(10+30+20+10)*S6, 35*S6)];
+    self.sendMessageTextfield.layer.cornerRadius = 5*S6;
+    self.sendMessageTextfield.layer.masksToBounds = YES;
+    self.sendMessageTextfield.layer.borderWidth = 1.0*S6;
+    self.sendMessageTextfield.layer.borderColor = [BOARDCOLOR CGColor];
+    self.sendMessageTextfield.delegate = self;
+    self.sendMessageTextfield.backgroundColor = [UIColor whiteColor];
+    self.sendMessageTextfield.returnKeyType = UIReturnKeySend;
+    self.sendMessageTextfield.font = [UIFont systemFontOfSize:16*S6];
+    self.sendMessageTextfield.userInteractionEnabled = YES;
+    __block typeof(self.sendMessageTextfield)sendMSG = self.sendMessageTextfield;
+    [self.sendMessageTextfield addTapGestureCallback:^{
+        [sendMSG becomeFirstResponder];
+    }];
+//    [self.sendMessageTextfield refreshHeight];
+    [self addSubview:self.sendMessageTextfield];
     
-    recordBtn = [Tools createNormalButtonWithFrame:sendMessageTextfield.frame textContent:@"按住发言" withFont:[UIFont systemFontOfSize:16*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+    recordBtn = [Tools createNormalButtonWithFrame:self.sendMessageTextfield.frame textContent:@"按住发言" withFont:[UIFont systemFontOfSize:16*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
     [recordBtn setTitle:@"正在录音..." forState:UIControlStateHighlighted];
     recordBtn.backgroundColor = RGB_COLOR(252, 249, 236, 1);
     recordBtn.layer.cornerRadius = 5*S6;
@@ -132,13 +143,13 @@ static int temp = 0;
 #pragma 发送消息
 -(void)sendMsg
 {
-    if(sendMessageTextfield.text.length>0&&[self judgeSpace:sendMessageTextfield.text]){
+    if(self.sendMessageTextfield.text.length>0&&[self judgeSpace:self.sendMessageTextfield.text]){
         
-        [self sendOutTextMessage:sendMessageTextfield.text];
+        [self sendOutTextMessage:self.sendMessageTextfield.text];
         [self createData];
     }
-    sendMessageTextfield.text = nil;
-    sendMessageTextfield.height = 35*S6;
+    self.sendMessageTextfield.text = nil;
+    self.sendMessageTextfield.height = 35*S6;
     recordKeyboradHeight = 35*S6;
     bgViews.transform = CGAffineTransformIdentity;
     temp = 0;
@@ -149,8 +160,9 @@ static int temp = 0;
     
     [UIView animateWithDuration:0.5 animations:^{
         
-        bgViews.transform = CGAffineTransformMakeTranslation(0, -height+35*S6);
+        bgViews.transform = CGAffineTransformMakeTranslation(0, -height+100*S6);
     }];
+    self.height = self.height+height;
     recordKeyboradHeight = height-35*S6;
 }
 
@@ -164,22 +176,24 @@ static int temp = 0;
 
 -(void)growingTextViewDidBeginEditing:(HPGrowingTextView *)growingTextView{
     
-    sendMessageTextfield.height = recordKeyboradHeight+35*S6;
-    bgViews.transform = CGAffineTransformMakeTranslation(0, -recordKeyboradHeight);
-}
-
--(void)growingTextViewDidChange:(HPGrowingTextView *)growingTextView{
-    
+    self.sendMessageTextfield.height = recordKeyboradHeight+35*S6;
+    bgViews.transform = CGAffineTransformMakeTranslation(0, -recordKeyboradHeight+70*S6);
 }
 
 -(void)growingTextViewDidEndEditing:(HPGrowingTextView *)growingTextView{
     
-    sendMessageTextfield.height = recordKeyboradHeight+35*S6;
+    self.sendMessageTextfield.height = recordKeyboradHeight+35*S6;
     if(keyboardState==NO){
-        bgViews.transform = CGAffineTransformMakeTranslation(0, -35*S6);
+        if(clickKeyBoardBtn){
+            bgViews.transform = CGAffineTransformIdentity;
+            bgViews.superview.transform = CGAffineTransformIdentity;
+        }else{
+            bgViews.transform = CGAffineTransformMakeTranslation(0, -recordKeyboradHeight);
+        }
     }else{
         bgViews.transform = CGAffineTransformMakeTranslation(0, -recordKeyboradHeight);
     }
+    clickKeyBoardBtn = NO;
 }
 
 -(BOOL)growingTextViewShouldReturn:(HPGrowingTextView *)growingTextView{
@@ -189,7 +203,7 @@ static int temp = 0;
 #pragma mark -计算产品描述Label的高度
 -(CGFloat)getDescriptionHeight:(NSString *)text{
     
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(10*S6, 0, sendMessageTextfield.width-8*S6, 10)];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(10*S6, 0, self.sendMessageTextfield.width-8*S6, 10)];
     label.text = text;
     label.font = [UIFont systemFontOfSize:16*S6];
     label.numberOfLines = 0;
@@ -255,11 +269,9 @@ static int temp = 0;
     //开始录音
     [self.audioRecorder startRecorder:^(NSString *filePath) {
         
-        //        NSLog(@"录音文件路径:%@",filePath);
         weakSelf.systemVoicePath = filePath;
         //录音停止就来这个获取录音数据
         NSData * data = [[NSData alloc]initWithContentsOfFile:filePath];
-        //        NSLog(@"%zi",[[kUserDefaults objectForKey:TIMERCOUNTER]integerValue]);
         
         if(data.length&&[[kUserDefaults objectForKey:TIMERCOUNTER]integerValue]>0){
             [weakSelf saveDateToPlistFile:data];
@@ -272,8 +284,6 @@ static int temp = 0;
     my_timer = [NSTimer scheduledTimerWithTimeInterval:1 repeats:YES callback:^{
         
         weakSelf.count ++;
-        //        NSLog(@"%zi",weakSelf.count);
-        [kUserDefaults setObject:[NSString stringWithFormat:@"%zi",weakSelf.count] forKey:TIMERCOUNTER];
     }];
     [[NSRunLoop currentRunLoop]addTimer:my_timer forMode:NSDefaultRunLoopMode];
 }
@@ -336,7 +346,8 @@ static int temp = 0;
     
     [self.audioRecorder stopRecorder];
     [my_timer setFireDate:[NSDate distantFuture]];
-    //    [my_timer invalidate];
+//        [my_timer invalidate];
+     [kUserDefaults setObject:[NSString stringWithFormat:@"%zi",self.count] forKey:TIMERCOUNTER];
 }
 
 -(void)dragAction{
@@ -344,6 +355,9 @@ static int temp = 0;
     //如果是拖出按钮，就将当前语音删除
     NSFileManager *manager = [NSFileManager defaultManager];
     [manager removeItemAtPath:self.systemVoicePath error:nil];
+    self.count = 0;
+     [my_timer setFireDate:[NSDate distantFuture]];
+    [self.audioRecorder stopRecorder];
 }
 
 #pragma amrk - 发送文字信息
@@ -351,11 +365,6 @@ static int temp = 0;
     
     [self saveDateToPlistFile:text];
 }
-
-#pragma mark - UITextViewDelegate
-//-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
-//    return YES;
-//}
 
 -(BOOL)judgeSpace:(NSString *)text{
     
@@ -371,17 +380,23 @@ static int temp = 0;
 #pragma mark -更换键盘
 -(void)changeVoice{
     
+    if(clickKeyBoardBtn == NO){
+        [UIView animateWithDuration:0.2 animations:^{
+            bgViews.transform = CGAffineTransformIdentity;
+        }];
+    }
+    
+    clickKeyBoardBtn = YES;
     if(keyboardState){
         recordBtn.hidden = YES;
         keyBoardBtn.selected = NO;
-        [sendMessageTextfield becomeFirstResponder];
+        [self.sendMessageTextfield becomeFirstResponder];
     }else{
-        
-        [sendMessageTextfield resignFirstResponder];
+        [self.sendMessageTextfield resignFirstResponder];
         recordBtn.hidden = NO;
         keyBoardBtn.selected = YES;
         
-        sendMessageTextfield.height = 35*S6;
+        self.sendMessageTextfield.height = 35*S6;
     }
     keyboardState = !keyboardState;
 }
@@ -494,16 +509,16 @@ static int temp = 0;
         [cell.contentView addSubview:view1];
     }else{
         
-        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 2.1*S6, self.frame.size.width-40*S6, 115*S6)];
-        //        label.backgroundColor = [UIColor redColor];
-        //        cell.backgroundColor = [UIColor orangeColor];
-        label.backgroundColor = [UIColor whiteColor];
-        label.layer.borderColor = [BOARDCOLOR CGColor];
-        label.layer.borderWidth = 0.5*S6;
-        label.userInteractionEnabled = YES;
-        [cell.contentView addSubview:label];
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(activeTextfield:)];
-        [label addGestureRecognizer:tap];
+        //        UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(0, 2.1*S6, self.frame.size.width-40*S6, 115*S6)];
+        //        //        label.backgroundColor = [UIColor redColor];
+        //        //        cell.backgroundColor = [UIColor orangeColor];
+        //        label.backgroundColor = [UIColor whiteColor];
+        //        label.layer.borderColor = [BOARDCOLOR CGColor];
+        //        label.layer.borderWidth = 0.5*S6;
+        //        label.userInteractionEnabled = YES;
+        //        [cell.contentView addSubview:label];
+        //        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(activeTextfield:)];
+        //        [label addGestureRecognizer:tap];
     }
     
     cell.backgroundColor = RGB_COLOR(238, 238, 238, 1);
@@ -531,12 +546,12 @@ static int temp = 0;
     return cell;
 }
 
--(void)activeTextfield:(UITapGestureRecognizer *)tap{
-    
-    keyboardState = NO;
-    [self changeVoice];
-    [sendMessageTextfield becomeFirstResponder];
-}
+//-(void)activeTextfield:(UITapGestureRecognizer *)tap{
+
+//    keyboardState = NO;
+//    [self changeVoice];
+//    [self.sendMessageTextfield becomeFirstResponder];
+//}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -646,9 +661,9 @@ static int temp = 0;
     NSError * error;
     BOOL isDeleted = [fileManager removeItemAtPath:self.my_RecordPath error:&error];
     if(isDeleted){
-        NSLog(@"清除成功");
+        //NSLog(@"清除成功");
     }else{
-        //        NSLog(@"%@",error.description);
+        //NSLog(@"%@",error.description);
     }
 }
 
@@ -679,12 +694,6 @@ static int temp = 0;
     return muStr;
 }
 
-//-(BOOL)textFieldShouldReturn:(UITextField *)textField{
-//
-//    [textField resignFirstResponder];
-//    return YES;
-//}
-
 -(XHSoundRecorder *)audioRecorder{
     
     if(_audioRecorder == nil){
@@ -696,6 +705,7 @@ static int temp = 0;
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     
+    clickKeyBoardBtn = NO;
     [self endEditing:YES];
 }
 

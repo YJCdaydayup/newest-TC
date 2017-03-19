@@ -72,6 +72,11 @@ singleM(tabbarController)
     self.selectedIndex = 0;
 }
 
+-(void)changeRootController:(NSInteger)index{
+    
+    self.selectedIndex = index;
+}
+
 #pragma mark - 创建tabbar的属性
 -(void)createTabBarItem{
     
@@ -128,7 +133,7 @@ singleM(tabbarController)
 -(BatarBadgeView *)badgeView{
     
     if(!_badgeView){
-        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(Wscreen*3/4.0-40*S6,2*S6,200,20)];
+        _badgeView= [[BatarBadgeView alloc]initWithFrame:CGRectMake(Wscreen*3/4.0-40*S6,3*S6,200,20)];
         [self setValue:[BatarTabbar shareBatarTabbar] forKeyPath:@"tabBar"];
         [self.tabBar addSubview:self.badgeView];
     }

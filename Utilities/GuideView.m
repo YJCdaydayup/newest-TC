@@ -1,9 +1,9 @@
 //
-//  GuideView.m
-//  杨双15131021
+//  DBWorkerManager.m
+//  DianZTC
 //
-//  Created by qf1 on 16/1/3.
-//  Copyright (c) 2016年 qf1. All rights reserved.
+//  Created by 杨力 on 4/9/2016.
+//  Copyright © 2016 杨力. All rights reserved.
 //
 
 #import "GuideView.h"

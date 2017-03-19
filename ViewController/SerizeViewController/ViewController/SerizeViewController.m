@@ -198,7 +198,11 @@
              [self.hud hide:YES];
             NSArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
             for(NSDictionary * dict in array){
-                
+                if([dict[@"imgs"]isKindOfClass:[NSNull class]])continue;
+                if([dict[@"imgs"]isKindOfClass:[NSArray class]]){
+                    NSArray * arr = (NSArray *)dict[@"imgs"];
+                    if(arr.count==0)continue;
+                }
                 SerizeModel * model = [[SerizeModel alloc]initWithDictionary:dict error:nil];
                 [self.dataArray addObject:model];
             }

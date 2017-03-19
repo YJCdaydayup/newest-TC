@@ -23,7 +23,7 @@
 #import "BatarMainTabBarContoller.h"
 #import "BatarManagerTool.h"
 
-@interface DetailViewController ()<YLScrollerViewDelegate,STPhotoBrowserDelegate,UITextFieldDelegate>{
+@interface DetailViewController ()<YLScrollerViewDelegate,STPhotoBrowserDelegate,UITextFieldDelegate,BatarCarDelegate,UIScrollViewDelegate>{
     
     //详情model
     DetailModel * detailModel;
@@ -81,7 +81,6 @@
 
 @property (nonatomic,strong) YLVoicemanagerView * voiceManager;
 @property (nonatomic,strong) DBWorkerManager * db_managaer;
-
 
 @end
 
@@ -187,11 +186,11 @@
     // 调用代理
     if([loginView.user_code_field becomeFirstResponder]){
         [UIView animateWithDuration:animationDuration animations:^{
-            self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+150*S6);
+            backgroundView.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+150*S6);
         }];
     }else{
         [UIView animateWithDuration:animationDuration animations:^{
-            self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height+50*S6);
+            scrollerView.transform = CGAffineTransformMakeTranslation(0, -keyboardRect.size.height);
         }];
     }
 }
@@ -207,7 +206,7 @@
     
     // 调用代理
     [UIView animateWithDuration:animationDuration animations:^{
-        self.view.transform = CGAffineTransformIdentity;
+        scrollerView.transform = CGAffineTransformIdentity;
     }];
 }
 
@@ -223,6 +222,7 @@
     scrollerView = [[UIScrollView alloc]initWithFrame:self.view.frame];
     scrollerView.userInteractionEnabled = YES;
     scrollerView.contentSize = CGSizeMake(Wscreen, 880*S6);
+    scrollerView.delegate = self;
     [self.view addSubview:scrollerView];
     
     backgroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 880*S6)];
@@ -454,8 +454,8 @@
     
     NSDictionary * dict = [self.sortItemsArray lastObject];
     NSString * content = [[dict allValues]lastObject];
-    backgroundView.height = backgroundView.height+[self getDescriptionHeight:content]+self.sortItemsArray.count*22.5*S6;
-    scrollerView.contentSize = CGSizeMake(scrollerView.contentSize.width, scrollerView.contentSize.height+[self getDescriptionHeight:content]+self.sortItemsArray.count+22.5*S6);
+    backgroundView.height = backgroundView.height+[self getDescriptionHeight:content]+self.sortItemsArray.count*8.5*S6;
+    scrollerView.contentSize = CGSizeMake(scrollerView.contentSize.width, scrollerView.contentSize.height+[self getDescriptionHeight:content]+self.sortItemsArray.count*8.5*S6);
     
     //中间隔条
     UIView * separete_view = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(label.frame)+10*S6, Wscreen, 8*S6)];
@@ -477,16 +477,11 @@
 #pragma mark - 这里填写录音控件
     self.automaticallyAdjustsScrollViewInsets = NO;
     YLVoicemanagerView * voiceManager = [[YLVoicemanagerView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(remark_label.frame)+10*S6, Wscreen, 230*S6) withVc:backgroundView];
-    _voiceManager = voiceManager;
+    self.voiceManager = voiceManager;
     [backgroundView addSubview:voiceManager];
     
 #pragma mark - 底部
     [self createBottomView];
-}
-
--(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    
-    [_voiceManager.sendMessageTextfield resignFirstResponder];
 }
 
 #pragma mark -分享到第三方平台
@@ -600,7 +595,7 @@
                 [self pushToViewControllerWithTransition:firstVc withDirection:@"right" type:NO];
                 [self removeNaviPushedController:self];
                 //回到主页时，tabbar选中主页的根视图
-                BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
+                BatarMainTabBarContoller * mainVc = [[BatarMainTabBarContoller alloc]init];
                 self.delegate = mainVc;
                 [self.delegate changeRootController];
             }
@@ -629,6 +624,7 @@
                     [_db_managaer createOrderDB];
                     [_db_managaer order_insertInfo:detailModel withData:UIImagePNGRepresentation(self.largeImageView.image) withNumber:detailModel.number date:[self getCurrentDate]];
                     [BatarManagerTool caculateDatabaseOrderCar];
+                    [self showAlertViewWithTitle:@"加入购物车成功"];
                 }
                 [[NSNotificationCenter defaultCenter]postNotificationName:AddShoppingCar object:nil];
                 self.tabBarController.tabBar.hidden = YES;
@@ -744,7 +740,7 @@
 -(void)addMyOrders{
     
     self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.hud.labelText = @"产品备注正在上传...";
+    self.hud.labelText = @"产品正在提交购物车...";
     self.hud.animationType = MBProgressHUDAnimationZoomOut;
     
     NSMutableArray * reNameVoiceArray = [NSMutableArray array];//获取所有的语音数组
@@ -762,7 +758,6 @@
     
     NetManager * netmanager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:UPLOADORDERCAR,[netmanager getIPAddress]];
-    //    NSLog(@"%@",[recordManager getAllTextMessageStr]);
     NSDictionary * subDict;
     if([_voiceManager getAllTextMessageStr].count>0){
         subDict = @{@"number":detailModel.number,@"customerid":CUSTOMERID,@"message":[self arrayToJson:[_voiceManager getAllTextMessageStr]]};
@@ -773,7 +768,7 @@
         
         if(responseObject){
             if(reNameVoiceArray.count == 0){
-                self.hud.labelText = @"上传成功!";
+                self.hud.labelText = @"成功添加到购物车";
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self.hud hide:YES];
                      [BatarManagerTool caculateServerOrderCar];
@@ -809,7 +804,7 @@
             
             if(responseObject){
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    self.hud.labelText = @"上传成功!";
+                    self.hud.labelText = @"成功添加到购物车";
                     [BatarManagerTool caculateServerOrderCar];
                 });
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.2f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -845,6 +840,11 @@
 -(void)configContentLabel:(UILabel *)label{
     label.font = [UIFont systemFontOfSize:16*S6];
     label.textColor = RGB_COLOR(51, 51, 51, 1);
+}
+
+-(void)deleteLocalRemark{
+    
+    [self.voiceManager cleanAllVoiceData];
 }
 
 //返回到上一个界面
@@ -887,6 +887,16 @@
         [self.bgView addSubview:_ylScrollerView];
     }
     return _ylScrollerView;
+}
+
+-(void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+    
+//    if(velocity.y>0){
+        [self.voiceManager.sendMessageTextfield resignFirstResponder];
+    [UIView animateWithDuration:0.5 animations:^{
+        scrollerView.transform = CGAffineTransformIdentity;
+    }];
+//    }
 }
 
 - (void)didReceiveMemoryWarning {

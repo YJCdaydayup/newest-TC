@@ -51,10 +51,10 @@ static DBWorkerManager * manager = nil;
     NSArray * docArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     //获取Document下面的目录地址
     NSString * docPath = [docArray lastObject];
-    //    QFLog(@"docPath:%@",docPath);
+    //    JFLog(@"docPath:%@",docPath);
     NSString * dbPath = [docPath stringByAppendingPathComponent:@"save.db"];
     //    NSString * dbPath1 = [docPath stringByAppendingPathComponent:@"order.db"];
-    //    QFLog(@"dbPath:%@",dbPath);
+    //    JFLog(@"dbPath:%@",dbPath);
     _dataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath];
     //    _orderDataBaseQueue = [FMDatabaseQueue databaseQueueWithPath:dbPath1];
     [self createTable];
@@ -90,9 +90,9 @@ static DBWorkerManager * manager = nil;
         
         BOOL isSu = [db executeUpdate:sql];
         if(isSu){
-            //QFLog(@"%@",@"执行建表语句成功");
+            //JFLog(@"%@",@"执行建表语句成功");
         }else{
-            //QFLog(@"%@",@"执行建表语句失败");
+            //JFLog(@"%@",@"执行建表语句失败");
         }
     }];
     
@@ -103,9 +103,9 @@ static DBWorkerManager * manager = nil;
         
         BOOL isSu = [db executeUpdate:sql1];
         if(isSu){
-//            QFLog(@"%@",@"执行建购物车表语句成功");
+//            JFLog(@"%@",@"执行建购物车表语句成功");
         }else{
-//            QFLog(@"%@",@"执行建购物车表语句失败");
+//            JFLog(@"%@",@"执行建购物车表语句失败");
         }
     }];
     
@@ -116,9 +116,9 @@ static DBWorkerManager * manager = nil;
         
         BOOL isSu = [db executeUpdate:mult_sql];
         if(isSu){
-            //QFLog(@"%@",@"执行建表语句成功");
+            //JFLog(@"%@",@"执行建表语句成功");
         }else{
-            //QFLog(@"%@",@"执行建表语句失败");
+            //JFLog(@"%@",@"执行建表语句失败");
         }
     }];
 }
@@ -163,9 +163,9 @@ static DBWorkerManager * manager = nil;
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name];
             if (isSuccess) {
-                //                QFLog(@"%@",@"执行插入语句成功");
+                //                JFLog(@"%@",@"执行插入语句成功");
             }else{
-                //                QFLog(@"%@",@"执行插入语句失败");
+                //                JFLog(@"%@",@"执行插入语句失败");
             }
         }
     }];
@@ -191,9 +191,9 @@ static DBWorkerManager * manager = nil;
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertSQL,number,imgData,model.name,date];
             if (isSuccess) {
-                QFLog(@"%@",@"执行插入语句成功");
+                JFLog(@"%@",@"执行插入语句成功");
             }else{
-                QFLog(@"%@",@"执行插入语句失败");
+                JFLog(@"%@",@"执行插入语句失败");
             }
         }
     }];
@@ -220,17 +220,17 @@ static DBWorkerManager * manager = nil;
             
             BOOL isSuccess = [db executeUpdate:updateSql,number];
             if (isSuccess) {
-                //                QFLog(@"%@",@"scan执行更新删除语句成功");
+                //                JFLog(@"%@",@"scan执行更新删除语句成功");
             }else{
-                //                QFLog(@"%@",@"scan执行更新删除语句失败");
+                //                JFLog(@"%@",@"scan执行更新删除语句失败");
             }
             NSString * insertMult_sql = [NSString stringWithFormat:@"insert into %@scanList(number,img,name,date,type,searchType) values (?,?,?,?,?,?)",[self getScanDBMD5]];
             //执行插入
             BOOL isSuccesss = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date,codeType,searchType];
             if (isSuccesss) {
-                QFLog(@"%@",@"scan执行插入语句成功");
+                JFLog(@"%@",@"scan执行插入语句成功");
             }else{
-                QFLog(@"%@",@"scan执行插入语句失败");
+                JFLog(@"%@",@"scan执行插入语句失败");
             }
         }
         
@@ -239,9 +239,9 @@ static DBWorkerManager * manager = nil;
             //执行插入
             BOOL isSuccess = [db executeUpdate:insertMult_sql,number,imgUrl,model.name,date,codeType,searchType];
             if (isSuccess) {
-                QFLog(@"%@",@"scan执行插入语句成功");
+                JFLog(@"%@",@"scan执行插入语句成功");
             }else{
-                QFLog(@"%@",@"scan执行插入语句失败");
+                JFLog(@"%@",@"scan执行插入语句失败");
             }
             //            NSLog(@"%@",imgData);
         }
@@ -326,9 +326,9 @@ static DBWorkerManager * manager = nil;
         BOOL isDelete = [db executeUpdate:deleteSql,number];
         if(isDelete){
             
-            //            QFLog(@"%@",@"根据number移除数据成功");
+            //            JFLog(@"%@",@"根据number移除数据成功");
         }else{
-            //            QFLog(@"%@",@"根据number移除数据失败");
+            //            JFLog(@"%@",@"根据number移除数据失败");
         }
     }];
 }
@@ -342,9 +342,9 @@ static DBWorkerManager * manager = nil;
         BOOL isDelete = [db executeUpdate:deleteSql,number];
         if(isDelete){
             
-            //            QFLog(@"%@",@"根据number移除数据成功");
+            //            JFLog(@"%@",@"根据number移除数据成功");
         }else{
-            //            QFLog(@"%@",@"根据number移除数据失败");
+            //            JFLog(@"%@",@"根据number移除数据失败");
         }
     }];
 }
@@ -359,9 +359,9 @@ static DBWorkerManager * manager = nil;
         BOOL isDelete = [db executeUpdate:deleteSql];
         if(isDelete){
             
-            //            QFLog(@"%@",@"移除数据库所有数据成功");
+            //            JFLog(@"%@",@"移除数据库所有数据成功");
         }else{
-            //            QFLog(@"%@",@"根据number移除数据失败");
+            //            JFLog(@"%@",@"根据number移除数据失败");
         }
     }];
 }
@@ -376,10 +376,10 @@ static DBWorkerManager * manager = nil;
         BOOL isDelete = [db executeUpdate:mult_sql];
         if(isDelete){
             
-            QFLog(@"%@",@"移除数据库所有数据成功");
+            JFLog(@"%@",@"移除数据库所有数据成功");
             block(YES);
         }else{
-            QFLog(@"%@",@"根据number移除数据失败");
+            JFLog(@"%@",@"根据number移除数据失败");
             block(NO);
         }
     }];
@@ -394,9 +394,9 @@ static DBWorkerManager * manager = nil;
         BOOL isDelete = [db executeUpdate:deleteSql];
         if(isDelete){
             
-            //            QFLog(@"%@",@"移除数据库所有数据成功");
+            //            JFLog(@"%@",@"移除数据库所有数据成功");
         }else{
-            //            QFLog(@"%@",@"根据number移除数据失败");
+            //            JFLog(@"%@",@"根据number移除数据失败");
         }
     }];
 }

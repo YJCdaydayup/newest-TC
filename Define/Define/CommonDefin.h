@@ -1,9 +1,9 @@
 //
-//  CommonDefin.h
-//  LoveLimitFree
+//  YLLoginView.h
+//  DianZTC
 //
-//  Created by 郝海圣 on 15/10/25.
-//  Copyright (c) 2015年 qianfeng. All rights reserved.
+//  Created by 杨力 on 31/10/2016.
+//  Copyright © 2016 杨力. All rights reserved.
 //
 
 #ifndef LoveLimitFree_CommonDefin_h
@@ -62,13 +62,13 @@
 
 
 /**
- *  如果是调试模式，QFLog就和NSLog一样，如果不是调试模式，QFLog就什么都不做
+ *  如果是调试模式，JFLog就和NSLog一样，如果不是调试模式，JFLog就什么都不做
  *  __VA_ARGS__ 表示见面...的参数列表
  */
 #ifdef DEBUG_FLAG
-#define QFLog(fmt, ...) NSLog(fmt, __VA_ARGS__)
+#define JFLog(fmt, ...) NSLog(fmt, __VA_ARGS__)
 #else
-#define QFLog(fmt, ...) 
+#define JFLog(fmt, ...) 
 #endif
 
 

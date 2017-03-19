@@ -139,6 +139,10 @@ static DiscoverViewController * _instance = nil;
                     [downArray addObject:model];
                 }
             }
+            
+            if(downArray.count == 0){
+                [selfWeak showAlertViewWithTitle:@"未搜到更多产品信息"];
+            }
             [selfWeak.dataArray addObjectsFromArray:downArray];
             if(selfWeak.dataArray.count==0){
                 [selfWeak showAlertViewWithTitle:@"未搜到任何产品信息!"];

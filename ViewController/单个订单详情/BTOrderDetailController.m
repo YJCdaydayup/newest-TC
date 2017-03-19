@@ -168,7 +168,7 @@
         
         NSArray * title = @[@"取消订单",@"确认订单"];
         for(int i =0;i<2;i++){
-            UIButton * itemBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen/2.0*i, CGRectGetMaxY(self.tableView.frame), Wscreen/2.0, 50*S6) textContent:title[i] withFont:[UIFont systemFontOfSize:15*S6] textColor:[UIColor blackColor] textAlignment:NSTextAlignmentCenter];
+            UIButton * itemBtn = [Tools createNormalButtonWithFrame:CGRectMake(Wscreen/2.0*i, Hscreen-50*S6, Wscreen/2.0, 50*S6) textContent:title[i] withFont:[UIFont systemFontOfSize:15*S6] textColor:[UIColor blackColor] textAlignment:NSTextAlignmentCenter];
             itemBtn.tag = i;
             [itemBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
             if(i == 0){
@@ -185,7 +185,7 @@
             [self.view addSubview:itemBtn];
         }
     }else if([self.state integerValue] == 0||[self.state integerValue] == 2){
-        UIButton * itemBtn = [Tools createNormalButtonWithFrame:CGRectMake(0, CGRectGetMaxY(self.tableView.frame), Wscreen, 50*S6) textContent:@"取消订单" withFont:[UIFont systemFontOfSize:15*S6] textColor:[UIColor blackColor] textAlignment:NSTextAlignmentCenter];
+        UIButton * itemBtn = [Tools createNormalButtonWithFrame:CGRectMake(0, Hscreen-50*S6, Wscreen, 50*S6) textContent:@"取消订单" withFont:[UIFont systemFontOfSize:15*S6] textColor:[UIColor blackColor] textAlignment:NSTextAlignmentCenter];
         itemBtn.tag = 0;
         cancelBtn = itemBtn;
         [itemBtn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];

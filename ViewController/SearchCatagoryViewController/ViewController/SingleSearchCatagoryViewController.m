@@ -61,7 +61,7 @@
     [self configCollectionView];
     
     //请求数据
-    [self createData];
+//    [self createData];
 }
 
 -(void)headerAction{
@@ -152,7 +152,16 @@
             }
                 break;
             case 3:
-            {
+            { //字典传过来
+                NSString * URLstring = [NSString stringWithFormat:CATAGORYURL,[manager getIPAddress]];
+                
+                urlStr = URLstring;
+                NSString * pageStr = [NSString stringWithFormat:@"%zi",page];
+                NSString * otherParm = [NSString stringWithFormat:@"%@%@",pageStr,@"@10"];
+                [self.parmDict setObject:otherParm forKey:@"others"];
+                NSString * jsonStr = [self dictionaryToJson:self.parmDict];
+                parmDict = @{@"parm":jsonStr};
+                self.titlelabel.text = self.catagoryItem;
             }
                 break;
             default:
@@ -192,6 +201,11 @@
                     [downArray addObject:model];
                 }
             }
+            
+            if(downArray.count == 0){
+                [self showAlertViewWithTitle:@"未搜到更多产品信息!"];
+            }
+            
             [self.dataArray addObjectsFromArray:downArray];
             if(self.dataArray.count==0){
                 [self showAlertViewWithTitle:@"未搜到任何产品信息!"];

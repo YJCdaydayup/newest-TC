@@ -32,7 +32,7 @@
     self.search_Tf.hidden = NO;
     self.search_tableView.hidden = YES;
     [self.search_Tf becomeFirstResponder];
-     self.view.transform = CGAffineTransformIdentity;
+//     self.view.transform = CGAffineTransformIdentity;
 }
 -(void)viewWillDisappear:(BOOL)animated{
     
@@ -49,12 +49,10 @@
     [self setNavi];
 }
 
-
 -(void)getDataWithText{
     
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:SEARCHINDICOTOR,[manager getIPAddress]];
-    //    NSString * content = [self.search_Tf.text stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSDictionary * dict = @{@"key":self.search_Tf.text};
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         if(responseObject){
@@ -181,7 +179,7 @@
     searchBtn.frame = CGRectMake(0*S6,height, 32*S6, 41/2.0*S6);
     [searchBtn setTitle:@"搜索" forState:UIControlStateNormal];
     [searchBtn setTitleColor:TEXTCOLOR forState:UIControlStateNormal];
-    searchBtn.titleLabel.font = [UIFont systemFontOfSize:16*S6];
+    searchBtn.titleLabel.font = [UIFont systemFontOfSize:13*S6];
     [searchBtn addTarget:self action:@selector(searchActions) forControlEvents:UIControlEventTouchUpInside];
     [searchView addSubview:searchBtn];
     UIBarButtonItem * searBarBtn = [[UIBarButtonItem alloc]initWithCustomView:searchView];

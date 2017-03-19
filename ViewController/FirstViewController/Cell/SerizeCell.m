@@ -64,14 +64,21 @@
         BannerModel * model = [modelArray objectAtIndex:i];
         UIButton * imgBtn = [Tools createButtonNormalImage:nil selectedImage:nil tag:i addTarget:self action:@selector(clickImgBtn:)];
         [imgBtn setImageForState:UIControlStateNormal withURL:[NSURL URLWithString:[self connectImage:URLstring withFollow:model.img]] placeholderImage:[UIImage imageNamed:@"places"]];
-        imgBtn.frame = CGRectMake((Wscreen-32*S6)/4.0*i+12.5*S6, 10*S6, 55*S6, 55*S6);
-        [horisonScrollView addSubview:imgBtn];
+        UILabel * label = [Tools createLabelWithFrame:CGRectMake((Wscreen-32*S6)/4.0*i+14*S6, 50*S6,(Wscreen-32*S6)/4.0 , 55*S6) textContent:model.aliasname withFont:[UIFont systemFontOfSize:12*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+        [horisonScrollView addSubview:label];
+           [horisonScrollView addSubview:imgBtn];
+        if(modelArray.count <= 4){
+            imgBtn.frame = CGRectMake((Wscreen-32*S6)/4.0*i+30*S6, 10*S6, 55*S6, 55*S6);
+        }else{
+            imgBtn.frame = CGRectMake((Wscreen-43*S6)/4.0*i+16*S6, 10*S6, 55*S6, 55*S6);
+            label.frame = CGRectMake((Wscreen-43*S6)/4.0*i+3*S6, 50*S6,(Wscreen-43*S6)/4.0 , 55*S6);
+        }
+     
         
         imgBtn.layer.cornerRadius = 55/2.0*S6;
         imgBtn.layer.masksToBounds = YES;
         
-        UILabel * label = [Tools createLabelWithFrame:CGRectMake((Wscreen-32*S6)/4.0*i-3*S6, 50*S6,(Wscreen-32*S6)/4.0 , 55*S6) textContent:model.aliasname withFont:[UIFont systemFontOfSize:12*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
-        [horisonScrollView addSubview:label];
+    
     }
 }
 

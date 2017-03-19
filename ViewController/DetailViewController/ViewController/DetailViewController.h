@@ -33,4 +33,6 @@
 @property (nonatomic,copy) NSString * codeType;
 @property (nonatomic,copy) NSString * searchType;
 
+-(void)deleteLocalRemark;
+
 @end

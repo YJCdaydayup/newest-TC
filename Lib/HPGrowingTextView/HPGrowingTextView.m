@@ -404,11 +404,18 @@
     if(!CGRectEqualToRect(internalTextView.frame, internalTextViewFrame)) internalTextView.frame = internalTextViewFrame;
 }
 
+-(void)dealloc{
+    
+    delegate = nil;
+}
+
 - (void)growDidStop
 {
-	if ([delegate respondsToSelector:@selector(growingTextView:didChangeHeight:)]) {
-		[delegate growingTextView:self didChangeHeight:self.frame.size.height];
-	}
+    if(delegate != nil){
+        if ([delegate respondsToSelector:@selector(growingTextView:didChangeHeight:)]) {
+            [delegate growingTextView:self didChangeHeight:self.frame.size.height];
+        }
+    }
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event

@@ -45,7 +45,7 @@
     
     [super viewWillAppear:animated];
     
-    if([self.fatherVc isKindOfClass:[DetailViewController class]]){
+    if([self.fatherVc isKindOfClass:[DetailViewController class]]||[self.fatherVc isKindOfClass:[FinalOrderViewController class]]){
         self.tabBarController.tabBar.hidden = YES;
     }else{
         self.tabBarController.tabBar.hidden = NO;
@@ -76,8 +76,8 @@
     YLOrdersController * ylOrderController = [[YLOrdersController alloc]init];
     [self.view addSubview:ylOrderController];
     
-    if(![self.fatherVc isKindOfClass:[DetailViewController class]]){
-        ylOrderController.hidden = YES;
+    if([self.fatherVc isKindOfClass:[DetailViewController class]]||[self.fatherVc isKindOfClass:[FinalOrderViewController class]]){
+        ylOrderController.hidden = NO;
     }
     
     //底部控制
@@ -125,7 +125,7 @@
     }];
     
     
-    if([self.fatherVc isKindOfClass:[DetailViewController class]]){
+    if([self.fatherVc isKindOfClass:[DetailViewController class]]||[self.fatherVc isKindOfClass:[FinalOrderViewController class]]){
         
         [self batar_setLeftNavButton:@[@"return",@""] target:self selector:@selector(back) size:CGSizeMake(49/2.0*S6, 22.5*S6) selector:nil rightSize:CGSizeZero topHeight:12*S6];
     }
@@ -133,6 +133,7 @@
     self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-40.5*S6-TABBAR_HEIGHT-NAV_BAR_HEIGHT)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.bounces = NO;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:self.tableView];
     
@@ -152,7 +153,7 @@
     bottomView.selectAllBtn.selected = NO;
     [self.view addSubview:bottomView];
     
-    if([self.fatherVc isKindOfClass:[DetailViewController class]]){
+    if([self.fatherVc isKindOfClass:[DetailViewController class]]||[self.fatherVc isKindOfClass:[FinalOrderViewController class]]){
         bottomView.deleteBtn.hidden = YES;
         bottomView.confirmBtn.hidden = YES;
     }else{
@@ -196,7 +197,7 @@
         
         if(self.selectedArray.count >0 ){
             self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            self.hud.labelText = @"正在提交产品数据...";
+            self.hud.labelText = @"正在确认产品订单...";
             self.hud.animationType = MBProgressHUDAnimationZoomOut;
         }
         
@@ -210,13 +211,14 @@
         NSDictionary * dict = @{@"customerid":CUSTOMERID,@"shopcontext":[self myArrayToJson:orderSeleArray]};
         NSString * urlStr = [NSString stringWithFormat:CONFRIMORDR,[manager getIPAddress]];
         
+        @WeakObj(self);
         [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
             if(responseObject){
-                self.hud.labelText = @"提交成功!";
+                selfWeak.hud.labelText = @"确认成功";
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.hud hide:YES];
-                    [self getData];
-                    self.carBottom.selectAllBtn.selected = NO;
+                    [selfWeak.hud hide:YES];
+                    [selfWeak getData];
+                    selfWeak.carBottom.selectAllBtn.selected = NO;
                 });
             }
         }];
@@ -230,16 +232,21 @@
         [loginView clickCancelBtn:^{
             
         }];
+        self.carBottom.selectAllBtn.selected = NO;
     }
 }
 
 -(void)removeLocalMessageInfo{
     
-    for(DBSaveModel * model in self.selectedArray){
-        
-        [kUserDefaults setObject:model.number forKey:RECORDPATH];
-        YLVoicemanagerView * voiceManager = [[YLVoicemanagerView alloc]initWithFrame:self.view.frame withVc:[UIView new]];
-        [voiceManager cleanAllVoiceData];
+    DetailViewController * detailVc = nil;
+    for(RootViewController * vc in self.navigationController.viewControllers){
+        if([vc isKindOfClass:[DetailViewController class]]){
+            detailVc = (DetailViewController *)vc;
+            for(DBSaveModel * model in self.selectedArray){
+                [kUserDefaults setObject:model.number forKey:RECORDPATH];
+                [detailVc deleteLocalRemark];
+            }
+        }
     }
 }
 
