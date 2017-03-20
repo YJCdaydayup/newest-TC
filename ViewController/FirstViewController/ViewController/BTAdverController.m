@@ -45,7 +45,6 @@
     self.bgImgView.image = [UIImage imageWithData:[manager bt_getAdvertiseInfo]];
     CGFloat showTime = [info[@"showtime"]floatValue];
     self.showTime = showTime;
-    self.showTime = 10;
     [self showTimerLabel];
 }
 

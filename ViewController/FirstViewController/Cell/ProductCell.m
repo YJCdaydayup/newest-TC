@@ -40,20 +40,19 @@
 //        imgView.layer.borderWidth = 0.5f;
 //        imgView.layer.borderColor = [[UIColor redColor] CGColor];
     
-        
-        _bgVc = [[UIControl alloc]initWithFrame:CGRectMake(5*S6+i%2*185*S6, i/2*175*S6, 180*S6, 175*S6)];
+
+        _bgVc = [[UIControl alloc]initWithFrame:CGRectMake(5*S6+i%2*185*S6, i/2*175*S6, 180*S6, 171*S6)];
         _bgVc.backgroundColor = [UIColor clearColor];
         _bgVc.layer.borderWidth = 0.5f;
         _bgVc.layer.borderColor = [BTNBORDCOLOR CGColor];
         [self.contentView addSubview:_bgVc];
             [self.contentView addSubview:imgView];
         
-        
         self.max_X = CGRectGetMinX(imgView.frame);
         self.max_Y = CGRectGetMaxY(imgView.frame);
         
         UILabel * titleLabel = [Tools createLabelWithFrame:CGRectMake(0, 140*S6,180*S6, 15) textContent:nil withFont:[UIFont systemFontOfSize:13*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
-        UILabel * numberLabel = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(titleLabel.frame)+2*S6, 180*S6, 9*S6) textContent:nil withFont:[UIFont systemFontOfSize:9*S6] textColor:RGB_COLOR(102, 102, 102, 1) textAlignment:NSTextAlignmentCenter];
+        UILabel * numberLabel = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(titleLabel.frame)+1*S6, 180*S6, 9*S6) textContent:nil withFont:[UIFont systemFontOfSize:9*S6] textColor:RGB_COLOR(102, 102, 102, 1) textAlignment:NSTextAlignmentCenter];
         [imgView addSubview:titleLabel];
         [imgView addSubview:numberLabel];
         

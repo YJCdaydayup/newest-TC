@@ -78,6 +78,8 @@
     
     if([self.fatherVc isKindOfClass:[DetailViewController class]]||[self.fatherVc isKindOfClass:[FinalOrderViewController class]]){
         ylOrderController.hidden = NO;
+    }else{
+        ylOrderController.hidden = YES;
     }
     
     //底部控制

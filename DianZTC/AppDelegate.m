@@ -19,6 +19,7 @@
 #import "BTAdverController.h"
 #import "YLSocketManager.h"
 #import "BatarManagerTool.h"
+#import <JSPatchPlatform/JSPatch.h>
 
 @interface AppDelegate ()<YLNetObseverDelegate>
 
@@ -132,6 +133,12 @@
         self.window.rootViewController = loginVc;
     }
     
+    //进行热修复
+    [JSPatch startWithAppKey:@"d00a7e86e7a9e8ea"];
+    
+    //本地测试下
+//    [JSPatch testScriptInBundle];
+    
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -147,7 +154,7 @@
 
 -(void)ylSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message{
     
-//    NSLog(@"从Tabbar的入口进入--->%@",message);
+    //    NSLog(@"从Tabbar的入口进入--->%@",message);
     
     message = (NSString *)message;
     if([message containsString:@"ok"]){
@@ -296,13 +303,12 @@
     
     //继续上传
     //    [self reStartUpload];
-    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     //继续上传
     //    [self reStartUpload];
-    
+    [JSPatch sync];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
