@@ -121,8 +121,10 @@
     [self.hud show:YES];
     NetManager * manager = [NetManager shareManager];
     NSString * urlStr = [NSString stringWithFormat:CHECKORDER,[manager getIPAddress]];
-    NSDictionary * dict = @{@"customerid":CUSTOMERID,@"page":@(page),@"size":@"10",@"type":type};
     
+    if(CUSTOMERID==nil||@(page)==nil||type == nil)return;
+    
+    NSDictionary * dict = @{@"customerid":CUSTOMERID,@"page":@(page),@"size":@"10",@"type":type};
     [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
         
         if(!responseObject){

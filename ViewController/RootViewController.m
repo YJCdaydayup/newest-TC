@@ -64,7 +64,7 @@
     UIButton * button = [Tools createButtonNormalImage:imgArray[0] selectedImage:nil tag:0 addTarget:target action:leftSel];
     button.frame = CGRectMake(15*S6, 15*S6, 100*S6, 50*S6);
     button.size = leftSize;
-    button.y = height;
+    button.y = height-1*S6;
     button.hidden = NO;
     _leftNavBtn = button;
     [self.navigationController.navigationBar addSubview:button];

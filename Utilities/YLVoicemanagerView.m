@@ -447,6 +447,7 @@ static int temp = 0;
         bgView.layer.borderColor = [BOARDCOLOR CGColor];
         bgView.layer.borderWidth = 1.0*S6;
         bgView.tag = 854;
+        bgView.backgroundColor = [UIColor whiteColor];
         [cell.contentView addSubview:bgView];
         
         //文字
