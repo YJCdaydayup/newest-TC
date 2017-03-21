@@ -33,7 +33,6 @@
     [self.contentView addSubview:lineView];
     
     UIView * btnView = [[UIView alloc]initWithFrame:CGRectMake(0,0, 42*S6, 103.5*S6)];
-//    btnView.backgroundColor = [UIColor redColor];
     [self.contentView addSubview:btnView];
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(selectTheBtn)];
     [btnView addGestureRecognizer:tap];
@@ -54,7 +53,7 @@
     self.numberLabel = [Tools createLabelWithFrame:CGRectMake(CGRectGetMinX(nameLabel.frame), CGRectGetMaxY(nameLabel.frame)+15*S6, 200, 14*S6) textContent:nil withFont:[UIFont systemFontOfSize:14*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentLeft];
     [self.contentView addSubview:self.numberLabel];
     
-    UIView * lineView1 = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imgView.frame)+10*S6, Wscreen, 1*S6)];
+    UIView * lineView1 = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imgView.frame)+8*S6, Wscreen, 0.8*S6)];
     lineView1.backgroundColor = BOARDCOLOR;
     [self.contentView addSubview:lineView1];
 }
@@ -112,7 +111,9 @@
     
     nameLabel.text = model.name;
     self.numberLabel.text = model.number;
-    
+    imgView.x= 25*S6;
+    self.numberLabel.x = imgView.x+imgView.width+10*S6;
+    nameLabel.x = self.numberLabel.x;
     //拼接ip和port
         NetManager * manager = [NetManager shareManager];
         NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];

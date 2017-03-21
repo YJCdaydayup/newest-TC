@@ -81,6 +81,7 @@
             
             //添加数据
             NSMutableDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            if(dict == nil)return ;
             NSArray * array1 = [dict objectForKey:@"category"];
             NSArray * array2 = [dict objectForKey:@"craft"];
             NSArray * array3 = [dict objectForKey:@"material"];

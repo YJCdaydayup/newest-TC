@@ -13,6 +13,7 @@
 #import "DBSaveModel.h"
 #import "ScanHistoryCell.h"
 #import "ScanViewController.h"
+#import "BatarIndicatorView.h"
 
 NSString * const CellID = @"cellID";
 
@@ -70,6 +71,10 @@ NSString * const CellID = @"cellID";
     [self.manager scan_getAllObject:^(NSMutableArray *dataArray) {
         [weakSelf.dataArray removeAllObjects];
         [weakSelf.dataArray addObjectsFromArray:dataArray];
+        if(weakSelf.dataArray.count == 0){
+            
+            [BatarIndicatorView showIndicatorWithTitle:@"您还没有扫码过任何条码，快去扫-扫吧!" imageName:@"scan_kong" inView:self.view hide:NO];
+        }
         [_tableView reloadData];
     }];
 }

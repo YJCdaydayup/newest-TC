@@ -18,6 +18,7 @@
 #import "YLVoicemanagerView.h"
 #import "BatarManagerTool.h"
 #import "BatarIndicatorView.h"
+#import "BatarCarController.h"
 
 #define CELL @"CARCell"
 
@@ -55,6 +56,7 @@
         self.tabBarController.tabBar.hidden = NO;
     }
     [self createBottom];
+    [self getData];
 }
 
 -(void)viewDidLoad{
@@ -149,6 +151,9 @@
 
 -(void)back{
     
+    if([self.fatherVc isKindOfClass:[FinalOrderViewController class]]){
+        [[NSNotificationCenter defaultCenter]postNotificationName:UpdateMyOrderNotification object:nil];
+    }
     [self popToViewControllerWithDirection:@"right" type:NO];
 }
 

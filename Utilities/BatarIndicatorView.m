@@ -24,7 +24,7 @@
         
         _instance = [[BatarIndicatorView alloc]init];
         _instance.frame = CGRectMake(110*S6, 300/2.0*S6, 165*S6, 165*S6);
-        _instance.titleLbl = [Tools createLabelWithFrame:CGRectMake(_instance.x, _instance.y+_instance.height+15.5*S6, _instance.width, 12*S6) textContent:nil withFont:[UIFont systemFontOfSize:12*S6] textColor:BatarPlaceTextCol textAlignment:NSTextAlignmentCenter];
+        _instance.titleLbl = [Tools createLabelWithFrame:CGRectMake(_instance.x-50*S6, _instance.y+_instance.height+15.5*S6, _instance.width+100*S6, 12*S6) textContent:nil withFont:[UIFont systemFontOfSize:12*S6] textColor:BatarPlaceTextCol textAlignment:NSTextAlignmentCenter];
     });
     return _instance;
 }

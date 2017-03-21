@@ -199,7 +199,6 @@ static DiscoverShapeController * _instance = nil;
     if(cell == nil){
         cell = [[MySelectedOrderCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CODERCELL];
     }
-    //    cell.backgroundColor = [UIColor redColor];
     BatarResultModel * model = self.dataArray[indexPath.row];
     [cell configResultCellWithModel:model];
     cell.select_btn.hidden = YES;

@@ -163,15 +163,14 @@
             
             NSMutableArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             tuiGuangArr = [NSMutableArray array];
-            for(NSDictionary * dict in array){
-                
-                BannerModel * model = [[BannerModel alloc]initWithDictionary:dict error:nil];
+            for(NSDictionary *dict in array){
+                BannerModel *model = [[BannerModel alloc]initWithDictionary:dict error:nil];
                 [tuiGuangArr addObject:model];
                 [self.tableView reloadData];
                 [self.tableView headerEndRefreshing];
             }
         }else{
-            NSLog(@"%@",error.description);
+//            NSLog(@"%@",error.description);
         }
     }];
     [self downloadNewestData];
