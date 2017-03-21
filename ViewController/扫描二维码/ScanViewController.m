@@ -334,7 +334,7 @@
         _confirmBtn = [Tools createNormalButtonWithFrame:CGRectMake(0, CGRectGetMaxY(self.coder_tf.frame)+35/2.0*S6, 240*S6,65/2.0*S6) textContent:@"确定" withFont:[UIFont systemFontOfSize:14*S6] textColor:[UIColor whiteColor] textAlignment:NSTextAlignmentCenter];
         [_confirmBtn setTitleColor:RGB_COLOR(29, 29, 29, 0.5) forState:UIControlStateHighlighted];
         _confirmBtn.centerX = self.view.centerX;
-        _confirmBtn.backgroundColor = RGB_COLOR(0, 0, 0, 0.5);
+        _confirmBtn.backgroundColor = RGB_COLOR(222, 166, 100, 1);
         [_inputBgView addSubview:_confirmBtn];
         
         [_confirmBtn addTarget:self action:@selector(confirmAction) forControlEvents:UIControlEventTouchUpInside];

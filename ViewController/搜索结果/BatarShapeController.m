@@ -140,7 +140,7 @@ NSString * const singleCell = @"singleCell";
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc]init];
     [flowLayOut setScrollDirection:UICollectionViewScrollDirectionVertical];
     
-    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT, Wscreen-4*S6, Hscreen-NAV_BAR_HEIGHT) collectionViewLayout:flowLayOut];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, NAV_BAR_HEIGHT+4*S6, Wscreen-4*S6, Hscreen-NAV_BAR_HEIGHT-4*S6) collectionViewLayout:flowLayOut];
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
     self.collectionView.backgroundColor = [UIColor whiteColor];

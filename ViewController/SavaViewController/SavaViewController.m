@@ -214,6 +214,7 @@ NSString * const saveCell = @"saveCell";
                 if(dict){
                     
                     if(![dict[@"page"]isKindOfClass:[NSArray class]]){
+                         [self showIndicator];
                         return ;
                     }
                     
@@ -236,6 +237,8 @@ NSString * const saveCell = @"saveCell";
                         }
                         [self showIndicator];
                     }
+                }else{
+                     [self showIndicator];
                 }
             }
         }];

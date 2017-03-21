@@ -61,4 +61,6 @@ typedef void(^CoderTypeBlock)(CoderType type);
 -(NSDictionary *)bt_getAdvertiseControlInfo;
 
 
+
+
 @end
