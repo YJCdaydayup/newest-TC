@@ -443,6 +443,7 @@
 		8F94A7A01E21968A00BDBEF6 /* DiscoverShapeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F94A79F1E21968A00BDBEF6 /* DiscoverShapeController.m */; };
 		8F9E91BA1E170860002297ED /* ScanHistoryContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91B91E170860002297ED /* ScanHistoryContoller.m */; };
 		8F9E91BD1E171C7D002297ED /* ScanHistoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */; };
+		8FA23E1D1E80A15B00893FB5 /* BatarIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA23E1C1E80A15B00893FB5 /* BatarIndicatorView.m */; };
 		8FA9D00A1E0DE00600DD0335 /* YLAddServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA9D0091E0DE00600DD0335 /* YLAddServer.m */; };
 		8FB9CCFB1E0C8D9A00DA6E11 /* Foundation+Log.m in Resources */ = {isa = PBXBuildFile; fileRef = 8FB9CCFA1E0C8D9A00DA6E11 /* Foundation+Log.m */; };
 		8FB9CD511E0CBDC200DA6E11 /* YLServerAddView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FB9CD501E0CBDC200DA6E11 /* YLServerAddView.m */; };
@@ -491,9 +492,9 @@
 		8F1389D81DC9917500974DE7 /* MyOrdersController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOrdersController.m; sourceTree = "<group>"; };
 		8F1E23AE1DDC0412007C2033 /* YLShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLShareView.h; sourceTree = "<group>"; };
 		8F1E23AF1DDC0412007C2033 /* YLShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLShareView.m; sourceTree = "<group>"; };
-		8F24D51C1E526C5100FE0F1B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = DianZTC/Assets.xcassets/icon.imageset/icon.png; sourceTree = "<group>"; };
-		8F24D51E1E526DB900FE0F1B /* start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start@2x.png"; sourceTree = "<group>"; };
-		8F24D5201E526DBF00FE0F1B /* start@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "start@3x.png"; sourceTree = "<group>"; };
+		8F24D51C1E526C5100FE0F1B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = ../Assets.xcassets/icon.imageset/icon.png; sourceTree = "<group>"; };
+		8F24D51E1E526DB900FE0F1B /* start@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "start@2x.png"; path = "../../start@2x.png"; sourceTree = "<group>"; };
+		8F24D5201E526DBF00FE0F1B /* start@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "start@3x.png"; path = "../../start@3x.png"; sourceTree = "<group>"; };
 		8F262EAD1E2F01CA00D48F5F /* YLNetObseverManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLNetObseverManager.h; sourceTree = "<group>"; };
 		8F262EAE1E2F01CA00D48F5F /* YLNetObseverManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLNetObseverManager.m; sourceTree = "<group>"; };
 		8F29A1F71E66375400C19A90 /* BTDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTDetailModel.h; sourceTree = "<group>"; };
@@ -1360,6 +1361,8 @@
 		8F9E91B91E170860002297ED /* ScanHistoryContoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanHistoryContoller.m; sourceTree = "<group>"; };
 		8F9E91BB1E171C7D002297ED /* ScanHistoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanHistoryCell.h; sourceTree = "<group>"; };
 		8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanHistoryCell.m; sourceTree = "<group>"; };
+		8FA23E1B1E80A15B00893FB5 /* BatarIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BatarIndicatorView.h; sourceTree = "<group>"; };
+		8FA23E1C1E80A15B00893FB5 /* BatarIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BatarIndicatorView.m; sourceTree = "<group>"; };
 		8FA9D0081E0DE00600DD0335 /* YLAddServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLAddServer.h; sourceTree = "<group>"; };
 		8FA9D0091E0DE00600DD0335 /* YLAddServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLAddServer.m; sourceTree = "<group>"; };
 		8FB9CCFA1E0C8D9A00DA6E11 /* Foundation+Log.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "Foundation+Log.m"; path = "../category/Foundation+Log.m"; sourceTree = "<group>"; };
@@ -1461,7 +1464,7 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		8F0276361E157833006E78F6 /* 搜索结果 */ = {
+		8F0276361E157833006E78F6 /* BatarSearchResult */ = {
 			isa = PBXGroup;
 			children = (
 				8F0276371E157850006E78F6 /* BatarResultController.h */,
@@ -1471,16 +1474,17 @@
 				8F02763A1E15826B006E78F6 /* BatarResultModel.h */,
 				8F02763B1E15826B006E78F6 /* BatarResultModel.m */,
 			);
+			name = BatarSearchResult;
 			path = "搜索结果";
 			sourceTree = "<group>";
 		};
-		8F12D3991CDE32C800712CDA /* 产品详情 */ = {
+		8F12D3991CDE32C800712CDA /* BatarOrderDetail */ = {
 			isa = PBXGroup;
 			children = (
 				8F12D39C1CDE32C800712CDA /* ViewController */,
 				8F12D39B1CDE32C800712CDA /* Model */,
 			);
-			name = "产品详情";
+			name = BatarOrderDetail;
 			path = DetailViewController;
 			sourceTree = "<group>";
 		};
@@ -1502,7 +1506,7 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		8F1389D51DC9914900974DE7 /* 我的订单 */ = {
+		8F1389D51DC9914900974DE7 /* BatarMyOrderList */ = {
 			isa = PBXGroup;
 			children = (
 				8F77C0F21DD625AC005AD9D8 /* FinalOrderViewController.h */,
@@ -1512,16 +1516,17 @@
 				8F7EFAD41DD7DB0C0021A9B0 /* HeaderModel.h */,
 				8F7EFAD51DD7DB0C0021A9B0 /* HeaderModel.m */,
 			);
+			name = BatarMyOrderList;
 			path = "我的订单";
 			sourceTree = "<group>";
 		};
-		8F1389D61DC9914900974DE7 /* 购物车单 */ = {
+		8F1389D61DC9914900974DE7 /* BatarShoppingCarTemp */ = {
 			isa = PBXGroup;
 			children = (
 				8F1389D71DC9917500974DE7 /* MyOrdersController.h */,
 				8F1389D81DC9917500974DE7 /* MyOrdersController.m */,
 			);
-			name = "购物车单";
+			name = BatarShoppingCarTemp;
 			path = "../我的选购单";
 			sourceTree = "<group>";
 		};
@@ -1533,7 +1538,8 @@
 				8F30CD521E7351C900D85A8B /* BatarSocketModel.h */,
 				8F30CD531E7351C900D85A8B /* BatarSocketModel.m */,
 			);
-			path = Model;
+			name = Model;
+			path = ../Model;
 			sourceTree = "<group>";
 		};
 		8F31D1701DE6449D00962818 /* XHSoundRecorder */ = {
@@ -1548,7 +1554,7 @@
 			path = ../DianZTC/XHSoundRecorder;
 			sourceTree = "<group>";
 		};
-		8F4081BB1D806C86000E2975 /* 我的设置 */ = {
+		8F4081BB1D806C86000E2975 /* BatarMySettingTemp */ = {
 			isa = PBXGroup;
 			children = (
 				8F4081BC1D806CA1000E2975 /* MyViewController.h */,
@@ -1558,7 +1564,7 @@
 				8F4081C21D8070F3000E2975 /* MyInfoModel.h */,
 				8F4081C31D8070F3000E2975 /* MyInfoModel.m */,
 			);
-			name = "我的设置";
+			name = BatarMySettingTemp;
 			path = ../MyViewController;
 			sourceTree = "<group>";
 		};
@@ -1589,13 +1595,13 @@
 			path = FMDB;
 			sourceTree = "<group>";
 		};
-		8F4215861D7CB70900A7219A /* 我的收藏 */ = {
+		8F4215861D7CB70900A7219A /* BatarSaveOrder */ = {
 			isa = PBXGroup;
 			children = (
 				8F42158B1D7E12D100A7219A /* SaveViewController */,
 				8F42158A1D7E12D100A7219A /* Cell */,
 			);
-			name = "我的收藏";
+			name = BatarSaveOrder;
 			path = ../SavaViewController;
 			sourceTree = "<group>";
 		};
@@ -1617,21 +1623,19 @@
 			path = SaveViewController;
 			sourceTree = "<group>";
 		};
-		8F4809B81DCD004400DD1385 /* 搜索界面 */ = {
+		8F4809B81DCD004400DD1385 /* BatarSearchOrder */ = {
 			isa = PBXGroup;
 			children = (
 				8F4809B91DCD006400DD1385 /* SearchViewController.h */,
 				8F4809BA1DCD006400DD1385 /* SearchViewController.m */,
 			);
+			name = BatarSearchOrder;
 			path = "搜索界面";
 			sourceTree = "<group>";
 		};
 		8F4A18171CDAB0CA006ED857 = {
 			isa = PBXGroup;
 			children = (
-				8F24D51C1E526C5100FE0F1B /* icon.png */,
-				8F24D51E1E526DB900FE0F1B /* start@2x.png */,
-				8F24D5201E526DBF00FE0F1B /* start@3x.png */,
 				8F4A18221CDAB0CA006ED857 /* DianZTC */,
 				8F4A183C1CDAB0CA006ED857 /* DianZTCTests */,
 				8F4A18471CDAB0CA006ED857 /* DianZTCUITests */,
@@ -1654,13 +1658,7 @@
 		8F4A18221CDAB0CA006ED857 /* DianZTC */ = {
 			isa = PBXGroup;
 			children = (
-				8F30CD511E7351B400D85A8B /* Model */,
-				8F4A18561CDAB450006ED857 /* category */,
-				8F4A18571CDAB450006ED857 /* Define */,
-				8F4A18581CDAB450006ED857 /* Lib */,
-				8F4A18591CDAB450006ED857 /* Manage */,
-				8F4A185B1CDAB450006ED857 /* Utilities */,
-				8F4A185C1CDAB450006ED857 /* ViewController */,
+				8FA23E1A1E8088A600893FB5 /* Class */,
 			);
 			path = DianZTC;
 			sourceTree = "<group>";
@@ -1762,7 +1760,7 @@
 				8F614A9C1D5D3F8A004EEECA /* YCDropTB.m */,
 				8F614A9D1D5D3F8A004EEECA /* YCDropTB.xib */,
 				8F614AA01D5D3FEF004EEECA /* UIView+Frame */,
-				8F4A19151CDAB580006ED857 /* 适配方案 */,
+				8F4A19151CDAB580006ED857 /* layout */,
 				8F69C0661DB98C2E00D34A7B /* ISRDataHelper.h */,
 				8F69C0671DB98C2E00D34A7B /* ISRDataHelper.m */,
 				8F4081C51D8080B1000E2975 /* HKPieChartView */,
@@ -1848,6 +1846,8 @@
 				8F30CD491E71F63A00D85A8B /* BatarBadgeView.m */,
 				8F30CD4E1E720C9400D85A8B /* BatarTabbar.h */,
 				8F30CD4F1E720C9400D85A8B /* BatarTabbar.m */,
+				8FA23E1B1E80A15B00893FB5 /* BatarIndicatorView.h */,
+				8FA23E1C1E80A15B00893FB5 /* BatarIndicatorView.m */,
 			);
 			path = Utilities;
 			sourceTree = SOURCE_ROOT;
@@ -1861,19 +1861,22 @@
 				8F5E50D11D43DFF3004F404F /* RootViewController.m */,
 				8FD3C4FF1E0B1DC600AB40F2 /* BatarMainTabBarContoller.h */,
 				8FD3C5001E0B1DC600AB40F2 /* BatarMainTabBarContoller.m */,
-				8F6AFA671E5BBE98008D3275 /* 单个订单详情 */,
-				8F1389D51DC9914900974DE7 /* 我的订单 */,
-				8F4809B81DCD004400DD1385 /* 搜索界面 */,
-				8F8DDB8A1CDBF35500F04D0C /* 产品分类 */,
-				8F5668011CDD25FF00C39F75 /* 产品系列 */,
-				8F0276361E157833006E78F6 /* 搜索结果 */,
-				8F7CBEF81E131F1A0033E7FB /* 扫描二维码 */,
-				8F12D3991CDE32C800712CDA /* 产品详情 */,
+				8F8D02A81DE4B91300DFE7E4 /* BatarBuyOrderDetails */,
+				8F56680B1CDD401900C39F75 /* BatarCatagorySearch */,
+				8F51FA701CE15D9400B128C5 /* BatarThemeProduct */,
+				8F6AFA671E5BBE98008D3275 /* BatarSingleOrder */,
+				8F1389D51DC9914900974DE7 /* BatarMyOrderList */,
+				8F4809B81DCD004400DD1385 /* BatarSearchOrder */,
+				8F8DDB8A1CDBF35500F04D0C /* BatarCatagoryOrder */,
+				8F5668011CDD25FF00C39F75 /* BatarSerizeOrder */,
+				8F0276361E157833006E78F6 /* BatarSearchResult */,
+				8F7CBEF81E131F1A0033E7FB /* BatarScanCode */,
+				8F12D3991CDE32C800712CDA /* BatarOrderDetail */,
 				8F9A9C711E0B0913003537EB /* temp */,
-				8FD3C5021E0B1EEE00AB40F2 /* 发现 */,
-				8FD3C5031E0B1EEE00AB40F2 /* 我的图鉴 */,
-				8FD3C5041E0B1EEE00AB40F2 /* 购物车 */,
-				8FD3C5051E0B1EEE00AB40F2 /* 首页 */,
+				8FD3C5021E0B1EEE00AB40F2 /* BatarFindOrders */,
+				8FD3C5031E0B1EEE00AB40F2 /* BatarMySetting */,
+				8FD3C5041E0B1EEE00AB40F2 /* BatarShoppingCar */,
+				8FD3C5051E0B1EEE00AB40F2 /* BatarFirstController */,
 			);
 			path = ViewController;
 			sourceTree = SOURCE_ROOT;
@@ -1994,13 +1997,13 @@
 			path = PageControl;
 			sourceTree = "<group>";
 		};
-		8F4A19151CDAB580006ED857 /* 适配方案 */ = {
+		8F4A19151CDAB580006ED857 /* layout */ = {
 			isa = PBXGroup;
 			children = (
 				8F4A19191CDAB580006ED857 /* YLAutoLayOut.h */,
 				8F4A191A1CDAB580006ED857 /* YLAutoLayOut.m */,
 			);
-			name = "适配方案";
+			name = layout;
 			path = "Lib/适配方案";
 			sourceTree = "<group>";
 		};
@@ -2014,7 +2017,7 @@
 			path = "Lib/适配方案/ProgressHUD";
 			sourceTree = "<group>";
 		};
-		8F4A19601CDAB9CB006ED857 /* 欢迎登录 */ = {
+		8F4A19601CDAB9CB006ED857 /* No_used Demo */ = {
 			isa = PBXGroup;
 			children = (
 				8F6AE56C1D5B939B00A423E2 /* LoginViewController.h */,
@@ -2022,30 +2025,30 @@
 				8F4A19611CDAB9E6006ED857 /* WelcomeViewController.h */,
 				8F4A19621CDAB9E6006ED857 /* WelcomeViewController.m */,
 			);
-			name = "欢迎登录";
+			name = "No_used Demo";
 			path = ../WelcomViewController;
 			sourceTree = "<group>";
 		};
-		8F4A19671CDABB47006ED857 /* 首页界面 */ = {
+		8F4A19671CDABB47006ED857 /* First */ = {
 			isa = PBXGroup;
 			children = (
 				8F8DDB7F1CDBB8C500F04D0C /* ViewController */,
 				8F8DDB7D1CDBB8C500F04D0C /* Cell */,
 				8F8DDB7E1CDBB8C500F04D0C /* Model */,
 			);
-			name = "首页界面";
+			name = First;
 			path = ../FirstViewController;
 			sourceTree = "<group>";
 		};
-		8F51FA701CE15D9400B128C5 /* 主题界面 */ = {
+		8F51FA701CE15D9400B128C5 /* BatarThemeProduct */ = {
 			isa = PBXGroup;
 			children = (
 				8F51FA731CE15D9400B128C5 /* ViewController */,
 				8F51FA711CE15D9400B128C5 /* Cell */,
 				8F51FA721CE15D9400B128C5 /* Model */,
 			);
-			name = "主题界面";
-			path = ../ThemeViewController;
+			name = BatarThemeProduct;
+			path = ThemeViewController;
 			sourceTree = "<group>";
 		};
 		8F51FA711CE15D9400B128C5 /* Cell */ = {
@@ -2077,14 +2080,14 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		8F5668011CDD25FF00C39F75 /* 产品系列 */ = {
+		8F5668011CDD25FF00C39F75 /* BatarSerizeOrder */ = {
 			isa = PBXGroup;
 			children = (
 				8F5668041CDD25FF00C39F75 /* ViewController */,
 				8F5668021CDD25FF00C39F75 /* Cell */,
 				8F5668031CDD25FF00C39F75 /* Model */,
 			);
-			name = "产品系列";
+			name = BatarSerizeOrder;
 			path = SerizeViewController;
 			sourceTree = "<group>";
 		};
@@ -2115,15 +2118,15 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		8F56680B1CDD401900C39F75 /* 分类搜索 */ = {
+		8F56680B1CDD401900C39F75 /* BatarCatagorySearch */ = {
 			isa = PBXGroup;
 			children = (
 				8F56680E1CDD401900C39F75 /* ViewController */,
 				8F56680C1CDD401900C39F75 /* Cell */,
 				8F56680D1CDD401900C39F75 /* Model */,
 			);
-			name = "分类搜索";
-			path = ../SearchCatagoryViewController;
+			name = BatarCatagorySearch;
+			path = SearchCatagoryViewController;
 			sourceTree = "<group>";
 		};
 		8F56680C1CDD401900C39F75 /* Cell */ = {
@@ -2180,7 +2183,7 @@
 			path = TKAlertView;
 			sourceTree = "<group>";
 		};
-		8F6AFA671E5BBE98008D3275 /* 单个订单详情 */ = {
+		8F6AFA671E5BBE98008D3275 /* BatarSingleOrder */ = {
 			isa = PBXGroup;
 			children = (
 				8F6AFA681E5BBEC7008D3275 /* BTOrderDetailController.h */,
@@ -2192,6 +2195,7 @@
 				8F426FC31E673AE3003B24EE /* BTDetailCell.h */,
 				8F426FC41E673AE3003B24EE /* BTDetailCell.m */,
 			);
+			name = BatarSingleOrder;
 			path = "单个订单详情";
 			sourceTree = "<group>";
 		};
@@ -2206,7 +2210,7 @@
 			path = HPGrowingTextView;
 			sourceTree = "<group>";
 		};
-		8F7CBEF81E131F1A0033E7FB /* 扫描二维码 */ = {
+		8F7CBEF81E131F1A0033E7FB /* BatarScanCode */ = {
 			isa = PBXGroup;
 			children = (
 				8F7CBEF91E131F2F0033E7FB /* ScanViewController.h */,
@@ -2216,6 +2220,7 @@
 				8F9E91BB1E171C7D002297ED /* ScanHistoryCell.h */,
 				8F9E91BC1E171C7D002297ED /* ScanHistoryCell.m */,
 			);
+			name = BatarScanCode;
 			path = "扫描二维码";
 			sourceTree = "<group>";
 		};
@@ -3001,7 +3006,7 @@
 			path = detector;
 			sourceTree = "<group>";
 		};
-		8F87D1551E0C431D006F5361 /* 登录模块 */ = {
+		8F87D1551E0C431D006F5361 /* BatarLoginOrder */ = {
 			isa = PBXGroup;
 			children = (
 				8F87D1561E0C4348006F5361 /* BatarLoginController.h */,
@@ -3009,7 +3014,7 @@
 				8F70C71F1E54C2A8000CDAAE /* BTAdverController.h */,
 				8F70C7201E54C2A8000CDAAE /* BTAdverController.m */,
 			);
-			name = "登录模块";
+			name = BatarLoginOrder;
 			path = "../登录模块";
 			sourceTree = "<group>";
 		};
@@ -3042,14 +3047,14 @@
 			path = STPhotoBrowserView;
 			sourceTree = "<group>";
 		};
-		8F8D02A81DE4B91300DFE7E4 /* 订单详情 */ = {
+		8F8D02A81DE4B91300DFE7E4 /* BatarBuyOrderDetails */ = {
 			isa = PBXGroup;
 			children = (
 				8F8D02A91DE4B94300DFE7E4 /* OrderDetailController.h */,
 				8F8D02AA1DE4B94300DFE7E4 /* OrderDetailController.m */,
 			);
-			name = "订单详情";
-			path = "../订单详情";
+			name = BatarBuyOrderDetails;
+			path = "订单详情";
 			sourceTree = "<group>";
 		};
 		8F8DDB7D1CDBB8C500F04D0C /* Cell */ = {
@@ -3089,14 +3094,14 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		8F8DDB8A1CDBF35500F04D0C /* 产品分类 */ = {
+		8F8DDB8A1CDBF35500F04D0C /* BatarCatagoryOrder */ = {
 			isa = PBXGroup;
 			children = (
 				8F8DDB8D1CDBF37200F04D0C /* ViewController */,
 				8F8DDB8B1CDBF37200F04D0C /* Cell */,
 				8F8DDB8C1CDBF37200F04D0C /* Model */,
 			);
-			name = "产品分类";
+			name = BatarCatagoryOrder;
 			path = CatagoryViewController;
 			sourceTree = "<group>";
 		};
@@ -3250,14 +3255,37 @@
 		8F9A9C711E0B0913003537EB /* temp */ = {
 			isa = PBXGroup;
 			children = (
-				8F4081BB1D806C86000E2975 /* 我的设置 */,
-				8F1389D61DC9914900974DE7 /* 购物车单 */,
-				8F8D02A81DE4B91300DFE7E4 /* 订单详情 */,
-				8F51FA701CE15D9400B128C5 /* 主题界面 */,
-				8F56680B1CDD401900C39F75 /* 分类搜索 */,
-				8F4A19601CDAB9CB006ED857 /* 欢迎登录 */,
+				8F4081BB1D806C86000E2975 /* BatarMySettingTemp */,
+				8F1389D61DC9914900974DE7 /* BatarShoppingCarTemp */,
+				8F4A19601CDAB9CB006ED857 /* No_used Demo */,
 			);
 			path = temp;
+			sourceTree = "<group>";
+		};
+		8FA23E191E80869700893FB5 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				8F24D51C1E526C5100FE0F1B /* icon.png */,
+				8F24D51E1E526DB900FE0F1B /* start@2x.png */,
+				8F24D5201E526DBF00FE0F1B /* start@3x.png */,
+			);
+			name = resource;
+			path = ../resource;
+			sourceTree = "<group>";
+		};
+		8FA23E1A1E8088A600893FB5 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				8FA23E191E80869700893FB5 /* resource */,
+				8F30CD511E7351B400D85A8B /* Model */,
+				8F4A18561CDAB450006ED857 /* category */,
+				8F4A18571CDAB450006ED857 /* Define */,
+				8F4A18581CDAB450006ED857 /* Lib */,
+				8F4A18591CDAB450006ED857 /* Manage */,
+				8F4A185B1CDAB450006ED857 /* Utilities */,
+				8F4A185C1CDAB450006ED857 /* ViewController */,
+			);
+			path = Class;
 			sourceTree = "<group>";
 		};
 		8FC318061D5CE34600E56D31 /* Nstimer的block封装 */ = {
@@ -3269,7 +3297,7 @@
 			path = "Nstimer的block封装";
 			sourceTree = "<group>";
 		};
-		8FD3C5021E0B1EEE00AB40F2 /* 发现 */ = {
+		8FD3C5021E0B1EEE00AB40F2 /* BatarFindOrders */ = {
 			isa = PBXGroup;
 			children = (
 				8F7D09641E11839C00E94955 /* DiscoverViewController.h */,
@@ -3277,21 +3305,23 @@
 				8F94A79E1E21968A00BDBEF6 /* DiscoverShapeController.h */,
 				8F94A79F1E21968A00BDBEF6 /* DiscoverShapeController.m */,
 			);
+			name = BatarFindOrders;
 			path = "发现";
 			sourceTree = "<group>";
 		};
-		8FD3C5031E0B1EEE00AB40F2 /* 我的图鉴 */ = {
+		8FD3C5031E0B1EEE00AB40F2 /* BatarMySetting */ = {
 			isa = PBXGroup;
 			children = (
 				8F803B4B1E0EFBC40005B7A2 /* BatarSettingController.h */,
 				8F803B4C1E0EFBC40005B7A2 /* BatarSettingController.m */,
-				8F4215861D7CB70900A7219A /* 我的收藏 */,
-				8F87D1551E0C431D006F5361 /* 登录模块 */,
+				8F4215861D7CB70900A7219A /* BatarSaveOrder */,
+				8F87D1551E0C431D006F5361 /* BatarLoginOrder */,
 			);
+			name = BatarMySetting;
 			path = "我的图鉴";
 			sourceTree = "<group>";
 		};
-		8FD3C5041E0B1EEE00AB40F2 /* 购物车 */ = {
+		8FD3C5041E0B1EEE00AB40F2 /* BatarShoppingCar */ = {
 			isa = PBXGroup;
 			children = (
 				8F7D09671E11947900E94955 /* BatarCarController.h */,
@@ -3301,14 +3331,16 @@
 				8FD9C4C41DD3E8380059721B /* OrderCarModel.h */,
 				8FD9C4C51DD3E8380059721B /* OrderCarModel.m */,
 			);
+			name = BatarShoppingCar;
 			path = "购物车";
 			sourceTree = "<group>";
 		};
-		8FD3C5051E0B1EEE00AB40F2 /* 首页 */ = {
+		8FD3C5051E0B1EEE00AB40F2 /* BatarFirstController */ = {
 			isa = PBXGroup;
 			children = (
-				8F4A19671CDABB47006ED857 /* 首页界面 */,
+				8F4A19671CDABB47006ED857 /* First */,
 			);
+			name = BatarFirstController;
 			path = "首页";
 			sourceTree = "<group>";
 		};
@@ -3652,6 +3684,7 @@
 				8FA9D00A1E0DE00600DD0335 /* YLAddServer.m in Sources */,
 				8F7CC1AB1E133A280033E7FB /* ZXEAN13Reader.m in Sources */,
 				8F7CC1481E133A280033E7FB /* ZXCGImageLuminanceSource.m in Sources */,
+				8FA23E1D1E80A15B00893FB5 /* BatarIndicatorView.m in Sources */,
 				8F7CC1261E133A280033E7FB /* ZXAddressBookParsedResult.m in Sources */,
 				8F7CC1AF1E133A280033E7FB /* ZXEANManufacturerOrgSupport.m in Sources */,
 				8F7CC1441E133A280033E7FB /* ZXVINResultParser.m in Sources */,
@@ -4071,7 +4104,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
@@ -4126,7 +4159,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;

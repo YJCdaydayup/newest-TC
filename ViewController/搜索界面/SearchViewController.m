@@ -32,7 +32,7 @@
     self.search_Tf.hidden = NO;
     self.search_tableView.hidden = YES;
     [self.search_Tf becomeFirstResponder];
-//     self.view.transform = CGAffineTransformIdentity;
+    //     self.view.transform = CGAffineTransformIdentity;
 }
 -(void)viewWillDisappear:(BOOL)animated{
     
@@ -294,8 +294,24 @@
 -(void)deleteAction{
     
     NetManager * manager = [NetManager shareManager];
-    [manager cleanHistorySearch];
-    [self createHistoryView];
+    NSArray * dataArray = [manager getSearchContent];
+    if(dataArray.count==0){
+        [self showAlertViewWithTitle:@"抱歉，您还没有搜索历史"];
+        return;
+    }
+    @WeakObj(self);
+    UIAlertController * alertVc = [UIAlertController alertControllerWithTitle:@"" message:@"确定要清空吗?" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [manager cleanHistorySearch];
+        [selfWeak createHistoryView];
+        [selfWeak dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alertVc addAction:action1];
+    [alertVc addAction:action2];
+    [self presentViewController:alertVc animated:YES completion:nil];
 }
 
 #pragma mark - 搜索内容
@@ -374,15 +390,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

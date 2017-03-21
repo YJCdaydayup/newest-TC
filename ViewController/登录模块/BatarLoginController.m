@@ -50,6 +50,9 @@
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
     self.tabBarController.tabBar.hidden = YES;
+    if(CUSTOMERID){
+        userCode_tf.text = CUSTOMERID;
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -118,7 +121,7 @@
     logoImg.centerX = self.view.centerX;
     [self.view addSubview:logoImg];
     
-    userCode_tf = [Tools createTextFieldFrame:CGRectMake(0, CGRectGetMaxY(logoImg.frame)+35*S6, 300*S6, 40*S6) placeholder:@"请向销售人员索取(可为空)" bgImageName:nil leftView:nil rightView:nil isPassWord:YES];
+    userCode_tf = [Tools createTextFieldFrame:CGRectMake(0, CGRectGetMaxY(logoImg.frame)+35*S6, 300*S6, 40*S6) placeholder:@"请向销售人员索取(可为空)" bgImageName:nil leftView:nil rightView:nil isPassWord:NO];
     userCode_tf.centerX = self.view.centerX;
     [self configTf:userCode_tf withView:@"users"];
     userCode_tf.delegate = self;

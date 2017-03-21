@@ -39,7 +39,7 @@
     [voiceManager stopWhenPushAway];
 }
 
-- (void)viewDidLoad {
+-(void)viewDidLoad {
     [super viewDidLoad];
     
     self.navigationItem.hidesBackButton = YES;

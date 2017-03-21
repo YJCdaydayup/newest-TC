@@ -83,7 +83,7 @@ singleM(tabbarController)
     //创建3个数组
     NSArray * titleArray = @[@"首页",@"发现",@"购物车",@"我的图鉴"];
     NSArray * unSelectArray = @[@"shouye_nol",@"discover_nol",@"shoppingcar_nor",@"setting_nor"];
-    NSArray * selectArray = @[@"shouye_sel",@"discover_sel",@"shoppingcar_sel",@"setting_sel"];
+    NSArray * selectArray = @[@"shouye_sel",@"discover_sel",@"tabbar_car",@"setting_sel"];
     
     for(int i=0;i<titleArray.count;i++){
         

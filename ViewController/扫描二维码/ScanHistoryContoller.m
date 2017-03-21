@@ -108,21 +108,36 @@ NSString * const CellID = @"cellID";
         [self pushToViewControllerWithTransition:searchVc withDirection:@"left" type:NO];
     }else{
         //错误码
-        NSLog(@"%@",model.searchType);
+//        NSLog(@"%@",model.searchType);
         [self showAlertViewWithTitle:@"未发现对应产品"];
     }
 }
 
 -(void)cleanHistory{
     
-    __block typeof(self)weakSelf = self;
-    [self.manager scan_cleanAllDBData:^(BOOL clear) {
-        if(clear){
-            dispatch_async(dispatch_get_main_queue(), ^{
-               [weakSelf createData]; 
-            });
-        }
+    
+    if(self.dataArray.count==0){
+        [self showAlertViewWithTitle:@"抱歉，您还没有扫码过..."];
+        return;
+    }
+    @WeakObj(self);
+    UIAlertController * alertVc = [UIAlertController alertControllerWithTitle:@"" message:@"确定要清空吗?" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
     }];
+    UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [selfWeak.manager scan_cleanAllDBData:^(BOOL clear) {
+            if(clear){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [selfWeak createData];
+                });
+            }
+        }];
+        [selfWeak dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alertVc addAction:action1];
+    [alertVc addAction:action2];
+    [self presentViewController:alertVc animated:YES completion:nil];
 }
 
 -(void)back{

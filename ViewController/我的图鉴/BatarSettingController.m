@@ -16,6 +16,7 @@
 #import "YLCoder2D.h"
 #import "FinalOrderViewController.h"
 #import "BatarBadgeView.h"
+#import "DBWorkerManager.h"
 
 @interface BatarSettingController(){
     
@@ -236,7 +237,23 @@
             break;
         case 1:
         {
-            [self showAlert:@"正在清除缓存..."];
+            @WeakObj(self);
+            UIAlertController * alertVc = [UIAlertController alertControllerWithTitle:@"" message:@"确定清除缓存吗?" preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [selfWeak showAlert:@"正在清除缓存..."];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [selfWeak showAlertViewWithTitle:[NSString stringWithFormat:@"清除缓存：%ziM",[SDImageCache sharedImageCache].getSize/1024000]];
+                    DBWorkerManager * manager= [DBWorkerManager shareDBManager];
+                    [manager cleanUpImageInDishes];
+                });
+                [selfWeak dismissViewControllerAnimated:YES completion:nil];
+            }];
+            [alertVc addAction:action1];
+            [alertVc addAction:action2];
+            [self presentViewController:alertVc animated:YES completion:nil];
         }
             break;
         case 2:

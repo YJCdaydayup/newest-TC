@@ -372,7 +372,14 @@
             //服务端是否收藏
             NetManager * manager = [NetManager shareManager];
             NSString * urlStr = [NSString stringWithFormat:WhetherSavedURl,[manager getIPAddress]];
-            NSDictionary * dict = @{@"user":CUSTOMERID,@"number":detailModel.number};
+            NSString * str;
+            if(CUSTOMERID==nil||detailModel.number==nil){
+                str = self.index;
+                return;
+            }else{
+                str = detailModel.number;
+            }
+            NSDictionary * dict = @{@"user":CUSTOMERID,@"number":str};
             [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
                 [self.hud hide:YES];
                 NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];

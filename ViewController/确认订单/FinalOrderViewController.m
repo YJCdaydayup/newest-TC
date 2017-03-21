@@ -23,12 +23,14 @@
 #import "BatarMainTabBarContoller.h"
 #import "YLLoginView.h"
 #import "BatarCarController.h"
+#import "BatarIndicatorView.h"
 
 @interface FinalOrderViewController ()<UITableViewDataSource,UITableViewDelegate,YLSocketDelegate>{
     
     UITableView * orderTableView;
     YLFinalOrderView * finalBottomView;
     UIButton * selectAllBtn;
+    UIControl * zoomInControl;
     
     UISegmentedControl * segment;
     NSInteger page;
@@ -39,6 +41,7 @@
 @property (nonatomic,strong) NSMutableArray * titleArray;
 @property (nonatomic,strong) NSMutableArray * stateArray;
 @property (nonatomic,strong) NSMutableArray * selectedHeaderArray;
+@property (nonatomic,strong) NSMutableArray * canBeSelectArray;
 
 /** 长连接 */
 @property (nonatomic,strong) YLSocketManager * socketManager;
@@ -94,8 +97,7 @@
 
 #pragma 改变角标
 -(void)changeBadge{
-    
-     [self.badgeView changeBadgeValue:[NSString stringWithFormat:@"%@",SocketModel.state_1]];
+    [self.badgeView changeBadgeValue:[NSString stringWithFormat:@"%@",SocketModel.state_1]];
 }
 
 -(void)updateAgain{
@@ -132,7 +134,6 @@
         }
         [self.hud hide:YES];
         NSMutableArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        //        NSLog(@"%@",array);
         if(![array isKindOfClass:[NSArray class]]){
             return ;
         }
@@ -140,6 +141,8 @@
             [self.dataArray removeAllObjects];
             [self.stateArray removeAllObjects];
             [self.selectedHeaderArray removeAllObjects];
+            [self.titleArray removeAllObjects];
+            [self.canBeSelectArray removeAllObjects];
         }
         
         for(int i =0;i<array.count;i++){
@@ -152,6 +155,9 @@
             model.state = dict[@"state"];
             model.type = [dict[@"type"]boolValue];
             [self.titleArray addObject:model];
+            if([model.state integerValue]==2||[model.state integerValue]==10||[model.state integerValue]==11||[model.state integerValue]==12){
+                [self.canBeSelectArray addObject:model];
+            }
             
             if(i == 0){
                 [self.stateArray addObject:@"1"];
@@ -174,6 +180,12 @@
             [self.dataArray addObject:dicts];
         }
         
+        if(self.dataArray.count==0){
+            [BatarIndicatorView showIndicatorWithTitle:@"您还没有相关的订单！" imageName:@"order_indicator" inView:self.view hide:NO];
+            
+        }else{
+            [BatarIndicatorView showIndicatorWithTitle:@"您还没有相关的订单！" imageName:@"order_indicator" inView:self.view hide:YES];
+        }
         [orderTableView reloadData];
         [orderTableView headerEndRefreshing];
         [orderTableView footerEndRefreshing];
@@ -209,8 +221,8 @@
             {//选购单
                 BatarCarController *carVc = [[BatarCarController alloc]initWithController:self];
                 [self pushToViewControllerWithTransition:carVc withDirection:@"right" type:NO];
-//                BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
-//                [mainVc changeRootController:2];
+                //                BatarMainTabBarContoller * mainVc = [BatarMainTabBarContoller sharetabbarController];
+                //                [mainVc changeRootController:2];
             }
                 break;
             case 3:
@@ -331,6 +343,7 @@
     [self.view addSubview:bgView];
     
     UIControl * control = [[UIControl alloc]initWithFrame:CGRectMake(0, 0, 120*S6, 40*S6)];
+    zoomInControl = control;
     [bgView addSubview:control];
     [control addTarget:self action:@selector(zoomInSelectBtn) forControlEvents:UIControlEventTouchUpInside];
     [self.view bringSubviewToFront:selectAllBtn];
@@ -423,12 +436,42 @@
     btn.selected = !btn.selected;
     if(btn.selected){
         [self.selectedHeaderArray removeAllObjects];
-        [self.selectedHeaderArray addObjectsFromArray:self.titleArray];
+        for(int i=0;i<self.titleArray.count;i++){
+            HeaderModel * model = self.titleArray[i];
+            /*
+             if([model.state integerValue] == 0){
+             stateLbl.text = @"待明细";
+             }else if([model.state integerValue] == 1){
+             stateLbl.text = @"待确认";
+             
+             }else if([model.state integerValue] == 2){
+             stateLbl.text = @"已确认";
+             }else{
+             stateLbl.text = @"已取消";
+             */
+            switch ([model.state integerValue]) {
+                case 2:
+                    [self.selectedHeaderArray addObject:self.titleArray[i]];
+                    break;
+                case 10:
+                    [self.selectedHeaderArray addObject:self.titleArray[i]];
+                    break;
+                case 11:
+                    [self.selectedHeaderArray addObject:self.titleArray[i]];
+                    break;
+                case 12:
+                    [self.selectedHeaderArray addObject:self.titleArray[i]];
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        
     }else{
         [self.selectedHeaderArray removeAllObjects];
     }
     [orderTableView reloadData];
-    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -547,15 +590,31 @@
     if([model.state integerValue] == 0){
         stateLbl.text = @"待明细";
         stateLbl.textColor = [UIColor redColor];
+        selectBtn.enabled = NO;
+        zoomView.userInteractionEnabled = NO;
+//        selectAllBtn.enabled = NO;
+//        zoomInControl.enabled = NO;
     }else if([model.state integerValue] == 1){
         stateLbl.text = @"待确认";
         stateLbl.textColor = RGB_COLOR(166, 83, 33, 1);
+        selectBtn.enabled = NO;
+        zoomView.userInteractionEnabled = NO;
+//        selectAllBtn.enabled = NO;
+//        zoomInControl.enabled = NO;
     }else if([model.state integerValue] == 2){
         stateLbl.text = @"已确认";
         stateLbl.textColor = BatarPlaceTextCol;
+        selectBtn.enabled = YES;
+        zoomView.userInteractionEnabled = YES;
+//        selectAllBtn.enabled = YES;
+//        zoomInControl.enabled = YES;
     }else{
         stateLbl.text = @"已取消";
         stateLbl.textColor = [UIColor grayColor];
+        selectBtn.enabled = YES;
+        zoomView.userInteractionEnabled = YES;
+//        selectAllBtn.enabled = YES;
+//        zoomInControl.enabled = YES;
     }
     
     UIView * detailVc = [[UIView alloc]initWithFrame:CGRectMake(40*S6, 0, Wscreen-stateLbl.x+90*S6, 40*S6)];
@@ -593,7 +652,6 @@
         array = dict[key];
     }
     
-    
     HeaderModel * model = self.titleArray[index];
     BTOrderDetailController * orderDvc = [[BTOrderDetailController alloc]initWithController:self];
     orderDvc.orderId = model.orderid;
@@ -621,8 +679,8 @@
     message = (NSString *)message;
     if([message containsString:@"ok"]){
         //发出通知
-//        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:\"\%@\"\,\"\message\"\:\"\[\%@\]\"}",@"1",model.orderid];
-//        [webSocket send:str];
+        //        NSString * str = [NSString stringWithFormat:@"{\"\cmd\"\:\"\%@\"\,\"\message\"\:\"\[\%@\]\"}",@"1",model.orderid];
+        //        [webSocket send:str];
     }else if([message containsString:@"logined"]){
         [kUserDefaults removeObjectForKey:CustomerID];
         [[NSNotificationCenter defaultCenter]postNotificationName:ServerMsgNotification object:nil];
@@ -634,8 +692,6 @@
             });
         }];
     }
-
-    
     [self.dataArray removeAllObjects];
     [self.selectedHeaderArray removeAllObjects];
     [self.stateArray removeAllObjects];
@@ -666,7 +722,7 @@
         //选择
         model.isSelected = YES;
         [self.selectedHeaderArray addObject:model];
-        if(self.selectedHeaderArray.count == self.titleArray.count){
+        if(self.selectedHeaderArray.count == self.canBeSelectArray.count){
             selectAllBtn.selected = YES;
         }
     }else{
@@ -688,7 +744,7 @@
         //选择
         model.isSelected = YES;
         [self.selectedHeaderArray addObject:model];
-        if(self.selectedHeaderArray.count == self.titleArray.count){
+        if(self.selectedHeaderArray.count == self.canBeSelectArray.count){
             selectAllBtn.selected = YES;
         }
     }else{
@@ -808,6 +864,14 @@
         _stateArray = [[NSMutableArray alloc]init];
     }
     return _stateArray;
+}
+
+-(NSMutableArray *)canBeSelectArray{
+    
+    if(_canBeSelectArray==nil){
+        _canBeSelectArray = [NSMutableArray array];
+    }
+    return _canBeSelectArray;
 }
 
 - (void)didReceiveMemoryWarning {

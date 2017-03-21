@@ -17,10 +17,14 @@
 #import "FinalOrderViewController.h"
 #import "YLVoicemanagerView.h"
 #import "BatarManagerTool.h"
+#import "BatarIndicatorView.h"
 
 #define CELL @"CARCell"
 
-@interface BatarCarController()<UITableViewDataSource,UITableViewDelegate>
+@interface BatarCarController()<UITableViewDataSource,UITableViewDelegate>{
+    
+    BatarIndicatorView *_indicatorView;
+}
 
 @property (nonatomic,strong) DBWorkerManager * manager;
 
@@ -361,6 +365,12 @@
                     [self.dataArray addObjectsFromArray:tempArray];
                 }
                 [BatarManagerTool caculateServerOrderCar];
+                
+                //if no data,show pic
+                if(self.dataArray.count==0){
+                    [BatarIndicatorView showIndicatorWithTitle:@"购物车竟然是空的！" imageName:@"order_indicator" inView:self.view hide:NO];
+                }
+                
                 [selfWeak.tableView reloadData];
                 
             }else{
@@ -373,6 +383,10 @@
         [self.manager createOrderDB];
         [self.manager order_getAllObject:^(NSMutableArray *dataArray) {
             selfWeak.dataArray = dataArray;
+            if(selfWeak.dataArray.count==0){
+                [BatarIndicatorView showIndicatorWithTitle:@"购物车竟然是空的！" imageName:@"order_indicator" inView:self.view hide:NO];
+            }
+            
             [selfWeak.tableView reloadData];
         }];
     }

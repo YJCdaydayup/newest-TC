@@ -459,6 +459,7 @@
     SingleSearchCatagoryViewController * singleVc = [[SingleSearchCatagoryViewController alloc]initWithController:self];
     singleVc.vc_flag = 3;
     singleVc.catagoryItem = self.dataArray[btn.tag].kid;
+    singleVc.themeTitle = self.dataArray[btn.tag].themename;
     [self pushToViewControllerWithTransition:singleVc withDirection:@"left" type:NO];
 }
 
