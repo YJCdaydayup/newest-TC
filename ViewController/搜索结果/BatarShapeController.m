@@ -146,7 +146,7 @@ NSString * const singleCell = @"singleCell";
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.collectionView];
     
-    //    [self.collectionView addHeaderWithTarget:self action:@selector(headerAction)];
+    //[self.collectionView addHeaderWithTarget:self action:@selector(headerAction)];
     [self.collectionView addFooterWithTarget:self action:@selector(footerAction)];
     
     //注册Cell

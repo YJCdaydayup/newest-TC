@@ -17,6 +17,7 @@ typedef enum : NSInteger{
 typedef void(^NetBlock)(id responseObject,NSError * error);
 typedef void(^CheckIPBlock)(NSString * response, NSError * error);
 typedef void(^CoderTypeBlock)(CoderType type);
+typedef void(^CacheBlock)(id data);
 
 @interface NetManager : NSObject
 
@@ -60,6 +61,13 @@ typedef void(^CoderTypeBlock)(CoderType type);
 -(NSData *)bt_getAdvertiseInfo;
 -(NSDictionary *)bt_getAdvertiseControlInfo;
 
+/*******************首页数据缓存********************/
+//判断是否存在缓存
++(BOOL)bt_exsitTabbarFirstCache:(NSString *)cacheName;
+//进行缓存
++(void)bt_beginTabbarFirstCache:(NSString *)cacheName data:(id)data;
+//读取缓存
++(void)bt_getTabbarFirstCache:(NSString *)cacheName completion:(CacheBlock)block;
 
 
 

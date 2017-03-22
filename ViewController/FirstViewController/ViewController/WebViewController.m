@@ -71,7 +71,7 @@
 
 -(void)backForward{
     
-    [self dismissViewControllerAnimated:YES completion:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{

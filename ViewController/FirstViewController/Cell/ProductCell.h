@@ -9,19 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "BatarCommandSubModel.h"
 
-typedef void(^ClickImageBlock)(NSInteger index);
+typedef void(^ClickImageBlock)(NSString *number);
 
 @interface ProductCell : UITableViewCell
 
-//适配工具
-@property (nonatomic,assign) CGFloat max_X;
-@property (nonatomic,assign) CGFloat max_Y;
-
 @property (nonatomic,copy) ClickImageBlock block;
-@property (nonatomic,strong) UIControl * bgVc;
 
--(void)configCellWithArray:(NSArray *)dataArray;
+-(void)configCellWithModel:(BatarCommandSubModel *)leftModel rightModel:(id)obj;
 -(void)clickImageForDetai:(ClickImageBlock)block;
--(void)setImageView:(NSMutableArray *)imgArray;
 
 @end

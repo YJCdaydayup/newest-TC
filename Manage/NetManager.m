@@ -17,6 +17,7 @@
 @property (nonatomic,copy) NSString * history_search_content;
 @property (nonatomic,copy) NSString * advertisePath;
 @property (nonatomic,copy) NSString * advertiseImgPath;
+@property (nonatomic,copy) NSString * cachePath;
 
 @end
 
@@ -47,6 +48,10 @@
         
         //广告页数据
         self.advertisePath = [NSString stringWithFormat:@"%@advertise.plist",LIBPATH];
+        
+        //首页数据缓存
+        self.cachePath = [NSString stringWithFormat:@"%@cache%@.plist",LIBPATH,[self getScanDBMD5]];
+        
         //广告页图片数据
         NSString * path = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
         self.advertiseImgPath = [path stringByAppendingPathComponent:@"advertiseImgPath"];
@@ -312,7 +317,7 @@
     NSString * imgUrl = [NSString stringWithFormat:startImg,[self getIPAddress],imgName];
     [self downloadDataWithUrl:imgUrl parm:nil callback:^(id responseObject, NSError *error) {
         
-       BOOL isOk = [NSKeyedArchiver archiveRootObject:responseObject toFile:self.advertiseImgPath];
+//       BOOL isOk = [NSKeyedArchiver archiveRootObject:responseObject toFile:self.advertiseImgPath];
 //        NSLog(@"isOk----%zi",isOk);
     }];
 }
@@ -327,6 +332,72 @@
     
     NSDictionary * info = [NSKeyedUnarchiver unarchiveObjectWithFile:self.advertisePath];
     return info;
+}
+
++(void)bt_beginTabbarFirstCache:(NSString *)cacheName data:(id)data{
+    
+    NetManager *manager = [NetManager shareManager];
+//    NSFileManager * m = [NSFileManager defaultManager];
+//    [m removeItemAtPath:manager.cachePath error:nil];
+    
+    
+    NSMutableArray * array = [NSMutableArray arrayWithContentsOfFile:manager.cachePath];
+    if(!array){
+        array = [NSMutableArray array];
+    }
+    
+    NSDictionary * dict = @{cacheName:data};
+    if([array containsObject:dict]){
+        NSInteger index = [array indexOfObject:dict];
+        [array removeObjectAtIndex:index];
+    }
+     [array addObject:dict];
+    BOOL isCached = [array writeToFile:manager.cachePath atomically:YES];
+    if(isCached){
+        JFLog(@"%@",@"缓存成功");
+    }else{
+        JFLog(@"%@",@"缓存失败");
+    }
+}
+
++(BOOL)bt_exsitTabbarFirstCache:(NSString *)cacheName{
+    
+    NetManager *manager = [NetManager shareManager];
+    NSMutableArray * array = [NSMutableArray arrayWithContentsOfFile:manager.cachePath];
+    for(NSDictionary * dict in array){
+        NSArray *keys = [dict allKeys];
+        if([keys containsObject:cacheName]){
+            return YES;
+            break;
+        }
+    }
+    return NO;
+}
+
++(void)bt_getTabbarFirstCache:(NSString *)cacheName completion:(CacheBlock)block{
+ 
+    NetManager *manager = [NetManager shareManager];
+    NSMutableArray * array = [NSMutableArray arrayWithContentsOfFile:manager.cachePath];
+    for(NSDictionary *dict in array){
+        NSArray *keys = [dict allKeys];
+        if([keys containsObject:cacheName]){
+            block(dict[cacheName]);
+            break;
+        }
+    }
+}
+
+-(NSString *)getScanDBMD5{
+    
+    NSArray * array = [[self getIPAddress]componentsSeparatedByString:@":"];
+    NSString * str = [NSString stringWithFormat:@"%@%@",array[0],array[1]];
+    NSArray * array2 = [str componentsSeparatedByString:@"."];
+    NSMutableString * muStr = [NSMutableString string];
+    [muStr appendString:@"YL"];
+    for(NSString * str1 in array2){
+        [muStr appendString:str1];
+    }
+    return muStr;
 }
 
 @end

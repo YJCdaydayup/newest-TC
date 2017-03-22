@@ -18,6 +18,15 @@ NSString * const CodeTypeQRCode = @"CodeTypeQRCode";         //二维码
 NSString * const CodeTypeBarCode = @"CodeTypeBarCode";       //条形码
 NSString * const CodeTypeFailCode = @"CodeTypeFailCode";     //错误码
 
+/*轮播缓存*/
+NSString * const BannerCache = @"BannerCache";
+
+/*推广缓存*/
+NSString * const RecommandCache = @"RecommandCache";
+
+/*推荐产品缓存*/
+NSString * const RecommandProductCache = @"RecommandProductCache";
+
 NSString * const BatarEntrance = @"BatarEntrance";      //登录入口
 
 NSString * const CustomerID = @"CustomerID";            //客户编号

@@ -10,7 +10,6 @@
 #import "MBProgressHUD.h"
 #import "UIViewController+Extension.h"
 #import "YLProgressHUD.h"
-#import "Single.h"
 
 @interface RootViewController : UIViewController{
     
@@ -18,7 +17,6 @@
     UIButton * _rightNavBtn;
 }
 
-//singleH(Controller)
 @property (nonatomic,strong) AppDelegate * app;
 @property (nonatomic,strong) MBProgressHUD * hud;
 @property (nonatomic,strong) YLProgressHUD * ylHud;

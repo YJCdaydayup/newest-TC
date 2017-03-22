@@ -35,6 +35,7 @@
     UIImageView * placeHolderImageView;
     NSDictionary * bottomDict; //底部数据模型
     NSMutableArray * tuiGuangArr;//中部的菜单推广数据
+    NSInteger _isFreshed;
 }
 
 //导航栏搜索输入框
@@ -140,11 +141,14 @@
     [self.tableView registerClass:[ProductCell class] forCellReuseIdentifier:productCell];
     [self.tableView addHeaderWithTarget:self action:@selector(headerAction)];
     self.tableView.tableHeaderView = self.cycleScrollView;
+    _isFreshed = 0;
     [self.tableView headerBeginRefreshing];
 }
 
 -(void)headerAction{
+    
     [self reloadView];
+    _isFreshed ++;
 }
 
 -(void)reloadView{
@@ -152,16 +156,16 @@
     //请求轮播图url
     [self getMenueInfo];
     [self downloadBanner];
+    [self downloadNewestData];
 }
 
 -(void)getMenueInfo{
     
-    NSString * urlStr = [NSString stringWithFormat:TUIGUANGINFO,[manager getIPAddress]];
-    [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
+    if([NetManager bt_exsitTabbarFirstCache:RecommandCache]==YES&&_isFreshed == 0){
         
-        if(error==nil){
-            
-            NSMutableArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        //如果已缓存
+        [NetManager bt_getTabbarFirstCache:RecommandCache completion:^(id data) {
+            NSMutableArray * array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
             tuiGuangArr = [NSMutableArray array];
             for(NSDictionary *dict in array){
                 BannerModel *model = [[BannerModel alloc]initWithDictionary:dict error:nil];
@@ -169,20 +173,58 @@
                 [self.tableView reloadData];
                 [self.tableView headerEndRefreshing];
             }
-        }else{
-//            NSLog(@"%@",error.description);
-        }
-    }];
-    [self downloadNewestData];
+        }];
+    }else{
+        NSString * urlStr = [NSString stringWithFormat:TUIGUANGINFO,[manager getIPAddress]];
+        [manager downloadDataWithUrl:urlStr parm:nil callback:^(id responseObject, NSError *error) {
+            
+            if(error==nil){
+                [NetManager bt_beginTabbarFirstCache:RecommandCache data:responseObject];
+                NSMutableArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+                tuiGuangArr = [NSMutableArray array];
+                for(NSDictionary *dict in array){
+                    BannerModel *model = [[BannerModel alloc]initWithDictionary:dict error:nil];
+                    [tuiGuangArr addObject:model];
+                    [self.tableView reloadData];
+                    [self.tableView headerEndRefreshing];
+                }
+            }
+        }];
+    }
 }
 
 -(void)downloadNewestData{
-    //拼接ip和port
+    
     [self.dataArray removeAllObjects];
+    if([NetManager bt_exsitTabbarFirstCache:RecommandProductCache]&&_isFreshed==0){
+        [NetManager bt_getTabbarFirstCache:RecommandProductCache completion:^(id data) {
+            
+            NSMutableArray * muArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:Nil];
+            for(NSDictionary * dict in muArray){
+                
+                NSMutableArray * array2 = [NSMutableArray array];
+                NSArray * subArray = dict[@"products"];
+                for(NSDictionary * subDict in subArray){
+                    BatarCommandSubModel * subModel = [[BatarCommandSubModel alloc]initWithDictionary:subDict error:nil];
+                    [array2 addObject:subModel];
+                }
+                BatarCommandModel * model = [[BatarCommandModel alloc]init];
+                model.kid = dict[@"id"];
+                model.products = array2;
+                model.themename = dict[@"themename"];
+                [self.dataArray addObject:model];
+            }
+            [self.tableView reloadData];
+            [self.tableView headerEndRefreshing];
+        }];
+        
+        return;
+    }
     NSString * URLstring = [NSString stringWithFormat:Batar_TUIJIAN,[manager getIPAddress]];
     [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
         
         if(error == nil){
+            [NetManager bt_beginTabbarFirstCache:RecommandProductCache data:responseObject];
             NSMutableArray * muArray = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:Nil];
             for(NSDictionary * dict in muArray){
                 
@@ -200,26 +242,52 @@
             }
             [self.tableView reloadData];
             [self.tableView headerEndRefreshing];
+        }else{
+            NSLog(@"%@",error.description);
         }
-        
     }];
 }
 
 #pragma mark -轮播图加载
 -(void)downloadBanner{
     
-    [self createBannerPlaceImage];
-    
     self.bannerArray = [NSMutableArray array];
+    if([NetManager bt_exsitTabbarFirstCache:BannerCache]&&_isFreshed==0){
+        
+        [NetManager bt_getTabbarFirstCache:BannerCache completion:^(id data) {
+            
+            self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT);
+            [placeHolderImageView removeFromSuperview];
+            
+            NSArray * array = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+            
+            for(int i=0;i<array.count;i++){
+                BannerModel * model = [[BannerModel alloc]initWithDictionary:array[i] error:nil];
+                [self.bannerArray addObject:model];
+            }
+            
+            NSMutableArray * imagesURLStrings = [NSMutableArray array];
+            for(int i=0;i<self.bannerArray.count;i++){
+                
+                BannerModel * model = [self.bannerArray objectAtIndex:i];
+                //拼接ip和port
+                NSString * URLstring = [NSString stringWithFormat:NEWBANNERCONNET,[manager getIPAddress]];
+                [imagesURLStrings addObject:[NSString stringWithFormat:@"%@%@",URLstring,model.img]];
+            }
+            self.cycleScrollView.imageURLStringsGroup = imagesURLStrings
+            ;
+        }];
+        return;
+    }
     //拼接ip和port
     NSString * URLstring = [NSString stringWithFormat:BANNERURL,[manager getIPAddress]];
-    
     [manager downloadDataWithUrl:URLstring parm:nil callback:^(id responseObject, NSError *error) {
         
         if(error == nil){
             self.tableView.frame = CGRectMake(0, NAV_BAR_HEIGHT, Wscreen, Hscreen-NAV_BAR_HEIGHT-TABBAR_HEIGHT);
             [placeHolderImageView removeFromSuperview];
             
+            [NetManager bt_beginTabbarFirstCache:BannerCache data:responseObject];
             NSArray * array = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             
             for(int i=0;i<array.count;i++){
@@ -254,6 +322,7 @@
 #pragma mark -请求分类搜索界面的数据
 -(void)downloadCatagory{
     
+    //缓存分类搜索页
     [manager downloadCatagoryData];
     //请求广告页参数数据，并缓存在本地
     [manager bt_saveAdvertiseInfo];
@@ -337,7 +406,13 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 1;
+    if(section == 0){
+        return 1;
+    }else{
+        
+        NSInteger count = self.dataArray[section-1].products.count;
+        return count%2?((count/2)+1):(count/2);
+    }
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -404,12 +479,30 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if(self.dataArray.count > 0){
             
-            NSMutableArray * array = self.dataArray[indexPath.row].products;
-            [cell setImageView:array];
-            [cell clickImageForDetai:^(NSInteger index) {
+            NSInteger leftIndex = 0;
+            NSInteger rightIndex = 0;
+            if(self.dataArray[indexPath.section-1].products.count>0){
                 
+                if(indexPath.row == 0){
+                    leftIndex = 0;
+                }else{
+                    leftIndex = indexPath.row*2;
+                }
+                rightIndex = leftIndex+1;
+                
+                id obj = nil;
+                if(self.dataArray[indexPath.section-1].products.count>rightIndex){
+                    obj = self.dataArray[indexPath.section-1].products[rightIndex];
+                }else{
+                    obj = @"空";
+                }
+                
+                [cell configCellWithModel:self.dataArray[indexPath.section-1].products[leftIndex] rightModel:obj];
+            }
+            
+            [cell clickImageForDetai:^(NSString *number) {
                 DetailViewController * detailVc = [[DetailViewController alloc]initWithController:self];
-                detailVc.index = self.dataArray[indexPath.row].products[index].number;
+                detailVc.index = number;
                 [self pushToViewControllerWithTransition:detailVc withDirection:@"right" type:NO];
             }];
         }
@@ -427,13 +520,7 @@
             return 0;
         }
     }else{
-        
-        NSInteger count = self.dataArray[indexPath.row].products.count;
-        if(count%2==0){
-            return (175*count/2.0+5)*S6;
-        }else{
-            return (175*(count+1)/2.0+5)*S6;
-        }
+        return 178*S6;
     }
 }
 
@@ -443,13 +530,30 @@
     UIView * view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Wscreen, 46*S6)];
     view.backgroundColor = [UIColor whiteColor];
     
-    UILabel * label = [Tools createLabelWithFrame:CGRectMake(0, 0, view.width, view.height) textContent:[NSString stringWithFormat:@"———— %@ ————",self.dataArray[section-1].themename] withFont:[UIFont systemFontOfSize:15*S6] textColor:TABBARTEXTCOLOR textAlignment:NSTextAlignmentCenter];
-    [view addSubview:label];
-    
-    UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btns" selectedImage:nil tag:section-1 addTarget:self action:@selector(moreAction:)];
-    moreBtn.frame = CGRectMake(Wscreen-93/2.0*S6, 15*S6, 40*S6, 18*S6);
-    [view addSubview:moreBtn];
+    if(self.dataArray.count>0){
+        UILabel * label = [Tools createLabelWithFrame:CGRectMake(0, 0, view.width, view.height) textContent:[NSString stringWithFormat:@"———— %@ ————",self.dataArray[section-1].themename] withFont:[UIFont systemFontOfSize:15*S6] textColor:TABBARTEXTCOLOR textAlignment:NSTextAlignmentCenter];
+        [view addSubview:label];
+        
+        UIButton * moreBtn = [Tools createButtonNormalImage:@"more_btns" selectedImage:nil tag:section-1 addTarget:self action:@selector(moreAction:)];
+        moreBtn.frame = CGRectMake(Wscreen-93/2.0*S6, 15*S6, 40*S6, 18*S6);
+        [view addSubview:moreBtn];
+    }
     return view;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    
+    if(section != 0){
+        return 46*S6;
+    }
+    else{
+        return 0.0;
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - “more”按钮事件
@@ -472,21 +576,6 @@
     moreLabel.userInteractionEnabled = YES;
     [view addSubview:moreLabel];
     return moreLabel;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    
-    if(section != 0){
-        return 46*S6;
-    }
-    else{
-        return 0.0;
-    }
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 //跳回详细分类界面

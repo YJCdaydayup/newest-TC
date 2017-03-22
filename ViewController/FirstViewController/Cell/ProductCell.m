@@ -11,98 +11,105 @@
 #import "NetManager.h"
 #import <UIImage+GIF.h>
 
-@implementation ProductCell
+@interface ProductCell()
+{
+    UIView *_leftBgVc;
+    UIView *_rightBgVc;
+    BatarCommandSubModel *imgLeftModel;
+    BatarCommandSubModel *imgRightModel;
+}
+@property (nonatomic,strong) UIImageView *leftImgView;
+@property (nonatomic,strong) UILabel *leftNameLbl;
+@property (nonatomic,strong) UILabel *leftNumberLbl;
 
-@synthesize bgVc = _bgVc;
+@property (nonatomic,strong) UIImageView *rightImgView;
+@property (nonatomic,strong) UILabel *rightNameLbl;
+@property (nonatomic,strong) UILabel *rightNumberLbl;
+
+@end
+
+@implementation ProductCell
 
 -(void)prepareForReuse{
     
-    [_bgVc removeFromSuperview];
-    _bgVc = nil;
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
+        [self createView];
     }
     return self;
 }
 
--(void)setImageView:(NSMutableArray *)imgArray{
+-(void)createView{
     
-    UIImageView * lastImg;
+    _leftBgVc = [[UIControl alloc]initWithFrame:CGRectMake(5*S6, 5*S6, 175*S6, 171*S6)];
+    _leftBgVc.backgroundColor = [UIColor clearColor];
+    _leftBgVc.layer.borderWidth = 0.5f;
+    _leftBgVc.layer.borderColor = [BTNBORDCOLOR CGColor];
+    _leftBgVc.userInteractionEnabled = YES;
+    [self.contentView addSubview:_leftBgVc];
+    _rightBgVc = [[UIControl alloc]initWithFrame:CGRectMake(185*S6, 5*S6, 178*S6, 171*S6)];
+    _rightBgVc.backgroundColor = [UIColor clearColor];
+    _rightBgVc.layer.borderWidth = 0.5f;
+    _rightBgVc.layer.borderColor = [BTNBORDCOLOR CGColor];
+    _rightBgVc.userInteractionEnabled = YES;
+    [self.contentView addSubview:_rightBgVc];
     
-    for(int i=0;i<imgArray.count;i++){
-        
-        UIImageView * imgView = [[UIImageView alloc]initWithFrame:CGRectMake(6*S6+i%2*185*S6, i/2*175*S6+1*S6, 178*S6, 135*S6)];
-        imgView.contentMode = UIViewContentModeScaleAspectFit;
-//        imgView.layer.borderWidth = 0.5f;
-//        imgView.layer.borderColor = [[UIColor redColor] CGColor];
+    self.leftImgView = [[UIImageView alloc]initWithFrame:CGRectMake(8*S6, 5*S6, 168*S6, 135*S6)];
+    self.leftImgView.contentMode = UIViewContentModeScaleAspectFit;
     
-
-        _bgVc = [[UIControl alloc]initWithFrame:CGRectMake(5*S6+i%2*185*S6, i/2*175*S6, 180*S6, 171*S6)];
-        _bgVc.backgroundColor = [UIColor clearColor];
-        _bgVc.layer.borderWidth = 0.5f;
-        _bgVc.layer.borderColor = [BTNBORDCOLOR CGColor];
-        [self.contentView addSubview:_bgVc];
-            [self.contentView addSubview:imgView];
-        
-        self.max_X = CGRectGetMinX(imgView.frame);
-        self.max_Y = CGRectGetMaxY(imgView.frame);
-        
-        UILabel * titleLabel = [Tools createLabelWithFrame:CGRectMake(0, 140*S6,180*S6, 15) textContent:nil withFont:[UIFont systemFontOfSize:13*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
-        UILabel * numberLabel = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(titleLabel.frame)+1*S6, 180*S6, 9*S6) textContent:nil withFont:[UIFont systemFontOfSize:9*S6] textColor:RGB_COLOR(102, 102, 102, 1) textAlignment:NSTextAlignmentCenter];
-        [imgView addSubview:titleLabel];
-        [imgView addSubview:numberLabel];
-        
-        imgView.tag = 6666+i;
-        if(i==imgArray.count-1){
-            lastImg = imgView;
-        }
-        
-        [self addClickAction:imgView withTag:imgView.tag];
-    }
+    self.leftNameLbl = [Tools createLabelWithFrame:CGRectMake(0, 140*S6,180*S6, 15) textContent:nil withFont:[UIFont systemFontOfSize:13*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+    self.leftNumberLbl = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(self.leftNameLbl.frame)+1*S6, 180*S6, 9*S6) textContent:nil withFont:[UIFont systemFontOfSize:9*S6] textColor:RGB_COLOR(102, 102, 102, 1) textAlignment:NSTextAlignmentCenter];
+    [self.contentView addSubview:self.leftImgView];
+    [self.leftImgView addSubview:self.leftNameLbl];
+    [self.leftImgView addSubview:self.leftNumberLbl];
     
-    UIView * bgView = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(lastImg.frame)+40*S6, Wscreen, 5*S6)];
-    bgView.backgroundColor = TABLEVIEWCOLOR;
-    [self.contentView addSubview:bgView];
     
-    [self configCellWithArray:imgArray];
+    self.rightImgView = [[UIImageView alloc]initWithFrame:CGRectMake(190*S6, 5*S6, 168*S6, 135*S6)];
+    self.rightImgView.contentMode = UIViewContentModeScaleAspectFit;
+    
+    self.rightNameLbl = [Tools createLabelWithFrame:CGRectMake(0, 140*S6,180*S6, 15) textContent:nil withFont:[UIFont systemFontOfSize:13*S6] textColor:TEXTCOLOR textAlignment:NSTextAlignmentCenter];
+    self.rightNumberLbl = [Tools createLabelWithFrame:CGRectMake(0, CGRectGetMaxY(self.rightNameLbl.frame)+1*S6, 180*S6, 9*S6) textContent:nil withFont:[UIFont systemFontOfSize:9*S6] textColor:RGB_COLOR(102, 102, 102, 1) textAlignment:NSTextAlignmentCenter];
+    [self.rightImgView addSubview:self.rightNameLbl];
+    [self.rightImgView addSubview:self.rightNumberLbl];
+    [self.contentView addSubview:self.rightImgView];
+    
 }
 
--(void)configCellWithArray:(NSArray *)dataArray{
-    
-    for(int i=0;i<dataArray.count;i++){
-        
-        [self addImageData:i withModel:dataArray[i]];
-    }
-}
-
--(void)addImageData:(NSInteger)tag withModel:(BatarCommandSubModel *)model{
+-(void)configCellWithModel:(BatarCommandSubModel *)leftModel rightModel:(id)obj{
     
     //拼接ip和port
     NetManager * manager = [NetManager shareManager];
     NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
-    
-    UIImageView * imgView = (UIImageView *)[self.contentView viewWithTag:6666+tag];
     UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
     
     NSInteger width = 180*THUMBNAILRATE;
     NSInteger height = 135*THUMBNAILRATE;
     
-    [imgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:model.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
-    UILabel * nameLabel = imgView.subviews.firstObject;
-    UILabel * numberLabel = imgView.subviews[1];
-    nameLabel.text = model.name;
-    numberLabel.text = model.number;
+    //左边
+    [self.leftImgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:leftModel.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
+    self.leftNameLbl.text = leftModel.name;
+    self.leftNumberLbl.text = leftModel.number;
+    imgLeftModel = leftModel;
+    [self addClickAction:self.leftImgView];
+    //右边
+    if([obj isKindOfClass:[BatarCommandSubModel class]]){
+        BatarCommandSubModel *rightModel = (BatarCommandSubModel *)obj;
+        [self.rightImgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:rightModel.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage];
+        self.rightNameLbl.text = rightModel.name;
+        self.rightNumberLbl.text = rightModel.number;
+        imgRightModel = rightModel;
+        [self addClickAction:self.rightImgView];
+    }
 }
 
 //给图片添加点击事件
--(void)addClickAction:(UIImageView *)imageView withTag:(NSInteger)tag{
+-(void)addClickAction:(UIImageView *)imageView{
     
     imageView.userInteractionEnabled = YES;
-    imageView.tag = tag;
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(clickAction:)];
     [imageView addGestureRecognizer:tap];
 }
@@ -111,7 +118,11 @@
     
     UIImageView * image = (UIImageView *)tap.view;
     if(self.block){
-        self.block(image.tag-6666);
+        if(image == self.leftImgView){
+            self.block(imgLeftModel.number);
+        }else{
+            self.block(imgRightModel.number);
+        }
     }
 }
 

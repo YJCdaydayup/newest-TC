@@ -20,6 +20,16 @@ UIKIT_EXTERN NSString * const CodeTypeQRCode;     //二维码
 UIKIT_EXTERN NSString * const CodeTypeBarCode;    //条形码
 UIKIT_EXTERN NSString * const CodeTypeFailCode;   //错误码
 
+/** 首页数据缓存 */
+/*轮播缓存*/
+UIKIT_EXTERN NSString * const BannerCache;
+
+/*推广缓存*/
+UIKIT_EXTERN NSString * const RecommandCache;
+
+/*推荐产品缓存*/
+UIKIT_EXTERN NSString * const RecommandProductCache;
+
 /*改变登录入口*/
 UIKIT_EXTERN NSString * const BatarEntrance;      //登录入口
 

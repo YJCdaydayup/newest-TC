@@ -63,7 +63,7 @@
 
 #define HasLogined [kUserDefaults objectForKey:BatarEntrance]
 
-#define BANNERPLACEHOLDER @"banner_placeHolder@2x.jpg"
+#define BANNERPLACEHOLDER @"banner_placeHolder"
 #define PLACEHOLDER @"placeHolder.jpg"
 #define PLACETYPE @"jpg"                                            //图片的默认填充
 #define FROMFLAG @"FROMFLAG"                                        //多个按钮界面跳转到下一级

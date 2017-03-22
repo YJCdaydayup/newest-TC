@@ -12,8 +12,6 @@
 
 @implementation RootViewController
 
-//singleM(Controller)
-
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];

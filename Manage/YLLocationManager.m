@@ -28,7 +28,6 @@
     
     self.geocoder = [[CLGeocoder alloc]init];
     
-//    NSLog(@"%@",self.address);
     __block typeof(self)weakSelf = self;
     [self.geocoder geocodeAddressString:self.address completionHandler:^(NSArray *placemarks, NSError *error) {
         
@@ -36,12 +35,9 @@
             
             CLPlacemark *firstPlacemark = placemarks.lastObject;
             dispatch_async(dispatch_get_main_queue(), ^{
-                
                 [weakSelf actionSheetWith:firstPlacemark.location.coordinate];
-//                NSLog(@"%zi",placemarks.count);
             });
         }else{
-            
             NSLog(@"%@",error.description);
         }
     }];
@@ -56,11 +52,11 @@
     __block CLLocationCoordinate2D coordinate = coordinates;
     
     UIAlertController *alert;
-    
     if([self.bottomDict[@"isopen"]boolValue]== YES){
         alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     }
-    if([self.bottomDict[@"isurl"]boolValue]==YES){
+        NSString * url = self.bottomDict[@"url"];
+    if([self.bottomDict[@"isurl"]boolValue]==YES&&url.length>0){
         UIAlertAction * action1 = [UIAlertAction actionWithTitle:@"进入公司首页" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
             NSString * url = self.bottomDict[@"url"];
@@ -76,7 +72,8 @@
         [alert addAction:action1];
     }
     
-    if([self.bottomDict[@"istel"]boolValue]==YES){
+    NSString * telNumber = self.bottomDict[@"tel"];
+    if([self.bottomDict[@"istel"]boolValue]==YES&&telNumber.length>0){
         
         UIAlertAction * action2 = [UIAlertAction actionWithTitle:@"拨打公司电话" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
@@ -89,7 +86,8 @@
     }
     
     //NSLog(@"%@",[self.bottomDict[@"isaddress"] class]);
-    if([self.bottomDict[@"isaddress"] boolValue]==YES){
+    NSString * address = self.bottomDict[@"address"];
+    if([self.bottomDict[@"isaddress"] boolValue]==YES&&address.length>0){
         
         //这个判断其实是不需要的
         if ( [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"http://maps.apple.com/"]])

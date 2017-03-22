@@ -1777,6 +1777,8 @@
 			children = (
 				8F5AB4CF1D3EB84C006C53BD /* NetManager.h */,
 				8F5AB4D01D3EB84C006C53BD /* NetManager.m */,
+				8F4215691D7C708B00A7219A /* DBWorkerManager.h */,
+				8F42156A1D7C708B00A7219A /* DBWorkerManager.m */,
 				8F60DF231E6E282A007DB3DE /* YLSocketManager.h */,
 				8F60DF241E6E282A007DB3DE /* YLSocketManager.m */,
 				8F7073501E71C6400026A6EE /* BatarManagerTool.h */,
@@ -1787,8 +1789,6 @@
 				8F7CBEF61E12E5130033E7FB /* YLUploadToServer.m */,
 				8F8689E41DDE647E0030FD4D /* YLLocationManager.h */,
 				8F8689E51DDE647E0030FD4D /* YLLocationManager.m */,
-				8F4215691D7C708B00A7219A /* DBWorkerManager.h */,
-				8F42156A1D7C708B00A7219A /* DBWorkerManager.m */,
 				8FCD03661DA55BF200E6DCED /* YLVer_UpManager.h */,
 				8FCD03671DA55BF200E6DCED /* YLVer_UpManager.m */,
 				8FC318061D5CE34600E56D31 /* Nstimer的block封装 */,
