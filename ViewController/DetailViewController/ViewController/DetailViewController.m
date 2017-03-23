@@ -567,7 +567,7 @@
     self.navigationItem.rightBarButtonItems = @[rightBarBtn,shareBarBtn];
     
     //导航条标题
-    self.titlelabel = [Tools createLabelWithFrame:CGRectMake(15, 10,100, 20*S6) textContent:nil withFont:[UIFont systemFontOfSize:17*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];
+    self.titlelabel = [Tools createLabelWithFrame:CGRectMake(15, 10,220*S6, 20*S6) textContent:nil withFont:[UIFont systemFontOfSize:17*S6] textColor:RGB_COLOR(0, 0, 0, 1) textAlignment:NSTextAlignmentCenter];
     self.navigationItem.titleView = self.titlelabel;
     
     //布局整个页面

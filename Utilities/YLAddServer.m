@@ -103,7 +103,8 @@
     
     UIView * leftView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 12*S6, 32*S6)];
     self.user_code_field = [Tools createTextFieldFrame:CGRectMake(12.5*S6, 30*S6, 160*S6, 35*S6) placeholder:nil bgImageName:nil leftView:leftView rightView:nil isPassWord:NO];
-    self.user_code_field.placeholder = @"zbtj.batar.cn";
+    self.user_code_field.text = @"zbtj.batar.cn";
+    self.user_code_field.placeholder = @"请输入域名";
     self.user_code_field.delegate = self;
     [self setTextfield:self.user_code_field];
     [controlView addSubview:self.user_code_field];
@@ -113,6 +114,7 @@
     [self setTextfield:self.user_port_field];
     self.user_port_field.delegate = self;
     [controlView addSubview:self.user_port_field];
+    [self.user_port_field becomeFirstResponder];
     
     wrongLabel = [Tools createLabelWithFrame:CGRectMake(24*S6, CGRectGetMaxY(self.user_code_field.frame)+5*S6, 232*S6, 14*S6) textContent:@"输入域名或端口号有误，请重新输入!" withFont:[UIFont systemFontOfSize:12*S6] textColor:[UIColor redColor] textAlignment:NSTextAlignmentLeft];
     wrongLabel.alpha = 0;
@@ -213,6 +215,13 @@
     [controlView removeFromSuperview];
     [maskView removeFromSuperview];
     [self removeFromSuperview];
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    
+    if(textField == self.user_code_field){
+        self.user_code_field.text = nil;
+    }
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{

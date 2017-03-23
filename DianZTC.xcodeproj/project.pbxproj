@@ -448,6 +448,7 @@
 		8FC318031D5CCCFF00E56D31 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8FC318021D5CCCFF00E56D31 /* Images.xcassets */; };
 		8FC318091D5CE34600E56D31 /* NSTimer+Net.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FC318081D5CE34600E56D31 /* NSTimer+Net.m */; };
 		8FCD03681DA55BF200E6DCED /* YLVer_UpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FCD03671DA55BF200E6DCED /* YLVer_UpManager.m */; };
+		8FD04BBD1E83324E009E0B43 /* UIImage+BatarImageExtention.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD04BBC1E83324E009E0B43 /* UIImage+BatarImageExtention.m */; };
 		8FD3C5011E0B1DC600AB40F2 /* BatarMainTabBarContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD3C5001E0B1DC600AB40F2 /* BatarMainTabBarContoller.m */; };
 		8FD9C4C61DD3E8380059721B /* OrderCarModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FD9C4C51DD3E8380059721B /* OrderCarModel.m */; };
 		8FFD7E5E1D70D72900A4AE8F /* YLProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFD7E5D1D70D72900A4AE8F /* YLProgressHUD.m */; };
@@ -1369,6 +1370,8 @@
 		8FC318081D5CE34600E56D31 /* NSTimer+Net.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Net.m"; sourceTree = "<group>"; };
 		8FCD03661DA55BF200E6DCED /* YLVer_UpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLVer_UpManager.h; sourceTree = "<group>"; };
 		8FCD03671DA55BF200E6DCED /* YLVer_UpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLVer_UpManager.m; sourceTree = "<group>"; };
+		8FD04BBB1E83324E009E0B43 /* UIImage+BatarImageExtention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BatarImageExtention.h"; sourceTree = "<group>"; };
+		8FD04BBC1E83324E009E0B43 /* UIImage+BatarImageExtention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BatarImageExtention.m"; sourceTree = "<group>"; };
 		8FD3C4FF1E0B1DC600AB40F2 /* BatarMainTabBarContoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BatarMainTabBarContoller.h; path = ../../../ViewController/BatarMainTabBarContoller.h; sourceTree = "<group>"; };
 		8FD3C5001E0B1DC600AB40F2 /* BatarMainTabBarContoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BatarMainTabBarContoller.m; path = ../../../ViewController/BatarMainTabBarContoller.m; sourceTree = "<group>"; };
 		8FD9C4C41DD3E8380059721B /* OrderCarModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OrderCarModel.h; path = "../我的选购单/OrderCarModel.h"; sourceTree = "<group>"; };
@@ -1726,6 +1729,8 @@
 				8F4A18761CDAB463006ED857 /* UIView+Extesion.m */,
 				8F4A18771CDAB463006ED857 /* UIViewController+Extension.h */,
 				8F4A18781CDAB463006ED857 /* UIViewController+Extension.m */,
+				8FD04BBB1E83324E009E0B43 /* UIImage+BatarImageExtention.h */,
+				8FD04BBC1E83324E009E0B43 /* UIImage+BatarImageExtention.m */,
 			);
 			name = Utilities;
 			path = category;
@@ -3862,6 +3867,7 @@
 				8F89198A1D6D2C6B00CC0D8F /* UIView+ST.m in Sources */,
 				8F7CC12E1E133A280033E7FB /* ZXExpandedProductResultParser.m in Sources */,
 				8F6AFA491E5B9DDC008D3275 /* UIView+TKCategory.m in Sources */,
+				8FD04BBD1E83324E009E0B43 /* UIImage+BatarImageExtention.m in Sources */,
 				8F4A192F1CDAB580006ED857 /* JSONModelArray.m in Sources */,
 				8F4A187C1CDAB463006ED857 /* ButtonSize.m in Sources */,
 				8F7CC1B21E133A280033E7FB /* ZXMultiFormatOneDReader.m in Sources */,
@@ -4107,7 +4113,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
@@ -4150,7 +4156,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6acd42f6-83f7-42fb-a536-239e104fc7a5";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4162,7 +4168,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
@@ -4205,7 +4211,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "6acd42f6-83f7-42fb-a536-239e104fc7a5";
+				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

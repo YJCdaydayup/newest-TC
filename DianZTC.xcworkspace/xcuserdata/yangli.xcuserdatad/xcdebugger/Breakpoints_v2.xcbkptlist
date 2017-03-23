@@ -25,13 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Manage/NetManager.m"
-            timestampString = "511907482.746986"
+            filePath = "ViewController/FirstViewController/Cell/ProductCell.m"
+            timestampString = "511917435.47493"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
-            landmarkName = "+bt_beginTabbarFirstCache:data:"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "-controlAction:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
