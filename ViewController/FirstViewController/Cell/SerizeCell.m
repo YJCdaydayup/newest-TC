@@ -16,13 +16,12 @@
 
 -(void)prepareForReuse{
     
-    
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = CELLBGCOLOR;
+        self.backgroundColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -73,12 +72,8 @@
             imgBtn.frame = CGRectMake((Wscreen-43*S6)/4.0*i+16*S6, 10*S6, 55*S6, 55*S6);
             label.frame = CGRectMake((Wscreen-43*S6)/4.0*i+3*S6, 50*S6,(Wscreen-43*S6)/4.0 , 55*S6);
         }
-     
-        
         imgBtn.layer.cornerRadius = 55/2.0*S6;
         imgBtn.layer.masksToBounds = YES;
-        
-    
     }
 }
 

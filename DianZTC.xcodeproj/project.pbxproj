@@ -3426,7 +3426,7 @@
 					8F4A181F1CDAB0CA006ED857 = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = 8SNW5V34AL;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					8F4A18381CDAB0CA006ED857 = {
 						CreatedOnToolsVersion = 7.1;
@@ -4114,7 +4114,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4156,8 +4156,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "6acd42f6-83f7-42fb-a536-239e104fc7a5";
+				PROVISIONING_PROFILE_SPECIFIER = zhubaotujian0318;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4169,7 +4169,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: SHENZHEN BATAR INVESTMENT HOIDING GROUP CO., LTD.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = 8SNW5V34AL;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -4211,8 +4211,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.domainBatar.DianZTC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "6acd42f6-83f7-42fb-a536-239e104fc7a5";
+				PROVISIONING_PROFILE_SPECIFIER = zhubaotujian0318;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

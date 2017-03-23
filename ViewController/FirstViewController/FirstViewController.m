@@ -474,7 +474,7 @@
         
         ProductCell * cell = [tableView dequeueReusableCellWithIdentifier:productCell];
         if(cell == nil){
-            cell = [[ProductCell alloc]init];
+            cell = [[ProductCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:productCell];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if(self.dataArray.count > 0){

@@ -337,8 +337,8 @@
 +(void)bt_beginTabbarFirstCache:(NSString *)cacheName data:(id)data{
     
     NetManager *manager = [NetManager shareManager];
-//    NSFileManager * m = [NSFileManager defaultManager];
-//    [m removeItemAtPath:manager.cachePath error:nil];
+    //NSFileManager * m = [NSFileManager defaultManager];
+    //[m removeItemAtPath:manager.cachePath error:nil];
     
     
     NSMutableArray * array = [NSMutableArray arrayWithContentsOfFile:manager.cachePath];
@@ -347,11 +347,14 @@
     }
     
     NSDictionary * dict = @{cacheName:data};
-    if([array containsObject:dict]){
-        NSInteger index = [array indexOfObject:dict];
-        [array removeObjectAtIndex:index];
+    for(NSDictionary *dict in array){
+        NSArray * keys = [dict allKeys];
+        if([keys containsObject:cacheName]){
+            [array removeObject:dict];
+            break;
+        }
     }
-     [array addObject:dict];
+    [array addObject:dict];
     BOOL isCached = [array writeToFile:manager.cachePath atomically:YES];
     if(isCached){
         JFLog(@"%@",@"缓存成功");
@@ -398,6 +401,19 @@
         [muStr appendString:str1];
     }
     return muStr;
+}
+/**
+ 清空缓存
+ */
++(void)bt_removeAllCache{
+    
+    NSError *error = nil;
+    NetManager *manager = [NetManager shareManager];
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm removeItemAtPath:manager.cachePath error:&error];
+    if(error){
+        JFLog(@"%@",error.description);
+    }
 }
 
 @end

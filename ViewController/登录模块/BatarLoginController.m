@@ -180,6 +180,8 @@
     
     [self.hud show:YES];
     
+    //清空首页缓存
+    [NetManager bt_removeAllCache];
     if(clear_server){
         
         [self showAlertViewWithTitle:@"服务器已清空，请添加服务器再登录!"];

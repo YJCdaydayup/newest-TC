@@ -349,14 +349,15 @@
         [manager downloadDataWithUrl:urlStr parm:dict callback:^(id responseObject, NSError *error) {
             if(responseObject){
                 
-                [self.hud hide:YES];
+                [selfWeak.hud hide:YES];
                 NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
                 id objs = dict[@"products"];
                 if([dict isKindOfClass:[NSArray class]]){
                     return ;
                 }
+                [selfWeak.dataArray removeAllObjects];
                 if([objs isKindOfClass:[NSNull class]]){
-                    [self.dataArray removeAllObjects];
+                    [selfWeak.dataArray removeAllObjects];
                 }else{
                     NSMutableArray * modelArray = dict[@"products"];
                     NSMutableArray * tempArray = [[NSMutableArray alloc]init];
@@ -367,12 +368,12 @@
                         model.image = dict[@"image"];
                         [tempArray addObject:model];
                     }
-                    [self.dataArray addObjectsFromArray:tempArray];
+                    [selfWeak.dataArray addObjectsFromArray:tempArray];
                 }
                 [BatarManagerTool caculateServerOrderCar];
                 
                 //if no data,show pic
-                if(self.dataArray.count==0){
+                if(selfWeak.dataArray.count==0){
                     [BatarIndicatorView showIndicatorWithTitle:@"购物车竟然是空的！" imageName:@"order_indicator" inView:self.view hide:NO];
                 }
                 

@@ -68,6 +68,8 @@ typedef void(^CacheBlock)(id data);
 +(void)bt_beginTabbarFirstCache:(NSString *)cacheName data:(id)data;
 //读取缓存
 +(void)bt_getTabbarFirstCache:(NSString *)cacheName completion:(CacheBlock)block;
+//清空缓存
++(void)bt_removeAllCache;
 
 
 

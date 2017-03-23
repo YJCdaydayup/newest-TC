@@ -33,6 +33,27 @@
 
 -(void)prepareForReuse{
     
+    /* [_leftBgVc removeFromSuperview];
+     _leftBgVc = nil;
+     [_rightBgVc removeFromSuperview];
+     _rightBgVc = nil;
+     [self.leftImgView removeFromSuperview];
+     self.leftImgView = nil;
+     
+     [self.leftNameLbl removeFromSuperview];
+     self.leftNameLbl = nil;
+     
+     [_leftBgVc removeFromSuperview];
+     _leftBgVc = nil;
+     [_leftBgVc removeFromSuperview];
+     _leftBgVc = nil;
+     [_leftBgVc removeFromSuperview];
+     _leftBgVc = nil;
+     [_leftBgVc removeFromSuperview];
+     _leftBgVc = nil;
+     [_leftBgVc removeFromSuperview];
+     _leftBgVc = nil;
+     */
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -77,7 +98,7 @@
     [self.contentView addSubview:self.rightImgView];
     [self.contentView addSubview:_rightBgVc];
     [self.contentView addSubview:_leftBgVc];
-
+    
     [self addGestureToControl:_leftBgVc];
     [self addGestureToControl:_rightBgVc];
 }
@@ -91,10 +112,10 @@
     
     if(control == _leftBgVc){
         //左边
-         self.block(imgLeftModel.number);
+        self.block(imgLeftModel.number);
     }else{
         //右边
-         self.block(imgRightModel.number);
+        self.block(imgRightModel.number);
     }
 }
 
@@ -104,15 +125,13 @@
     NetManager * manager = [NetManager shareManager];
     NSString * URLstring = [NSString stringWithFormat:BANNERCONNET,[manager getIPAddress]];
     UIImage * gifImage = [UIImage imageNamed:PLACEHOLDER];
-    
     NSInteger width = 180*THUMBNAILRATE;
     NSInteger height = 135*THUMBNAILRATE;
     
     //左边
     @WeakObj(self);
-    [self.leftImgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:leftModel.image] width:GETSTRING(width) height:GETSTRING(height)]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-        UIImage *newImg = [selfWeak cutImage:image];
-        selfWeak.leftImgView.image = newImg;
+    [self.leftImgView sd_setImageWithPreviousCachedImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:leftModel.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        selfWeak.leftImgView.image = image;
     }];
     
     self.leftNameLbl.text = leftModel.name;
@@ -123,9 +142,9 @@
     //右边
     if([obj isKindOfClass:[BatarCommandSubModel class]]){
         BatarCommandSubModel *rightModel = (BatarCommandSubModel *)obj;
-        [self.self.rightImgView sd_setImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:rightModel.image] width:GETSTRING(width) height:GETSTRING(height)]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            UIImage *newImg = [selfWeak cutImage:image];
-            selfWeak.self.rightImgView.image = newImg;
+        
+        [self.rightImgView sd_setImageWithPreviousCachedImageWithURL:[NSURL URLWithString:[Tools connectOriginImgStr:[self connectImage:URLstring withFollow:rightModel.image] width:GETSTRING(width) height:GETSTRING(height)]] placeholderImage:gifImage options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            selfWeak.rightImgView.image = image;
         }];
         
         self.rightNameLbl.text = rightModel.name;
@@ -146,23 +165,19 @@
     CGSize imageViewSize = self.leftImgView.frame.size;
     CGSize originImageSize = originImage.size;
     
-    if ((originImageSize.width / originImageSize.height) < (imageViewSize.width / imageViewSize.height))
-    {
-        // imageView的宽高比 > image的宽高比
+    if ((originImageSize.width / originImageSize.height) < (imageViewSize.width / imageViewSize.height)){
         newImageSize.width = originImageSize.width;
         newImageSize.height = imageViewSize.height * (originImageSize.width / imageViewSize.width);
         
         imageRef = CGImageCreateWithImageInRect([originImage CGImage], CGRectMake(0, fabs(originImageSize.height - newImageSize.height) / 2, newImageSize.width, newImageSize.height));
     }
-    else
-    {
-        // image的宽高比 > imageView的宽高比   ： 也就是说原始图片比较狭长
+    else{
         newImageSize.height = originImageSize.height-10*S6;
         newImageSize.width = imageViewSize.width * (originImageSize.height / imageViewSize.height);
         
         imageRef = CGImageCreateWithImageInRect([originImage CGImage], CGRectMake(fabs(originImageSize.width - newImageSize.width) / 2, 0, newImageSize.width, newImageSize.height));
     }
-    
+    originImage = nil;
     return [UIImage imageWithCGImage:imageRef];
 }
 
